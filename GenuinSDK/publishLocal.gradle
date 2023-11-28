@@ -6,7 +6,7 @@ task sourceJar(type: Jar) {
 }
 
 project.afterEvaluate {
-    //publishToMavenLocal {
+    publishToMavenLocal {
         def groupId = LIBRARY_GROUP
         def artifactId = LIBRARY_ARTIFACT_ID
         def versionName = LIBRARY_VERSION_NAME
@@ -42,17 +42,17 @@ project.afterEvaluate {
             }
         }
 
-//        doLast {
-//            def prettyPrint = {
-//                1.upto(100, { print "=" })
-//                println()
-//            }
-//            println()
-//            prettyPrint()
-//            println "PUBLICATION FINISHED"
-//            println "Artifact RELEASE: " + groupId + ":" + artifactId +  ":" + versionName + releaseSuffix
-//            println "Artifact DEBUG: " + groupId + ":" + artifactId +  ":" + versionName + debugSuffix
-//            prettyPrint()
-//        }
-   // }
+        doLast {
+            def prettyPrint = {
+                1.upto(100, { print "=" })
+                println()
+            }
+            println()
+            prettyPrint()
+            println "PUBLICATION FINISHED"
+            println "Artifact RELEASE: " + groupId + ":" + artifactId +  ":" + versionName + releaseSuffix
+            println "Artifact DEBUG: " + groupId + ":" + artifactId +  ":" + versionName + debugSuffix
+            prettyPrint()
+        }
+    }
 }
