@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/translucent_black"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="@dimen/dimen_48dp"
+        android:layout_height="@dimen/dimen_48dp"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:contentDescription="@string/roundtables"
+        android:src="@drawable/ic_repost" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_20dp"
+        android:fontFamily="@font/avenir_next_demi_bold"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/dimen_8dp"
+        android:text="@string/repost_video"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_24sp" />
+
+    <TextView
+        android:id="@+id/tvRoundTableDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:fontFamily="@font/avenir_next_demi_bold"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/dimen_40dp"
+        android:lineSpacingExtra="@dimen/dimen_3dp"
+        android:text="@string/repost_tutorial_desc"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_15sp" />
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DisplayPictureView">
+        <attr name="roundSize" format="dimension" />
+        <attr name="innerTextSize" format="dimension" />
+        <attr name="lottiePadding" format="dimension" />
+        <attr name="dpBorderColor" format="color" />
+        <attr name="dpBorderWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="DiscreteScrollView">
+        <attr name="dsv_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CustomIcon">
+        <attr name="custom_icon" format="reference" />
+        <attr name="insideIconHeight" format="integer" />
+        <attr name="insideIconWidth" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="SparkView">
+        <attr name="size" format="dimension" />
+        <attr name="filled_bulb_resource" format="reference" />
+        <attr name="empty_bulb_resource" format="reference" />
+    </declare-styleable>
+</resources>

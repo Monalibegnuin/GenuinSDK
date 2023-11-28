@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_353535"
+    android:paddingTop="@dimen/dimen_72dp">
+
+    <LinearLayout
+        android:id="@+id/llLoader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/ivProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:indicatorColor="@color/colorWhite"
+            app:indicatorSize="@dimen/dimen_20dp"
+            app:trackColor="@color/white_opacity20"
+            app:trackThickness="@dimen/dimen_2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:fontFamily="@font/avenir_next_demi_bold"
+            android:text="@string/loading_new_videos"
+            android:textColor="@color/white_opacity60"
+            android:textSize="@dimen/text_size_17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivAllCaughtUp"
+            android:layout_width="@dimen/dimen_48dp"
+            android:layout_height="@dimen/dimen_48dp"
+            android:src="@drawable/checkmark_success"
+            app:tint="@color/colorWhite" />
+
+        <TextView
+            android:id="@+id/tvFeedEndMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_18dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:text="@string/all_caught_up"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_24sp" />
+
+        <TextView
+            android:id="@+id/tvFeedEndDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_40dp"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            android:fontFamily="@font/avenir_next_demi_bold"
+            android:text="@string/my_loop_end_desc"
+            android:textAlignment="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_15sp" />
+
+        <com.begenuin.begenuin.ui.customview.NestedScrollableHost
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_16dp" >
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vpLoopSuggestions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.begenuin.begenuin.ui.customview.NestedScrollableHost>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGoToForYou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="@dimen/dimen_16dp"
+            android:backgroundTint="@color/colorWhite"
+            android:enabled="true"
+            android:fontFamily="@font/avenir_next_bold"
+            android:letterSpacing="0"
+            android:paddingHorizontal="@dimen/dimen_24dp"
+            android:paddingVertical="@dimen/dimen_15dp"
+            android:stateListAnimator="@null"
+            android:text="@string/go_to_for_you"
+            android:textAllCaps="false"
+            android:textColor="@color/black_111111"
+            android:textSize="@dimen/text_size_17sp"
+            android:visibility="gone"
+            app:cornerRadius="@dimen/dimen_8dp" />
+    </LinearLayout>
+</RelativeLayout>

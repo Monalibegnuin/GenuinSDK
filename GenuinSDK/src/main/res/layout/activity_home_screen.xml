@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.begnuine.library.common.customViews.customscrollview.DiscreteScrollView
+                android:id="@+id/feedViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black"
+                android:nestedScrollingEnabled="true"
+                app:dsv_orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/llNoCommunityLoops"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/dimen_32dp"
+                android:background="@color/colorWhite"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/dimen_120dp"
+                    android:layout_height="@dimen/dimen_120dp"
+                    android:src="@drawable/ic_no_loops" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:fontFamily="@font/avenir_next_bold"
+                    android:text="@string/ready_to_start_loop"
+                    android:textAlignment="center"
+                    android:textColor="@color/black_111111"
+                    android:textSize="@dimen/text_size_20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:lineSpacingExtra="@dimen/dimen_2dp"
+                    android:text="@string/no_loops_feed_msg"
+                    android:textAlignment="center"
+                    android:textColor="@color/color_949494"
+                    android:textSize="@dimen/text_size_15sp" />
+
+                <LinearLayout
+                    android:id="@+id/llNewLoop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen_32dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_32dp"
+                    android:background="@drawable/profile_qna_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/dimen_8dp"
+                    android:paddingEnd="@dimen/dimen_16dp"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_22dp"
+                        android:layout_height="@dimen/dimen_22dp"
+                        android:layout_marginStart="@dimen/dimen_4dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/icon_plus"
+                        app:tint="@color/colorWhite" />
+
+                    <com.begnuine.library.common.customViews.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/dimen_6dp"
+                        android:layout_marginEnd="@dimen/dimen_4dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:text="@string/new_loop"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_medium" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relative_nonetowrk"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <include
+                    android:id="@+id/fragment_feed_no_internet"
+                    layout="@layout/layout_no_internet_screen"
+                    android:visibility="visible" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/feed_gradient_top"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/dimen_16dp"
+                android:paddingHorizontal="@dimen/dimen_16dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clFeedOptionsContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintHeight_default="wrap">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvFeedSelector"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_centerVertical="true"
+                        app:cardBackgroundColor="@color/black_opacity20"
+                        app:cardCornerRadius="@dimen/dimen_8dp"
+                        app:cardElevation="0dp"
+                        app:layout_constrainedHeight="true"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHeight="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth="wrap_content"
+                        android:visibility="gone">
+
+                        <TableLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/dimen_8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:shrinkColumns="1">
+
+                            <TableRow
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content">
+
+                                <com.begnuine.library.common.customViews.DisplayPictureView
+                                    android:id="@+id/llFeedSelectCommunityDp"
+                                    android:layout_width="@dimen/dimen_24dp"
+                                    android:layout_height="@dimen/dimen_24dp"
+                                    android:layout_marginEnd="@dimen/dimen_8dp"
+                                    app:roundSize="@dimen/dimen_24dp"
+                                    app:innerTextSize="@dimen/text_size_10sp"
+                                    android:visibility="gone"/>
+
+                                <TextView
+                                    android:id="@+id/tvFeedType"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/avenir_next_bold"
+                                    android:text="@string/for_you_small_y"
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:textColor="@color/colorWhite"
+                                    android:layout_gravity="center_vertical"
+                                    android:textSize="@dimen/text_size_20sp" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/dimen_16dp"
+                                    android:layout_height="@dimen/dimen_16dp"
+                                    android:layout_marginStart="@dimen/dimen_8dp"
+                                    android:src="@drawable/ic_down_arrow"
+                                    android:layout_gravity="center_vertical"
+                                    app:tint="@color/colorWhite" />
+
+                            </TableRow>
+
+                        </TableLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingVertical="@dimen/dimen_8dp"
+                    android:paddingHorizontal="@dimen/dimen_16dp">
+
+                    <com.begnuine.library.common.customViews.CustomTextView
+                        android:id="@+id/txtLoginEmailIdSDK"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:fontFamily="@font/avenir_next_demi"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_big_20sp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cvSearch"
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    app:cardBackgroundColor="@color/black_opacity20"
+                    app:cardCornerRadius="@dimen/dimen_32dp"
+                    app:cardElevation="0dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_24dp"
+                        android:layout_height="@dimen/dimen_24dp"
+                        android:layout_margin="@dimen/dimen_4dp"
+                        android:src="@drawable/ic_feed_search" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/llSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginHorizontal="@dimen/dimen_36dp"
+                    android:background="@drawable/searchbar_bg"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/dimen_8dp"
+                    android:paddingStart="@dimen/dimen_10dp"
+                    android:paddingEnd="@dimen/dimen_10dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_22dp"
+                        android:layout_height="@dimen/dimen_22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dimen_10dp"
+                        android:layout_marginEnd="@dimen/dimen_10dp"
+                        android:contentDescription="@string/search"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/white_opacity50" />
+
+                    <com.begnuine.library.common.customViews.CustomTextView
+                        android:id="@+id/tvSearchTextFeed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_demi"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_medium" />
+
+                    <ImageView
+                        android:id="@+id/ivClearSearch"
+                        android:layout_width="@dimen/dimen_22dp"
+                        android:layout_height="@dimen/dimen_22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dimen_5dp"
+                        android:layout_marginEnd="0dp"
+                        android:src="@drawable/ic_search_close" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/llInfinityContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginVertical="@dimen/dimen_16dp"
+                android:clipToPadding="false"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingStart="@dimen/dimen_16dp">
+
+                    <RelativeLayout
+                        android:id="@+id/rlShadowCommunityInfinity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0"
+                        android:rotationX="-180">
+
+                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                            android:id="@+id/ivShadowCanvasLeft"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:id="@+id/llShadowCommunityInfinity"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginHorizontal="@dimen/dimen_8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.begnuine.library.common.customViews.DisplayPictureView
+                                android:id="@+id/ivShadowCommunityDp"
+                                android:layout_width="@dimen/dimen_32dp"
+                                android:layout_height="@dimen/dimen_32dp"
+                                android:layout_gravity="center"
+                                app:innerTextSize="@dimen/text_size_12sp"
+                                app:roundSize="@dimen/dimen_32dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="@dimen/dimen_8dp"
+                                android:layout_marginEnd="@dimen/dimen_16dp"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvShadowCommunityHandle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/avenir_next_medium"
+                                    android:maxLines="1"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/text_size_15sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/avenir_next_medium"
+                                    android:maxLines="1"
+                                    android:text="@string/browse_community"
+                                    android:textColor="@color/white_opacity40"
+                                    android:textSize="@dimen/text_size_11sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlCommunityInfinity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                            android:id="@+id/ivCanvasLeft"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <LinearLayout
+                            android:id="@+id/llCommunityInfinity"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginHorizontal="@dimen/dimen_8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.begnuine.library.common.customViews.DisplayPictureView
+                                android:id="@+id/ivCommunityDp"
+                                android:layout_width="@dimen/dimen_32dp"
+                                android:layout_height="@dimen/dimen_32dp"
+                                android:layout_gravity="center"
+                                app:innerTextSize="@dimen/text_size_12sp"
+                                app:roundSize="@dimen/dimen_32dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="@dimen/dimen_8dp"
+                                android:layout_marginEnd="@dimen/dimen_16dp"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvCommunityHandle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/avenir_next_medium"
+                                    android:maxLines="1"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/text_size_15sp" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/avenir_next_medium"
+                                    android:maxLines="1"
+                                    android:text="@string/browse_community"
+                                    android:textColor="@color/white_opacity40"
+                                    android:textSize="@dimen/text_size_11sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingEnd="@dimen/dimen_16dp">
+
+                    <RelativeLayout
+                        android:id="@+id/rlShadowLoopInfinity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                            android:id="@+id/ivShadowCanvasRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleX="-1" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/dimen_28dp"
+                            android:layout_marginEnd="@dimen/dimen_16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvShadowLoopName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/avenir_next_medium"
+                                android:maxLines="1"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/text_size_15sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/avenir_next_medium"
+                                android:maxLines="1"
+                                android:text="@string/view_loop"
+                                android:textColor="@color/white_opacity40"
+                                android:textSize="@dimen/text_size_12sp" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlLoopInfinity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                            android:id="@+id/ivCanvasRight"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleX="-1" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/dimen_28dp"
+                            android:layout_marginEnd="@dimen/dimen_16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvLoopName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/avenir_next_medium"
+                                android:maxLines="1"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/text_size_15sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/avenir_next_medium"
+                                android:maxLines="1"
+                                android:text="@string/view_loop"
+                                android:textColor="@color/white_opacity40"
+                                android:textSize="@dimen/text_size_12sp" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressTimer"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1_half_dp"
+                android:layout_alignParentBottom="true"
+                android:progressDrawable="@drawable/custom_feed_progressbar_square" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/feedBlurLayoutFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:id="@+id/search_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative_tutorial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#cc000000"
+            android:paddingBottom="@dimen/dimen_6dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/avenir_next_bold"
+                android:gravity="center"
+                android:text="@string/replay_to_any_video"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_big_20sp" />
+
+            <LinearLayout
+                android:id="@+id/llTutorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="@dimen/dimen_6dp"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/circle_white_ring"
+                android:padding="@dimen/dimen_10dp">
+
+                <com.begnuine.library.common.customViews.CustomIcon
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:custom_icon="@drawable/ic_reply" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/tutorialRepost"
+            layout="@layout/tutorial_repost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/feedBlurLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/relative_success_page"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/translucent_black"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margint_top">
+
+                    <ImageView
+                        android:id="@+id/img_close_success"
+                        android:layout_width="@dimen/dimen_30dp"
+                        android:layout_height="@dimen/dimen_30dp"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="@dimen/dimen_20dp"
+                        android:contentDescription="@string/go_back"
+                        android:src="@drawable/ic_close" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.250" />
+
+                <LinearLayout
+                    android:id="@+id/linear_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerview_success"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:clipToPadding="false" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.250" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/reply_sent_image_size"
+                        android:layout_height="@dimen/reply_sent_image_size"
+                        android:contentDescription="@string/txt_reply"
+                        android:src="@drawable/image_replysent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_10dp"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:layout_marginRight="@dimen/dimen_10dp"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:gravity="center"
+                        android:lineSpacingExtra="@dimen/dimen_5dp"
+                        android:text="@string/reply_sent"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_22sp" />
+
+                    <CheckBox
+                        android:id="@+id/checkbox_reply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:checked="false"
+                        android:drawableStart="@drawable/checkbox_selector_success_screen"
+                        android:drawablePadding="@dimen/dimen_10dp"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:text="@string/dont_show_again"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_small_14sp"
+                        android:visibility="gone" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_gotit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_50dp"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:letterSpacing="0"
+                        android:stateListAnimator="@null"
+                        android:text="@string/got_it"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_15sp"
+                        app:backgroundTint="@color/splash_background"
+                        app:cornerRadius="@dimen/dimen_5dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.250" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/reactionBlurLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:id="@+id/relative_failure_page"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/translucent_black"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_50dp">
+
+                    <ImageView
+                        android:id="@+id/img_close_failure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="@dimen/dimen_20dp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_close" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvReactionFailure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_10dp"
+                        android:layout_marginTop="@dimen/dimen_20dp"
+                        android:layout_marginRight="@dimen/dimen_10dp"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:gravity="center"
+                        android:lineSpacingExtra="@dimen/dimen_5dp"
+                        android:text="You have ongoing conversation with this post"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_extra_big" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnGotItFailure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_30dp"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:letterSpacing="0"
+                        android:stateListAnimator="@null"
+                        android:text="@string/got_it"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_15sp"
+                        app:backgroundTint="@color/splash_background"
+                        app:cornerRadius="@dimen/dimen_5dp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/feedProgressBar"
+            android:layout_width="@dimen/dimen_80dp"
+            android:layout_height="@dimen/dimen_80dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loader_mix" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/profile_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

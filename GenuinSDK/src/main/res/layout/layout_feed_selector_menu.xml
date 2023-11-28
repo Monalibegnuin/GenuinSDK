@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clMain"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/dimen_16dp"
+    android:paddingTop="@dimen/dimen_8dp"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    app:layout_constraintHeight_default="wrap">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvFeedOptions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="@dimen/dimen_8dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth="wrap_content">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/llFeedOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llForYou"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/dimen_16dp"
+                    android:paddingVertical="@dimen/dimen_8dp">
+
+                    <ImageView
+                        android:id="@+id/ivForYou"
+                        android:layout_width="@dimen/dimen_24dp"
+                        android:layout_height="@dimen/dimen_24dp"
+                        android:src="@drawable/ic_face_for_you" />
+
+                    <TextView
+                        android:id="@+id/tvForYou"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_medium"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/dimen_2dp"
+                        android:text="@string/for_you_small_y"
+                        android:textColor="@color/black_111111"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_marginHorizontal="@dimen/dimen_16dp"
+                    android:background="@color/color_E7E7E7"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/llMyLoops"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/dimen_16dp"
+                    android:paddingVertical="@dimen/dimen_8dp">
+
+                    <ImageView
+                        android:id="@+id/ivMyLoops"
+                        android:layout_width="@dimen/dimen_24dp"
+                        android:layout_height="@dimen/dimen_24dp"
+                        android:src="@drawable/ic_rt_tab"
+                        app:tint="@color/black_111111" />
+
+                    <TextView
+                        android:id="@+id/tvMyLoops"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_medium"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/dimen_2dp"
+                        android:text="@string/my_loops"
+                        android:textColor="@color/black_111111"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llDivider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_marginHorizontal="@dimen/dimen_16dp"
+                    android:background="@color/color_E7E7E7"
+                    android:orientation="horizontal" />
+
+                <LinearLayout
+                    android:id="@+id/llSubscriptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/dimen_16dp"
+                    android:paddingVertical="@dimen/dimen_8dp">
+
+                    <ImageView
+                        android:id="@+id/ivLatest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_green_tick"
+                        app:tint="@color/black_111111" />
+
+                    <TextView
+                        android:id="@+id/tvLatest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_14dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_medium"
+                        android:maxLines="1"
+                        android:paddingTop="@dimen/dimen_2dp"
+                        android:text="@string/subscriptions"
+                        android:textColor="@color/black_111111"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCommunityList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/llDivider3"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_1dp"
+                        android:background="@color/color_E7E7E7"
+                        android:orientation="horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_14dp"
+                        android:layout_marginTop="@dimen/dimen_8dp"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:text="@string/my_communities"
+                        android:textColor="@color/color_949494"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvCommunities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"/>
+
+                </LinearLayout>
+
+                <!-- <LinearLayout
+                     android:id="@+id/llForYou1"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/custom_ripple"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingHorizontal="@dimen/dimen_16dp"
+                     android:paddingVertical="@dimen/dimen_12dp">
+
+                     <ImageView
+                         android:id="@+id/ivRetry1"
+                         android:layout_width="@dimen/dimen_24dp"
+                         android:layout_height="@dimen/dimen_24dp"
+                         android:src="@drawable/ic_tick" />
+
+                     <TextView
+                         android:id="@+id/tvRetry1"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="@dimen/dimen_8dp"
+                         android:fontFamily="@font/avenir_next_demi_bold"
+                         android:paddingTop="@dimen/dimen_2dp"
+                         android:paddingEnd="@dimen/dimen_40dp"
+                         android:text="@string/for_you"
+                         android:textColor="@color/black_111111"
+                         android:textSize="@dimen/text_size_17sp" />
+
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/llForYou2"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/custom_ripple"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingHorizontal="@dimen/dimen_16dp"
+                     android:paddingVertical="@dimen/dimen_12dp">
+
+                     <ImageView
+                         android:id="@+id/ivRetry2"
+                         android:layout_width="@dimen/dimen_24dp"
+                         android:layout_height="@dimen/dimen_24dp"
+                         android:src="@drawable/ic_tick" />
+
+                     <TextView
+                         android:id="@+id/tvRetry2"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="@dimen/dimen_8dp"
+                         android:fontFamily="@font/avenir_next_demi_bold"
+                         android:paddingTop="@dimen/dimen_2dp"
+                         android:paddingEnd="@dimen/dimen_40dp"
+                         android:text="@string/for_you"
+                         android:textColor="@color/black_111111"
+                         android:textSize="@dimen/text_size_17sp" />
+
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/llForYou3"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/custom_ripple"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingHorizontal="@dimen/dimen_16dp"
+                     android:paddingVertical="@dimen/dimen_12dp">
+
+                     <ImageView
+                         android:id="@+id/ivRetry3"
+                         android:layout_width="@dimen/dimen_24dp"
+                         android:layout_height="@dimen/dimen_24dp"
+                         android:src="@drawable/ic_tick" />
+
+                     <TextView
+                         android:id="@+id/tvRetry3"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="@dimen/dimen_8dp"
+                         android:fontFamily="@font/avenir_next_demi_bold"
+                         android:paddingTop="@dimen/dimen_2dp"
+                         android:paddingEnd="@dimen/dimen_40dp"
+                         android:text="@string/for_you"
+                         android:textColor="@color/black_111111"
+                         android:textSize="@dimen/text_size_17sp" />
+
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/llForYou4"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/custom_ripple"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingHorizontal="@dimen/dimen_16dp"
+                     android:paddingVertical="@dimen/dimen_12dp">
+
+                     <ImageView
+                         android:id="@+id/ivRetry4"
+                         android:layout_width="@dimen/dimen_24dp"
+                         android:layout_height="@dimen/dimen_24dp"
+                         android:src="@drawable/ic_tick" />
+
+                     <TextView
+                         android:id="@+id/tvRetry4"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="@dimen/dimen_8dp"
+                         android:fontFamily="@font/avenir_next_demi_bold"
+                         android:paddingTop="@dimen/dimen_2dp"
+                         android:paddingEnd="@dimen/dimen_40dp"
+                         android:text="@string/for_you"
+                         android:textColor="@color/black_111111"
+                         android:textSize="@dimen/text_size_17sp" />
+
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/llForYou5"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/custom_ripple"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingHorizontal="@dimen/dimen_16dp"
+                     android:paddingVertical="@dimen/dimen_12dp">
+
+                     <ImageView
+                         android:id="@+id/ivRetry5"
+                         android:layout_width="@dimen/dimen_24dp"
+                         android:layout_height="@dimen/dimen_24dp"
+                         android:src="@drawable/ic_tick" />
+
+                     <TextView
+                         android:id="@+id/tvRetry5"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="@dimen/dimen_8dp"
+                         android:fontFamily="@font/avenir_next_demi_bold"
+                         android:paddingTop="@dimen/dimen_2dp"
+                         android:paddingEnd="@dimen/dimen_40dp"
+                         android:text="@string/for_you"
+                         android:textColor="@color/black_111111"
+                         android:textSize="@dimen/text_size_17sp" />
+
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/llForYou6"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/custom_ripple"
+                     android:gravity="center_vertical"
+                     android:orientation="horizontal"
+                     android:paddingHorizontal="@dimen/dimen_16dp"
+                     android:paddingVertical="@dimen/dimen_12dp">
+
+                     <ImageView
+                         android:id="@+id/ivRetry6"
+                         android:layout_width="@dimen/dimen_24dp"
+                         android:layout_height="@dimen/dimen_24dp"
+                         android:src="@drawable/ic_tick" />
+
+                     <TextView
+                         android:id="@+id/tvRetry6"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_marginStart="@dimen/dimen_8dp"
+                         android:fontFamily="@font/avenir_next_demi_bold"
+                         android:paddingTop="@dimen/dimen_2dp"
+                         android:paddingEnd="@dimen/dimen_40dp"
+                         android:text="@string/for_you"
+                         android:textColor="@color/black_111111"
+                         android:textSize="@dimen/text_size_17sp" />
+
+                 </LinearLayout>-->
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

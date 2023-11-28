@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dimen_20dp"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/bottomSheetFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_black_bg"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/dimen_60dp"
+            android:layout_height="@dimen/dimen_5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/dimen_20dp"
+            android:backgroundTint="@color/colorWhite"
+            app:cardCornerRadius="@dimen/dimen_3dp"
+            app:cardElevation="0dp" />
+
+        <com.begnuine.library.common.customViews.CustomTextView
+            android:id="@+id/tvNewPostPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:text="@string/didn_t_find_what_you_were_looking_for"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_big_20sp" />
+
+        <com.begnuine.library.common.customViews.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_40dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:text="@string/no_videos_found_try_a_different_search_term"
+            android:textColor="@color/md_grey_400"
+            android:textSize="@dimen/text_size_normal" />
+
+        <RelativeLayout
+            android:id="@+id/rlCreateVideo"
+            android:layout_width="157dp"
+            android:layout_height="279dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_45dp"
+            android:background="@drawable/ic_no_video_light_blue_bg">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/transparent_gradient" />
+
+            <com.begnuine.library.common.customViews.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="8dp"
+                android:fontFamily="@font/avenir_next_bold"
+                android:gravity="center"
+                android:text="Post a Video"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/text_size_15sp" />
+
+            <ImageView
+                android:layout_width="@dimen/dimen_80dp"
+                android:layout_height="@dimen/dimen_80dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/conv_dummy01" />
+
+
+            <ImageView
+                android:id="@+id/ivCreateVideo"
+                android:layout_width="@dimen/dimen_50dp"
+                android:layout_height="@dimen/dimen_50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:src="@drawable/fab_addvideo" />
+
+        </RelativeLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGoBackToFeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_45dp"
+            android:layout_marginBottom="@dimen/dimen_20dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:letterSpacing="0"
+            android:stateListAnimator="@null"
+            android:text="@string/go_back_feed"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_big"
+            app:backgroundTint="@color/splash_background"
+            app:cornerRadius="@dimen/dimen_5dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/dimen_120dp"
+            android:layout_height="@dimen/dimen_5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/dimen_10dp"
+            android:visibility="gone"
+            android:backgroundTint="@color/colorWhite"
+            app:cardCornerRadius="@dimen/dimen_3dp"
+            app:cardElevation="0dp" />
+
+    </LinearLayout>
+
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_333333"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivNoNetwork"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/no_network_black" />
+
+        <com.begnuine.library.common.customViews.CustomTextView
+            android:id="@+id/layout_no_internet_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_25dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:text=""
+            android:visibility="gone"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_15sp" />
+
+        <com.begnuine.library.common.customViews.CustomTextView
+            android:id="@+id/no_internet_sub_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/dimen_4dp"
+            android:text="@string/no_internet_try_again"
+            android:textColor="@color/disableColor"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btntryAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dimen_30dp"
+            android:paddingRight="@dimen/dimen_30dp"
+            android:text="@string/txt_try_again"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_15sp"
+            app:backgroundTint="@color/splash_background"
+            app:cornerRadius="4dp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/llBottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_200dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/feed_gradient_bottom"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible"/>
+</RelativeLayout>

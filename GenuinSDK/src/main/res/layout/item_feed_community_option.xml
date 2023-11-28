@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingHorizontal="@dimen/dimen_16dp"
+    android:orientation="vertical"
+    android:id="@+id/llMain">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/dimen_8dp"
+        android:orientation="horizontal">
+        
+        <com.begnuine.library.common.customViews.DisplayPictureView
+            android:id="@+id/llDp"
+            android:layout_width="@dimen/dimen_24dp"
+            android:layout_height="@dimen/dimen_24dp"
+            app:roundSize="@dimen/dimen_24dp"
+            app:innerTextSize="@dimen/text_size_10sp" />
+
+        <TextView
+            android:id="@+id/tvCommunityName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_8dp"
+            android:layout_gravity="center_vertical"
+            android:maxLines="1"
+            tools:text="nyc"
+            android:textColor="@color/black_111111"
+            android:fontFamily="@font/avenir_next_medium"
+            android:textSize="@dimen/text_size_15sp"
+            android:ellipsize="end"/>
+        
+    </LinearLayout>
+
+    <View
+        android:id="@+id/itemDivider"
+        android:layout_width="match_parent"
+        android:background="@drawable/edit_text_e7e7_bg"
+        android:layout_height="@dimen/dimen_1dp"/>
+    
+</LinearLayout>

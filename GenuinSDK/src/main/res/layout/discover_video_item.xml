@@ -1,0 +1,944 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/flMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/avenir_next_italic"
+        android:textColor="@color/white_opacity70"
+        android:textSize="@dimen/text_size_10sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvGenuinLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/genuin"
+        android:text="@string/g"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_32sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvUserNameWaterMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/avenir_next_bold_italic"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_9sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvFullNameWaterMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/avenir_next_bold_italic"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_9sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvBioWaterMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/avenir_next_bold_italic"
+        android:gravity="center_horizontal"
+        android:maxLines="5"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_6sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvFromUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/avenir_next_italic"
+        android:textColor="@color/white_opacity70"
+        android:textSize="@dimen/text_size_10sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvFromCameraRoll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/avenir_next_italic"
+        android:textColor="@color/white_opacity70"
+        android:textSize="@dimen/text_size_10sp"
+        android:visibility="gone" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ivWaterMarkProfile"
+        android:layout_width="@dimen/dimen_100dp"
+        android:layout_height="@dimen/dimen_100dp"
+        android:visibility="gone" />
+
+    <com.begnuine.library.common.customViews.TextureImageView
+        android:id="@+id/ivThumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@android:color/black" />
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        app:auto_show="true"
+        app:backgroundTint="@color/transparent"
+        app:resize_mode="zoom"
+        app:surface_type="texture_view"
+        app:use_controller="false" />
+
+    <RelativeLayout
+        android:id="@+id/rlOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_opacity20"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/llBottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/feed_gradient_bottom"
+        android:baselineAligned="true"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/dimen_16dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/llBottomInnerLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="@dimen/dimen_100dp"
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:layout_weight="1"
+            android:animateLayoutChanges="true"
+            android:baselineAligned="true"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimen_16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvRecordedByText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:maxWidth="@dimen/dimen_190dp"
+                    android:maxLines="1"
+                    android:textColor="@color/white_opacity60"
+                    android:textSize="@dimen/text_size_15sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/llWhoCanSee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/privacy_option_white_border"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dimen_4dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_16dp"
+                        android:layout_height="@dimen/dimen_16dp"
+                        android:src="@drawable/ic_white_bg_unlisted" />
+
+                    <com.begnuine.library.common.customViews.CustomTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dimen_4dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:maxLines="1"
+                        android:text="@string/unlisted"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_12sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivFlagged"
+                    android:layout_width="@dimen/dimen_24dp"
+                    android:layout_height="@dimen/dimen_24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/dimen_8dp"
+                    android:layout_marginTop="@dimen/dimen_2dp"
+                    android:src="@drawable/ic_retry"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:shrinkColumns="1">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+
+                    <com.begnuine.library.common.customViews.DisplayPictureView
+                        android:id="@+id/llDp"
+                        android:layout_width="@dimen/dimen_36dp"
+                        android:layout_height="@dimen/dimen_36dp"
+                        app:innerTextSize="@dimen/text_size_15sp"
+                        app:lottiePadding="@dimen/dimen_2dp"
+                        app:roundSize="@dimen/dimen_36dp" />
+
+                    <com.begnuine.library.common.customViews.CustomTextView
+                        android:id="@+id/tvPublicUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_17sp"
+                        tools:text="\@user.name" />
+
+                    <com.begnuine.library.common.customViews.CustomTextView
+                        android:id="@+id/tvOwnerConversationAt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:maxLines="1"
+                        android:textColor="@color/white_opacity60"
+                        android:textSize="@dimen/text_size_15sp" />
+                </TableRow>
+            </TableLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp">
+
+                <TextView
+                    android:id="@+id/tvDescSingle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:lineSpacingExtra="@dimen/dimen_2dp"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_15sp" />
+
+                <TextView
+                    android:id="@+id/tvDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:lineSpacingExtra="@dimen/dimen_2dp"
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/text_size_15sp"
+                    android:visibility="gone"
+                    tools:text="An open discussion about the various innovative projects in upcoming markets" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llGenuinOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="false"
+            android:baselineAligned="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <!-- <com.begenuin.begenuin.common.CustomIcon
+                 android:id="@+id/llDownloadVideo"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="@dimen/dimen_16dp"
+                 android:contentDescription="@string/download"
+                 android:visibility="visible"
+                 app:custom_icon="@drawable/ic_download" /-->
+
+            <ImageView
+                android:id="@+id/ivDownloadVideo"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_download"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/ivLink"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_linkout_new"
+                android:visibility="gone" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:contentDescription="@string/link"
+                android:visibility="gone"
+                app:custom_icon="@drawable/ic_link2" />-->
+
+            <ImageView
+                android:id="@+id/ivRepost"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_repost_new" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llRepost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:contentDescription="@string/link"
+                app:custom_icon="@drawable/ic_repost" />-->
+
+            <LinearLayout
+                android:id="@+id/llSpark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:orientation="vertical">
+
+                <com.begnuine.library.common.customViews.SparkView
+                    android:id="@+id/sparkView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvSparks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_4dp"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/text_size_15sp"
+                    tools:text="0" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivSaveVideo"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_save_idle" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llSaveVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:contentDescription="@string/save"
+                app:custom_icon="@drawable/ic_save_idle" />-->
+
+            <ImageView
+                android:id="@+id/ivShare"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_share_new" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:contentDescription="@string/share"
+                app:custom_icon="@drawable/ic_share" />-->
+
+            <ImageView
+                android:id="@+id/ivReply"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_reply" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:contentDescription="@string/reply"
+                app:custom_icon="@drawable/ic_reply" />-->
+
+            <ImageView
+                android:id="@+id/ivMoreOptions"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_more_options_white" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llMoreOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                app:custom_icon="@drawable/ic_more_menu" />-->
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llRTBottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="true"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llRTAnimLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/feed_gradient_bottom"
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dimen_16dp"
+            android:paddingBottom="@dimen/dimen_74dp"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/llRTBottomInnerLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/dimen_100dp"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:layout_weight="1"
+                android:animateLayoutChanges="true"
+                android:baselineAligned="true"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dimen_16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvRTRecordedByText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dimen_8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:maxWidth="@dimen/dimen_190dp"
+                        android:maxLines="1"
+                        android:textColor="@color/white_opacity60"
+                        android:textSize="@dimen/text_size_15sp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/llWhoCanSeeRT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/privacy_option_white_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/dimen_4dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="@dimen/dimen_16dp"
+                            android:layout_height="@dimen/dimen_16dp"
+                            android:src="@drawable/ic_white_bg_unlisted" />
+
+                        <com.begnuine.library.common.customViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/dimen_4dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_demi_bold"
+                            android:maxLines="1"
+                            android:text="@string/unlisted"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text_size_12sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardReposted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_8dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/black_opacity40"
+                    app:cardCornerRadius="@dimen/dimen_20dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/dimen_8dp"
+                        android:paddingVertical="@dimen/dimen_4dp">
+
+                        <ImageView
+                            android:layout_width="@dimen/dimen_24dp"
+                            android:layout_height="@dimen/dimen_24dp"
+                            android:src="@drawable/ic_repost"
+                            app:tint="@color/white_opacity60" />
+
+                        <com.begnuine.library.common.customViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_3dp"
+                            android:fontFamily="@font/avenir_next_demi_bold"
+                            android:text="@string/reposted_small"
+                            android:textColor="@color/white_opacity60"
+                            android:textSize="@dimen/text_size_15sp" />
+
+                        <com.begnuine.library.common.customViews.CustomTextView
+                            android:id="@+id/tvOgOwnerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_4dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_bold"
+                            android:maxLines="1"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text_size_15sp" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:shrinkColumns="1">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <com.begnuine.library.common.customViews.DisplayPictureView
+                            android:id="@+id/llUserDp"
+                            android:layout_width="@dimen/dimen_36dp"
+                            android:layout_height="@dimen/dimen_36dp"
+                            app:innerTextSize="@dimen/text_size_15sp"
+                            app:lottiePadding="@dimen/dimen_2dp"
+                            app:roundSize="@dimen/dimen_36dp" />
+
+                        <com.begnuine.library.common.customViews.CustomTextView
+                            android:id="@+id/tvRTUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_bold"
+                            android:maxLines="1"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/text_size_17sp"
+                            tools:text="\@user.name" />
+
+                        <com.begnuine.library.common.customViews.CustomTextView
+                            android:id="@+id/tvRTOwnerConversationAt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_8dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_demi_bold"
+                            android:maxLines="1"
+                            android:textColor="@color/white_opacity60"
+                            android:textSize="@dimen/text_size_15sp" />
+                    </TableRow>
+                </TableLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rlRTDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp">
+
+                    <TextView
+                        android:id="@+id/tvRTDescSingle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:lineSpacingExtra="@dimen/dimen_2dp"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                    <TextView
+                        android:id="@+id/tvRTDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:lineSpacingExtra="@dimen/dimen_2dp"
+                        android:scrollbars="vertical"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_15sp"
+                        android:visibility="gone"
+                        tools:text="An open discussion about the various innovative projects in upcoming markets" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llRTOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:animateLayoutChanges="false"
+                android:baselineAligned="true"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llRTLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:visibility="visible"
+                app:custom_icon="@drawable/ic_link2" />-->
+
+                <ImageView
+                    android:id="@+id/ivRTLink"
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_linkout_new" />
+
+                <ImageView
+                    android:id="@+id/ivRTRepost"
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_repost_new" />
+
+                <!--<com.begenuin.begenuin.common.CustomIcon
+                android:id="@+id/llRTRepost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                app:custom_icon="@drawable/ic_repost" />-->
+
+                <LinearLayout
+                    android:id="@+id/llRTSpark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:orientation="vertical">
+
+                    <com.begnuine.library.common.customViews.SparkView
+                        android:id="@+id/sparkViewRT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvRTSparks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_15sp"
+                        android:lineSpacingExtra="0dp"
+                        tools:text="0" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llComments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/feed_icon_dimen"
+                        android:layout_height="@dimen/feed_icon_dimen"
+                        android:src="@drawable/ic_comment_new" />
+
+                    <TextView
+                        android:id="@+id/tvComments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_4dp"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:text="0"
+                        android:lineSpacingExtra="0dp"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_15sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/ivRTShare"
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_share_new" />
+
+                <ImageView
+                    android:id="@+id/ivParticipate"
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_video"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/ivRTMoreOptions"
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:layout_marginBottom="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_more_options_white" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLoopFiller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dimen_74dp"
+            android:visibility="gone">
+
+            <include layout="@layout/shimmer_layout_loop_filler" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/llVideoUnavailable"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_video_unavailable_error" />
+
+            <com.begnuine.library.common.customViews.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:fontFamily="@font/avenir_next_demi_bold"
+                android:text="@string/video_unavailable"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_17sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llRTBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/black_opacity80"
+            android:gravity="center_vertical|bottom"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dimen_16dp"
+            android:paddingVertical="@dimen/dimen_10dp"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/llGroupDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dimen_8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.begnuine.library.common.customViews.CustomTextView
+                            android:id="@+id/tvRTName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_demi_bold"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/text_size_15sp"
+                            tools:text="Innovation Discussion" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="@dimen/dimen_16dp"
+                                android:layout_height="@dimen/dimen_16dp"
+                                android:src="@drawable/inbox_rt"
+                                app:tint="@color/white_opacity60" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dimen_4dp"
+                                android:fontFamily="@font/avenir_next_demi_bold"
+                                android:text="@string/view_loop"
+                                android:textColor="@color/white_opacity60"
+                                android:textSize="@dimen/text_size_12sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardSubscribe"
+                            android:layout_width="@dimen/dimen_108dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:visibility="gone"
+                            app:cardBackgroundColor="@color/splash_background"
+                            app:cardCornerRadius="@dimen/dimen_5dp"
+                            app:cardElevation="0dp">
+
+                            <com.begnuine.library.common.customViews.CustomTextView
+                                android:id="@+id/tvSubscribeSubscribed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/avenir_next_bold"
+                                android:maxLines="1"
+                                android:paddingHorizontal="@dimen/dimen_2dp"
+                                android:paddingVertical="@dimen/dimen_6dp"
+                                android:text="@string/subscribe"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/text_size_medium" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardAddQuestion"
+                            android:layout_width="@dimen/dimen_108dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            app:cardBackgroundColor="@color/transparent"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@color/color_949494"
+                            app:strokeWidth="@dimen/dimen_1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingVertical="@dimen/dimen_4dp"
+                                android:paddingStart="@dimen/dimen_8dp"
+                                android:paddingEnd="@dimen/dimen_16dp">
+
+                                <ImageView
+                                    android:layout_width="@dimen/dimen_24dp"
+                                    android:layout_height="@dimen/dimen_24dp"
+                                    android:src="@drawable/ic_question_box" />
+
+                                <com.begnuine.library.common.customViews.CustomTextView
+                                    android:id="@+id/tvAddQuestion"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/dimen_8dp"
+                                    android:fontFamily="@font/avenir_next_bold"
+                                    android:text="@string/add_question"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/text_size_medium" />
+                            </LinearLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </FrameLayout>
+
+                    <ImageView
+                        android:id="@+id/ivNext"
+                        android:layout_width="@dimen/dimen_16dp"
+                        android:layout_height="@dimen/dimen_16dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dimen_16dp"
+                        android:src="@drawable/icon_next" />
+
+                </LinearLayout>
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerLoopGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <include layout="@layout/shimmer_layout_loop_group" />
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivMuteIcon"
+        android:layout_width="@dimen/dimen_92dp"
+        android:layout_height="@dimen/dimen_92dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_mute"
+        android:visibility="gone"
+        app:tint="@color/white_opacity40" />
+</FrameLayout>
