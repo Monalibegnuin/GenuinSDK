@@ -58,7 +58,7 @@
         </RelativeLayout>
 
     </LinearLayout>
-    <com.begnuine.library.common.customView.CustomTextView
+    <com.begenuin.library.common.customView.CustomTextView
         android:id="@+id/tvMemberName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

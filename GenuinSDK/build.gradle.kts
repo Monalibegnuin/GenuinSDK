@@ -2,11 +2,12 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("maven-publish")
 }
 //apply(from = "publishLocal.gradle")
 
 android {
-    namespace = "com.begnuine.library"
+    namespace = "com.begenuin.library"
     compileSdk = 33
 
     defaultConfig {

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/no_network_black" />
 
-        <com.begnuine.library.common.customViews.CustomTextView
+        <com.begenuin.library.common.customViews.CustomTextView
             android:id="@+id/layout_no_internet_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/text_size_15sp" />
 
-        <com.begnuine.library.common.customViews.CustomTextView
+        <com.begenuin.library.common.customViews.CustomTextView
             android:id="@+id/no_internet_sub_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

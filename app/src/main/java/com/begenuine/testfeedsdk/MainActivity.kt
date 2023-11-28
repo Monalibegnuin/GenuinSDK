@@ -2,7 +2,7 @@ package com.begenuine.testfeedsdk
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.begnuine.library.SDKInitiate
+import com.begenuin.library.SDKInitiate
 
 class MainActivity : AppCompatActivity() {
 

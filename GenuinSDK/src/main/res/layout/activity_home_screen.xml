@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.begnuine.library.common.customViews.customscrollview.DiscreteScrollView
+            <com.begenuin.library.common.customViews.customscrollview.DiscreteScrollView
                 android:id="@+id/feedViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -80,7 +80,7 @@
                         android:src="@drawable/icon_plus"
                         app:tint="@color/colorWhite" />
 
-                    <com.begnuine.library.common.customViews.CustomTextView
+                    <com.begenuin.library.common.customViews.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -154,7 +154,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_width="wrap_content">
 
-                                <com.begnuine.library.common.customViews.DisplayPictureView
+                                <com.begenuin.library.common.customViews.DisplayPictureView
                                     android:id="@+id/llFeedSelectCommunityDp"
                                     android:layout_width="@dimen/dimen_24dp"
                                     android:layout_height="@dimen/dimen_24dp"
@@ -198,7 +198,7 @@
                     android:paddingVertical="@dimen/dimen_8dp"
                     android:paddingHorizontal="@dimen/dimen_16dp">
 
-                    <com.begnuine.library.common.customViews.CustomTextView
+                    <com.begenuin.library.common.customViews.CustomTextView
                         android:id="@+id/txtLoginEmailIdSDK"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -256,7 +256,7 @@
                         android:src="@drawable/ic_search"
                         app:tint="@color/white_opacity50" />
 
-                    <com.begnuine.library.common.customViews.CustomTextView
+                    <com.begenuin.library.common.customViews.CustomTextView
                         android:id="@+id/tvSearchTextFeed"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -305,7 +305,7 @@
                         android:alpha="0"
                         android:rotationX="-180">
 
-                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                        <com.begenuin.library.common.customViews.InfinityView
                             android:id="@+id/ivShadowCanvasLeft"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -319,7 +319,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <com.begnuine.library.common.customViews.DisplayPictureView
+                            <com.begenuin.library.common.customViews.DisplayPictureView
                                 android:id="@+id/ivShadowCommunityDp"
                                 android:layout_width="@dimen/dimen_32dp"
                                 android:layout_height="@dimen/dimen_32dp"
@@ -366,7 +366,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                        <com.begenuin.library.common.customViews.InfinityView
                             android:id="@+id/ivCanvasLeft"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
@@ -380,7 +380,7 @@
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
-                            <com.begnuine.library.common.customViews.DisplayPictureView
+                            <com.begenuin.library.common.customViews.DisplayPictureView
                                 android:id="@+id/ivCommunityDp"
                                 android:layout_width="@dimen/dimen_32dp"
                                 android:layout_height="@dimen/dimen_32dp"
@@ -437,7 +437,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                        <com.begenuin.library.common.customViews.InfinityView
                             android:id="@+id/ivShadowCanvasRight"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -481,7 +481,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.begenuine.feedscreensdk.common.customViews.InfinityView
+                        <com.begenuin.library.common.customViews.InfinityView
                             android:id="@+id/ivCanvasRight"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -576,7 +576,7 @@
                 android:background="@drawable/circle_white_ring"
                 android:padding="@dimen/dimen_10dp">
 
-                <com.begnuine.library.common.customViews.CustomIcon
+                <com.begenuin.library.common.customViews.CustomIcon
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:custom_icon="@drawable/ic_reply" />

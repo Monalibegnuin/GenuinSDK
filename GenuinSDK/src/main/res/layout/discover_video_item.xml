@@ -84,7 +84,7 @@
         android:layout_height="@dimen/dimen_100dp"
         android:visibility="gone" />
 
-    <com.begnuine.library.common.customViews.TextureImageView
+    <com.begenuin.library.common.customViews.TextureImageView
         android:id="@+id/ivThumbnail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -169,7 +169,7 @@
                         android:layout_height="@dimen/dimen_16dp"
                         android:src="@drawable/ic_white_bg_unlisted" />
 
-                    <com.begnuine.library.common.customViews.CustomTextView
+                    <com.begenuin.library.common.customViews.CustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/dimen_4dp"
@@ -204,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical">
 
-                    <com.begnuine.library.common.customViews.DisplayPictureView
+                    <com.begenuin.library.common.customViews.DisplayPictureView
                         android:id="@+id/llDp"
                         android:layout_width="@dimen/dimen_36dp"
                         android:layout_height="@dimen/dimen_36dp"
@@ -212,7 +212,7 @@
                         app:lottiePadding="@dimen/dimen_2dp"
                         app:roundSize="@dimen/dimen_36dp" />
 
-                    <com.begnuine.library.common.customViews.CustomTextView
+                    <com.begenuin.library.common.customViews.CustomTextView
                         android:id="@+id/tvPublicUserName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -224,7 +224,7 @@
                         android:textSize="@dimen/text_size_17sp"
                         tools:text="\@user.name" />
 
-                    <com.begnuine.library.common.customViews.CustomTextView
+                    <com.begenuin.library.common.customViews.CustomTextView
                         android:id="@+id/tvOwnerConversationAt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -334,7 +334,7 @@
                 android:layout_marginBottom="@dimen/dimen_16dp"
                 android:orientation="vertical">
 
-                <com.begnuine.library.common.customViews.SparkView
+                <com.begenuin.library.common.customViews.SparkView
                     android:id="@+id/sparkView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -482,7 +482,7 @@
                             android:layout_height="@dimen/dimen_16dp"
                             android:src="@drawable/ic_white_bg_unlisted" />
 
-                        <com.begnuine.library.common.customViews.CustomTextView
+                        <com.begenuin.library.common.customViews.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/dimen_4dp"
@@ -519,7 +519,7 @@
                             android:src="@drawable/ic_repost"
                             app:tint="@color/white_opacity60" />
 
-                        <com.begnuine.library.common.customViews.CustomTextView
+                        <com.begenuin.library.common.customViews.CustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dimen_3dp"
@@ -528,7 +528,7 @@
                             android:textColor="@color/white_opacity60"
                             android:textSize="@dimen/text_size_15sp" />
 
-                        <com.begnuine.library.common.customViews.CustomTextView
+                        <com.begenuin.library.common.customViews.CustomTextView
                             android:id="@+id/tvOgOwnerName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -553,7 +553,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical">
 
-                        <com.begnuine.library.common.customViews.DisplayPictureView
+                        <com.begenuin.library.common.customViews.DisplayPictureView
                             android:id="@+id/llUserDp"
                             android:layout_width="@dimen/dimen_36dp"
                             android:layout_height="@dimen/dimen_36dp"
@@ -561,7 +561,7 @@
                             app:lottiePadding="@dimen/dimen_2dp"
                             app:roundSize="@dimen/dimen_36dp" />
 
-                        <com.begnuine.library.common.customViews.CustomTextView
+                        <com.begenuin.library.common.customViews.CustomTextView
                             android:id="@+id/tvRTUserName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -573,7 +573,7 @@
                             android:textSize="@dimen/text_size_17sp"
                             tools:text="\@user.name" />
 
-                        <com.begnuine.library.common.customViews.CustomTextView
+                        <com.begenuin.library.common.customViews.CustomTextView
                             android:id="@+id/tvRTOwnerConversationAt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -663,7 +663,7 @@
                     android:layout_marginBottom="@dimen/dimen_16dp"
                     android:orientation="vertical">
 
-                    <com.begnuine.library.common.customViews.SparkView
+                    <com.begenuin.library.common.customViews.SparkView
                         android:id="@+id/sparkViewRT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -759,7 +759,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/ic_video_unavailable_error" />
 
-            <com.begnuine.library.common.customViews.CustomTextView
+            <com.begenuin.library.common.customViews.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_16dp"
@@ -800,7 +800,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <com.begnuine.library.common.customViews.CustomTextView
+                        <com.begenuin.library.common.customViews.CustomTextView
                             android:id="@+id/tvRTName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -851,7 +851,7 @@
                             app:cardCornerRadius="@dimen/dimen_5dp"
                             app:cardElevation="0dp">
 
-                            <com.begnuine.library.common.customViews.CustomTextView
+                            <com.begenuin.library.common.customViews.CustomTextView
                                 android:id="@+id/tvSubscribeSubscribed"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -891,7 +891,7 @@
                                     android:layout_height="@dimen/dimen_24dp"
                                     android:src="@drawable/ic_question_box" />
 
-                                <com.begnuine.library.common.customViews.CustomTextView
+                                <com.begenuin.library.common.customViews.CustomTextView
                                     android:id="@+id/tvAddQuestion"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"

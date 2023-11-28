@@ -26,7 +26,7 @@
             app:cardCornerRadius="@dimen/dimen_3dp"
             app:cardElevation="0dp" />
 
-        <com.begnuine.library.common.customViews.CustomTextView
+        <com.begenuin.library.common.customViews.CustomTextView
             android:id="@+id/tvNewPostPreview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_big_20sp" />
 
-        <com.begnuine.library.common.customViews.CustomTextView
+        <com.begenuin.library.common.customViews.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -62,7 +62,7 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/transparent_gradient" />
 
-            <com.begnuine.library.common.customViews.CustomTextView
+            <com.begenuin.library.common.customViews.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

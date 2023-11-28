@@ -18,13 +18,13 @@
         android:theme="@style/Theme.FeedScreenSDK"
         tools:targetApi="31">
         <activity
-            android:name="com.begnuine.library.views.DunkidonutsScreen"
+            android:name="com.begenuin.library.views.DunkidonutsScreen"
             android:exported="false" />
         <activity
-            android:name="com.begnuine.library.views.LoginActivity"
+            android:name="com.begenuin.library.views.LoginActivity"
             android:exported="true" />
         <activity
-            android:name="com.begnuine.library.views.HomeScreen"
+            android:name="com.begenuin.library.views.HomeScreen"
             android:exported="true" />
     </application>
 
