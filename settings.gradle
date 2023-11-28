@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TestFeedSDK"
+rootProject.name = "GenuinSDK"
 include ':app'
 //includeBuild("publishing-plugin")
 include ':GenuinSDK'
