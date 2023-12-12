@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <merge>
+<FrameLayout
+    android:id="@+id/flFontSeekbar"
+    android:layout_width="@dimen/dimen_30dp"
+    android:layout_height="@dimen/dimen_270dp"
+    android:layout_centerVertical="true"
+    android:layout_gravity="left|center_vertical">
+
+    <ImageView
+        android:id="@+id/ivSliderImage"
+        android:layout_width="258dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
+        android:rotation="270"
+        android:src="@drawable/ic_slider_track" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/fontSeekbar"
+        android:layout_width="268dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
+        android:rotation="270"
+        app:haloColor="@color/colorWhite"
+        app:haloRadius="0dp"
+        app:labelBehavior="gone"
+        app:thumbColor="@color/colorWhite"
+        app:thumbElevation="0dp"
+        app:thumbStrokeColor="@color/colorWhite"
+        app:tickColor="@color/colorWhite"
+        app:tickColorActive="@color/transparent"
+        app:tickColorInactive="@color/transparent"
+        app:trackColorActive="@color/transparent"
+        app:trackColorInactive="@color/transparent" />
+
+</FrameLayout>
+    </merge>
+</layout>

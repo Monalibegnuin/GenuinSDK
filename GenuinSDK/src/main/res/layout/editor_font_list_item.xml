@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llEditorFontMain"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="@dimen/dimen_8dp"
+    android:layout_marginRight="@dimen/dimen_8dp"
+    android:background="@drawable/font_rounded_corner_border_grey"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/tvFontToApply"
+        android:layout_width="@dimen/dimen_30dp"
+        android:layout_height="@dimen/dimen_30dp"
+        android:gravity="center"
+        android:text="Aa"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp" />
+</LinearLayout>

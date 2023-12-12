@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dimen_60dp"
+    android:background="@drawable/dialog_ll_shape"
+    android:orientation="vertical"
+    android:paddingVertical="@dimen/dimen_10dp">
+
+    <com.begenuin.library.common.customViews.CustomTextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_14dp"
+        android:fontFamily="@font/avenir_next_bold"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/dimen_5dp"
+        android:text="@string/delete_this_conversation"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:textSize="@dimen/text_size_17sp" />
+
+    <com.begenuin.library.common.customViews.CustomTextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dimen_24dp"
+        android:fontFamily="@font/avenir_next_demi_bold"
+        android:gravity="center"
+        android:text="@string/txt_delete_chat_sub"
+        android:textColor="@color/color_999999"
+        android:textSize="@dimen/text_size_small_13sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:orientation="vertical">
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/dialog_btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dimen_32dp"
+            android:background="@drawable/alert_blue_round_new"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:text="@string/btn_delete"
+            android:paddingHorizontal="@dimen/dimen_50dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_size_medium" />
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/dialog_btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/dimen_14dp"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/avenir_next_bold"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/splash_background"
+            android:textSize="@dimen/text_size_medium" />
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/dialog_btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/dimen_14dp"
+            android:background="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:fontFamily="@font/avenir_next_demi"
+            android:gravity="center"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/splash_background"
+            android:textSize="@dimen/text_size_medium"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

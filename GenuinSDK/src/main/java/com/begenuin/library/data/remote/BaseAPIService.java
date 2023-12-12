@@ -11,7 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 
 import com.begenuin.library.R;
-import com.begenuine.feedscreensdk.common.Constants;
+import com.begenuin.library.common.Constants;
 import com.begenuin.library.common.Utility;
 import com.begenuin.library.SDKInitiate;
 import com.begenuin.library.core.interfaces.ResponseListener;
@@ -74,7 +74,8 @@ public class BaseAPIService {
      * @param responseListener is the listener of response
      * @param isShowProgress   decides whether show progress bar or not
      */
-    public BaseAPIService(final Context context, String module, RequestBody requestBody, boolean isHeader, ResponseListener responseListener, String apiMethodType, boolean isShowProgress) {
+    public BaseAPIService(final Context context, String module, RequestBody requestBody, boolean isHeader,
+                          ResponseListener responseListener, String apiMethodType, boolean isShowProgress) {
         this.context = context;
         this.responseListener = responseListener;
         this.isShowProgress = isShowProgress;
@@ -366,17 +367,17 @@ public class BaseAPIService {
                 break;
         }
 
-//        apiCall.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
-//                try {
-//                    Request request = response.raw().request();
-//                    String requestJsonStr = "";
-//                    if (requestBody != null) {
-//                        requestJsonStr = Utility.bodyToString(requestBody);
-//                    }
-//                    if (response.code() == 200) {
-//                        sendAPISuccessLogs(request.url().toString());
+        apiCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NotNull Call<ResponseBody> call, @NotNull Response<ResponseBody> response) {
+                try {
+                    Request request = response.raw().request();
+                    String requestJsonStr = "";
+                    if (requestBody != null) {
+                        requestJsonStr = Utility.bodyToString(requestBody);
+                    }
+                    if (response.code() == 200) {
+                        //sendAPISuccessLogs(request.url().toString());
 //                        if (module.equalsIgnoreCase(Constants.VERIFY_OTP) || module.equalsIgnoreCase(Constants.VERIFY_NEW_MOBILE) || module.equalsIgnoreCase(Constants.COMPLETE_PROFILE) || module.equalsIgnoreCase(Constants.REFRESH_TOKEN)) {
 //                            try {
 //                                Headers headerList = response.headers();
@@ -407,21 +408,23 @@ public class BaseAPIService {
 //                                dismissProgressDialog();
 //                            }
 //                        }
-//                        String res = response.body().string();
-//                        if (responseListener != null) {
-//                            responseListener.onSuccess(res);
-//                        }
-//                        showLog("Response:", res);
-//                    } else if (response.code() == 404) {
-//                        String responseBody = response.errorBody().string();
-//                        sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
-//                        if (isShowProgress) {
-//                            dismissProgressDialog();
-//                        }
-//                        if (module.equalsIgnoreCase(Constants.GET_PROFILE)) {
-//                            if (responseListener != null) {
-//                                responseListener.onFailure("404");
-//                            }
+                        String res = response.body().string();
+                        if (responseListener != null) {
+                            dismissProgressDialog();
+                            responseListener.onSuccess(res);
+                        }
+                        showLog("Response:", res);
+                    } else if (response.code() == 404) {
+                        String responseBody = response.errorBody().string();
+                        //sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
+                        if (isShowProgress) {
+                            dismissProgressDialog();
+                        }
+                        if (module.equalsIgnoreCase(Constants.GET_PROFILE)) {
+                            if (responseListener != null) {
+                                responseListener.onFailure("404");
+                            }
+                        }
 //                        } else if (module.equalsIgnoreCase(Constants.SEND_REPLY)) {
 //                            if (responseListener != null) {
 //                                responseListener.onFailure("404");
@@ -435,180 +438,180 @@ public class BaseAPIService {
 //                                responseListener.onFailure("404");
 //                            }
 //                        }
-//                    } else if (response.code() == 401) {
-//                        String responseBody = response.errorBody().string();
-//                        sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
-//                        if (module.equals(Constants.REFRESH_TOKEN)) {
-//                            // Force Logout
-//                            dismissProgressDialog();
-//                            showLog("token", "Force Logout");
-//                            RefreshTokenManager.getInstance().status = RefreshTokenManager.RefreshTokenAPIStatus.FAILED;
-//                            EventBus.getDefault().post(new APICallRefreshEvent());
-//                            //Note: Here removing whole cache directory so explicitly not removing qrCode image folder
-//                            clearDataAndRedirect();
-//                        } else if (module.equals(Constants.COMPLETE_PROFILE)) {
-//                            dismissProgressDialog();
-//                            responseListener.onFailure(responseBody);
-//                        } else {
-//                            reqContext = context;
-//                            reqHeader = isHeader;
-//                            reqModule = module;
-//                            reqType = apiMethodType;
-//                            reqBody = requestBody;
-////                            showLog("RefreshToken", RefreshTokenManager.getInstance().status.name());
-////                            if (RefreshTokenManager.getInstance().status != RefreshTokenManager.RefreshTokenAPIStatus.IN_PROGRESS && RefreshTokenManager.getInstance().status != RefreshTokenManager.RefreshTokenAPIStatus.COMPLETED) {
-////                                RefreshTokenManager.getInstance().callRefreshTokenAPI(context);
-////                            }
-//                            //EventBus.getDefault().register(BaseAPIService.this);
-//                        }
-//                    } else if (response.code() == 429) {
-//                        String responseBody = response.errorBody().string();
-//                        sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
-//                        if (isShowProgress) {
-//                            dismissProgressDialog();
-//                        }
-//                        if (module.equalsIgnoreCase(Constants.HOME) || module.equalsIgnoreCase(Constants.SEARCH_API)) {
-//                            if (responseListener != null) {
-//                                responseListener.onFailure("429");
+                    } else if (response.code() == 401) {
+                        String responseBody = response.errorBody().string();
+                        //sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
+                        if (module.equals(Constants.GET_PROFILE)) {
+                            // Force Logout
+                            dismissProgressDialog();
+                            showLog("token", "Force Logout");
+                            //RefreshTokenManager.getInstance().status = RefreshTokenManager.RefreshTokenAPIStatus.FAILED;
+                            //EventBus.getDefault().post(new APICallRefreshEvent());
+                            //Note: Here removing whole cache directory so explicitly not removing qrCode image folder
+                            //clearDataAndRedirect();
+                        } else if (module.equals(Constants.COMPLETE_PROFILE)) {
+                            dismissProgressDialog();
+                            responseListener.onFailure(responseBody);
+                        } else {
+                            reqContext = context;
+                            reqHeader = isHeader;
+                            reqModule = module;
+                            reqType = apiMethodType;
+                            reqBody = requestBody;
+//                            showLog("RefreshToken", RefreshTokenManager.getInstance().status.name());
+//                            if (RefreshTokenManager.getInstance().status != RefreshTokenManager.RefreshTokenAPIStatus.IN_PROGRESS && RefreshTokenManager.getInstance().status != RefreshTokenManager.RefreshTokenAPIStatus.COMPLETED) {
+//                                RefreshTokenManager.getInstance().callRefreshTokenAPI(context);
 //                            }
+                            //EventBus.getDefault().register(BaseAPIService.this);
+                        }
+                    } else if (response.code() == 429) {
+                        String responseBody = response.errorBody().string();
+                        //sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
+                        if (isShowProgress) {
+                            dismissProgressDialog();
+                        }
+                        if (module.equalsIgnoreCase(Constants.HOME) || module.equalsIgnoreCase(Constants.SEARCH_API)) {
+                            if (responseListener != null) {
+                                responseListener.onFailure("429");
+                            }
+                        }
+                    } else {
+                        if (isShowProgress) {
+                            dismissProgressDialog();
+                        }
+                        JSONObject jsonObject;
+                        try {
+                            String responseBody = response.errorBody().string();
+                            //sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
+                            jsonObject = new JSONObject(responseBody);
+                            String userMessage = jsonObject.optString("message", "");
+                            String code = jsonObject.optString("code", "");
+//                            if (module.equalsIgnoreCase(Constants.CAN_INVITE_ALL)) {
+//                                if (responseListener != null) {
+//                                    responseListener.onFailure(code);
+//                                }
+//                            } else if (module.equalsIgnoreCase(Constants.EMBED)) {
+//                                if (responseListener != null) {
+//                                    responseListener.onFailure(responseBody);
+//                                }
+//                            } else if (module.equalsIgnoreCase(Constants.INVITE_ALL)) {
+//                                if (code.equalsIgnoreCase(Constants.CODE_5160)) {
+//                                    responseListener.onFailure(responseBody);
+//                                } else {
+//                                    responseListener.onFailure(code);
+//                                }
+//                            } else if (code.equalsIgnoreCase(Constants.VIDEO_ALREADY_DELETED_CODE)) {
+//                                if (responseListener != null) {
+//                                    responseListener.onFailure(code);
+//                                }
+//                            } else if (code.equalsIgnoreCase(Constants.DELETED_ACCOUNT_CODE)) {
+//                                if (responseListener != null) {
+//                                    responseListener.onFailure(code);
+//                                }
+//                            } else if (module.contains(Constants.SAVE_VIDEO) || module.contains(Constants.UNSAVE_VIDEO) || module.contains(Constants.SYNC_CONTACTS)) {
+//                                if (responseListener != null) {
+//                                    responseListener.onFailure(code);
+//                                }
+//                            } else if (module.equalsIgnoreCase(Constants.UPDATE_ENTITIES)) {
+//                                if (responseListener != null) {
+//                                    responseListener.onFailure(code);
+//                                }
+//                            } else if (code.equalsIgnoreCase(Constants.CODE_5061) || code.equalsIgnoreCase(Constants.CODE_5026) || code.equalsIgnoreCase(Constants.CODE_5082) ||
+//                                    code.equalsIgnoreCase(Constants.CODE_5090) || code.equalsIgnoreCase(Constants.CODE_5095) || code.equalsIgnoreCase(Constants.CODE_5096) ||
+//                                    code.equalsIgnoreCase(Constants.CODE_5097) || code.equalsIgnoreCase(Constants.CODE_5025) || code.equalsIgnoreCase(Constants.CODE_5057) ||
+//                                    code.equalsIgnoreCase(Constants.CODE_5044) || code.equalsIgnoreCase(Constants.CODE_5094) || code.equalsIgnoreCase(Constants.CODE_5059) ||
+//                                    code.equalsIgnoreCase(Constants.CODE_5154) || code.equalsIgnoreCase(Constants.CODE_5093) || code.equalsIgnoreCase(Constants.CODE_5060) ||
+//                                    code.equalsIgnoreCase(Constants.CODE_5178) || code.equalsIgnoreCase(Constants.CODE_5175) || code.equalsIgnoreCase(Constants.CODE_5156) ||
+//                                    code.equalsIgnoreCase(Constants.CODE_5198) || code.equalsIgnoreCase(Constants.CODE_5216) || code.equalsIgnoreCase(Constants.CODE_5101)) {
+//                                if (responseListener != null) {
+//                                    if (module.contains(Constants.CHECK_VIDEO) && (code.equalsIgnoreCase(Constants.CODE_5095) || code.equalsIgnoreCase(Constants.CODE_5096))) {
+//                                        responseListener.onFailure(code + userMessage);
+//                                    } else if (module.equalsIgnoreCase(Constants.VALIDATE_NEW_MOBILE) && code.equalsIgnoreCase(Constants.CODE_5094)) {
+//                                        responseListener.onFailure(code + userMessage);
+//                                    } else if (module.contains(Constants.SEND_REPLY) && code.equalsIgnoreCase(Constants.CODE_5057)) {
+//                                        responseListener.onFailure(responseBody);
+//                                    } else if (module.contains(Constants.SEND_REACTION) && code.equalsIgnoreCase(Constants.CODE_5061)) {
+//                                        responseListener.onFailure(responseBody);
+//                                    } else if (module.equalsIgnoreCase(Constants.CREATE_PUBLIC_VIDEO) && code.equalsIgnoreCase(Constants.CODE_5156)) {
+//                                        responseListener.onFailure(responseBody);
+//                                    } else if (module.equalsIgnoreCase(Constants.CREATE_COMMENT) && code.equalsIgnoreCase(Constants.CODE_5175)) {
+//                                        responseListener.onFailure(responseBody);
+//                                    } else if (module.equals(Constants.COMPLETE_PROFILE) || module.equals(Constants.UPDATE_USER_PROFILE)) {
+//                                        responseListener.onFailure(responseBody);
+//                                    } else if (module.equalsIgnoreCase(Constants.CREATE_COMMUNITY) && code.equalsIgnoreCase(Constants.CODE_5216)) {
+//                                        responseListener.onFailure(responseBody);
+//                                    } else {
+//                                        responseListener.onFailure(userMessage);
+//                                    }
+//                                }
+//                            } else if (!TextUtils.isEmpty(userMessage) && responseListener != null) {
+//                                if (!module.contains(Constants.LOOP_MESSAGE_PIN) && !module.contains(Constants.SUBSCRIBE_RT) && !module.contains(Constants.READ) && !module.contains(Constants.STORE_UTM_DATA) && !module.contains(Constants.GET_UPLOAD_URL) && !module.contains(Constants.VERIFY_OTP) && !module.contains(Constants.VIEW_VIDEO) && !module.contains(Constants.SAVE_VIDEO) && !module.contains(Constants.UNSAVE_VIDEO) && !module.contains(Constants.EDIT_GROUP)) {
+//                                    Utility.showToast(context, userMessage);
+//                                }
+//
+//                                responseListener.onFailure(userMessage);
+//
+//                                if (module.contains(Constants.VALIDATE_USER) || module.contains(Constants.USER_LOGIN)) {
+//
+//                                    long start = SharedPrefUtils.getLongPreference(context, "login_duration");
+//                                    long duration = System.currentTimeMillis() - start;
+//                                    HashMap<String, Object> map;
+//                                    map = new HashMap<String, Object>() {{
+//                                        put("latency", duration);
+//                                    }};
+//                                   // GenuInApplication.getInstance().sendEventLogs(Constants.SIGN_IN_FAILED, map);
+//                                } else if (module.contains(Constants.COMPLETE_PROFILE)) {
+//                                    String token = SharedPrefUtils.getStringPreference(context, Constants.PREF_XAT);
+//                                    if (TextUtils.isEmpty(token)) {
+//                                        long start = SharedPrefUtils.getLongPreference(context, "login_duration");
+//                                        long duration = System.currentTimeMillis() - start;
+//                                        HashMap<String, Object> map;
+//                                        map = new HashMap<String, Object>() {{
+//                                            put("latency", duration);
+//                                        }};
+//                                       // GenuInApplication.getInstance().sendEventLogs(Constants.SIGN_UP_FAILED, map);
+//                                    }
+//                                }
+//                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (Exception e) {
+                    Utility.showLogException(e);
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
+                dismissProgressDialog();
+                try {
+                    showLog(TAG_EXCEPTION, t.getMessage());
+//                    if (module.contains(Constants.CAN_INVITE_ALL) || module.contains(Constants.INVITE_ALL)) {
+//                        if (responseListener != null) {
+//                            responseListener.onFailure("");
 //                        }
-//                    } else {
-//                        if (isShowProgress) {
-//                            dismissProgressDialog();
+//                    } else if (module.contains(Constants.CHECK_VIDEO)) {
+//                        Utility.showToast(context, Constants.SOMETHING_WENT_WRONG_MSG);
+//                    } else if (module.contains(Constants.CREATE_COMMUNITY)) {
+//                        if (responseListener != null) {
+//                            responseListener.onFailure("error");
 //                        }
-//                        JSONObject jsonObject;
-//                        try {
-//                            String responseBody = response.errorBody().string();
-//                            sendAPIFailureLogs(request.url().toString(), requestJsonStr, responseBody);
-//                            jsonObject = new JSONObject(responseBody);
-//                            String userMessage = jsonObject.optString("message", "");
-//                            String code = jsonObject.optString("code", "");
-////                            if (module.equalsIgnoreCase(Constants.CAN_INVITE_ALL)) {
-////                                if (responseListener != null) {
-////                                    responseListener.onFailure(code);
-////                                }
-////                            } else if (module.equalsIgnoreCase(Constants.EMBED)) {
-////                                if (responseListener != null) {
-////                                    responseListener.onFailure(responseBody);
-////                                }
-////                            } else if (module.equalsIgnoreCase(Constants.INVITE_ALL)) {
-////                                if (code.equalsIgnoreCase(Constants.CODE_5160)) {
-////                                    responseListener.onFailure(responseBody);
-////                                } else {
-////                                    responseListener.onFailure(code);
-////                                }
-////                            } else if (code.equalsIgnoreCase(Constants.VIDEO_ALREADY_DELETED_CODE)) {
-////                                if (responseListener != null) {
-////                                    responseListener.onFailure(code);
-////                                }
-////                            } else if (code.equalsIgnoreCase(Constants.DELETED_ACCOUNT_CODE)) {
-////                                if (responseListener != null) {
-////                                    responseListener.onFailure(code);
-////                                }
-////                            } else if (module.contains(Constants.SAVE_VIDEO) || module.contains(Constants.UNSAVE_VIDEO) || module.contains(Constants.SYNC_CONTACTS)) {
-////                                if (responseListener != null) {
-////                                    responseListener.onFailure(code);
-////                                }
-////                            } else if (module.equalsIgnoreCase(Constants.UPDATE_ENTITIES)) {
-////                                if (responseListener != null) {
-////                                    responseListener.onFailure(code);
-////                                }
-////                            } else if (code.equalsIgnoreCase(Constants.CODE_5061) || code.equalsIgnoreCase(Constants.CODE_5026) || code.equalsIgnoreCase(Constants.CODE_5082) ||
-////                                    code.equalsIgnoreCase(Constants.CODE_5090) || code.equalsIgnoreCase(Constants.CODE_5095) || code.equalsIgnoreCase(Constants.CODE_5096) ||
-////                                    code.equalsIgnoreCase(Constants.CODE_5097) || code.equalsIgnoreCase(Constants.CODE_5025) || code.equalsIgnoreCase(Constants.CODE_5057) ||
-////                                    code.equalsIgnoreCase(Constants.CODE_5044) || code.equalsIgnoreCase(Constants.CODE_5094) || code.equalsIgnoreCase(Constants.CODE_5059) ||
-////                                    code.equalsIgnoreCase(Constants.CODE_5154) || code.equalsIgnoreCase(Constants.CODE_5093) || code.equalsIgnoreCase(Constants.CODE_5060) ||
-////                                    code.equalsIgnoreCase(Constants.CODE_5178) || code.equalsIgnoreCase(Constants.CODE_5175) || code.equalsIgnoreCase(Constants.CODE_5156) ||
-////                                    code.equalsIgnoreCase(Constants.CODE_5198) || code.equalsIgnoreCase(Constants.CODE_5216) || code.equalsIgnoreCase(Constants.CODE_5101)) {
-////                                if (responseListener != null) {
-////                                    if (module.contains(Constants.CHECK_VIDEO) && (code.equalsIgnoreCase(Constants.CODE_5095) || code.equalsIgnoreCase(Constants.CODE_5096))) {
-////                                        responseListener.onFailure(code + userMessage);
-////                                    } else if (module.equalsIgnoreCase(Constants.VALIDATE_NEW_MOBILE) && code.equalsIgnoreCase(Constants.CODE_5094)) {
-////                                        responseListener.onFailure(code + userMessage);
-////                                    } else if (module.contains(Constants.SEND_REPLY) && code.equalsIgnoreCase(Constants.CODE_5057)) {
-////                                        responseListener.onFailure(responseBody);
-////                                    } else if (module.contains(Constants.SEND_REACTION) && code.equalsIgnoreCase(Constants.CODE_5061)) {
-////                                        responseListener.onFailure(responseBody);
-////                                    } else if (module.equalsIgnoreCase(Constants.CREATE_PUBLIC_VIDEO) && code.equalsIgnoreCase(Constants.CODE_5156)) {
-////                                        responseListener.onFailure(responseBody);
-////                                    } else if (module.equalsIgnoreCase(Constants.CREATE_COMMENT) && code.equalsIgnoreCase(Constants.CODE_5175)) {
-////                                        responseListener.onFailure(responseBody);
-////                                    } else if (module.equals(Constants.COMPLETE_PROFILE) || module.equals(Constants.UPDATE_USER_PROFILE)) {
-////                                        responseListener.onFailure(responseBody);
-////                                    } else if (module.equalsIgnoreCase(Constants.CREATE_COMMUNITY) && code.equalsIgnoreCase(Constants.CODE_5216)) {
-////                                        responseListener.onFailure(responseBody);
-////                                    } else {
-////                                        responseListener.onFailure(userMessage);
-////                                    }
-////                                }
-////                            } else if (!TextUtils.isEmpty(userMessage) && responseListener != null) {
-////                                if (!module.contains(Constants.LOOP_MESSAGE_PIN) && !module.contains(Constants.SUBSCRIBE_RT) && !module.contains(Constants.READ) && !module.contains(Constants.STORE_UTM_DATA) && !module.contains(Constants.GET_UPLOAD_URL) && !module.contains(Constants.VERIFY_OTP) && !module.contains(Constants.VIEW_VIDEO) && !module.contains(Constants.SAVE_VIDEO) && !module.contains(Constants.UNSAVE_VIDEO) && !module.contains(Constants.EDIT_GROUP)) {
-////                                    Utility.showToast(context, userMessage);
-////                                }
-////
-////                                responseListener.onFailure(userMessage);
-////
-////                                if (module.contains(Constants.VALIDATE_USER) || module.contains(Constants.USER_LOGIN)) {
-////
-////                                    long start = SharedPrefUtils.getLongPreference(context, "login_duration");
-////                                    long duration = System.currentTimeMillis() - start;
-////                                    HashMap<String, Object> map;
-////                                    map = new HashMap<String, Object>() {{
-////                                        put("latency", duration);
-////                                    }};
-////                                   // GenuInApplication.getInstance().sendEventLogs(Constants.SIGN_IN_FAILED, map);
-////                                } else if (module.contains(Constants.COMPLETE_PROFILE)) {
-////                                    String token = SharedPrefUtils.getStringPreference(context, Constants.PREF_XAT);
-////                                    if (TextUtils.isEmpty(token)) {
-////                                        long start = SharedPrefUtils.getLongPreference(context, "login_duration");
-////                                        long duration = System.currentTimeMillis() - start;
-////                                        HashMap<String, Object> map;
-////                                        map = new HashMap<String, Object>() {{
-////                                            put("latency", duration);
-////                                        }};
-////                                       // GenuInApplication.getInstance().sendEventLogs(Constants.SIGN_UP_FAILED, map);
-////                                    }
-////                                }
-////                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
+//                    } else if (!module.contains(Constants.READ) && !module.contains(Constants.VIEW_VIDEO) && !module.contains(Constants.SHARE_COUNT) && !module.contains(Constants.CLICK_COUNT)) {
+//                        if (responseListener != null) {
+//                            responseListener.onFailure(t.getMessage());
 //                        }
 //                    }
-//                } catch (Exception e) {
-//                    Utility.showLogException(e);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NotNull Call<ResponseBody> call, @NotNull Throwable t) {
-//                dismissProgressDialog();
-//                try {
-//                    showLog(TAG_EXCEPTION, t.getMessage());
-////                    if (module.contains(Constants.CAN_INVITE_ALL) || module.contains(Constants.INVITE_ALL)) {
-////                        if (responseListener != null) {
-////                            responseListener.onFailure("");
-////                        }
-////                    } else if (module.contains(Constants.CHECK_VIDEO)) {
-////                        Utility.showToast(context, Constants.SOMETHING_WENT_WRONG_MSG);
-////                    } else if (module.contains(Constants.CREATE_COMMUNITY)) {
-////                        if (responseListener != null) {
-////                            responseListener.onFailure("error");
-////                        }
-////                    } else if (!module.contains(Constants.READ) && !module.contains(Constants.VIEW_VIDEO) && !module.contains(Constants.SHARE_COUNT) && !module.contains(Constants.CLICK_COUNT)) {
-////                        if (responseListener != null) {
-////                            responseListener.onFailure(t.getMessage());
-////                        }
-////                    }
-////                    String requestJsonStr = "";
-////                    if (requestBody != null) {
-////                        requestJsonStr = Utility.bodyToString(requestBody);
-////                    }
-////                    sendAPIFailureLogs(call.request().url().toString(), requestJsonStr, t.getMessage());
-//                } catch (Exception e) {
-//                    Utility.showLogException(e);
-//                }
-//            }
-//        });
+//                    String requestJsonStr = "";
+//                    if (requestBody != null) {
+//                        requestJsonStr = Utility.bodyToString(requestBody);
+//                    }
+//                    sendAPIFailureLogs(call.request().url().toString(), requestJsonStr, t.getMessage());
+                } catch (Exception e) {
+                    Utility.showLogException(e);
+                }
+            }
+        });
     }
 
 //    public boolean isLoggedIn() {

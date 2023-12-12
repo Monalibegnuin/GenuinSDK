@@ -23,6 +23,13 @@
     <dimen name="text_size_9sp">9sp</dimen>
     <dimen name="text_size_6sp">6sp</dimen>
     <dimen name="text_size_very_small_11sp">11sp</dimen>
+    <dimen name="text_size_small_13sp">13sp</dimen>
+    <dimen name="camera_profile_hw">36dp</dimen>
+    <dimen name="text_size_28sp">28sp</dimen>
+    <dimen name="text_size_very_small">12sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_normal_17sp">17sp</dimen>
 
     <dimen name="dimen_1dp">1dp</dimen>
     <dimen name="dimen_1_half_dp">1.5dp</dimen>
@@ -112,6 +119,12 @@
     <dimen name="dimen_500dp">500dp</dimen>
     <dimen name="text_size_normal">16sp</dimen>
     <dimen name="text_size_big">18sp</dimen>
+    <dimen name="gradient_height">120dp</dimen>
+    <dimen name="text_size_36sp">36sp</dimen>
+    <dimen name="thumb_width">120dp</dimen>
+    <dimen name="thumb_height">210dp</dimen>
+    <dimen name="video_edit_text_hint_size">40sp</dimen>
+    <dimen name="video_edit_text_size_25">25sp</dimen>
 
     <dimen name="simpletooltip_overlay_offset">10dp</dimen>
     <dimen name="simpletooltip_margin">10dp</dimen>

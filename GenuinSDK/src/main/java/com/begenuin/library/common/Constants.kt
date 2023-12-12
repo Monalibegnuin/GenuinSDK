@@ -1,4 +1,6 @@
-package com.begenuine.feedscreensdk.common
+package com.begenuin.library.common
+
+import android.graphics.Color
 
 class Constants {
 
@@ -16,7 +18,7 @@ class Constants {
         const val DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss"
         const val DOWNLOAD_DIRECTORY = "download_video"
         // QA build private const val SOCKET: String = "https://nodejs.qa.begenuin.com"
-        private const val SOCKET: String = "https://api.begenuin.com"
+        private const val SOCKET: String = "https://nodejs.qa.begenuin.com"
         @JvmField var BASE_URL: String = "$SOCKET/api/v3/"
         const val BASE_URL_v4: String = "$SOCKET/api/v4/"
         const val NO_NETWORK =
@@ -76,6 +78,44 @@ class Constants {
         private const val USERS_CONVERSATION = "users/conversation"
         const val READ: String = "$USERS_CONVERSATION/read/"
         const val SCREEN_COMMENT = "comment"
+        const val GET_PROFILE = "users/get_profile"
+        const val PROFILE_VIDEOS = "profile_videos"
+        const val GET_COMMUNITY_LOOPS = "community/loops"
+        const val FROM_RECORD_FOR_OTHER = "record_for_other"
+        const val SYNC_QUESTIONS = "video/questions"
+        const val ADD_UPDATE_CUSTOM_QUESTION = "question"
+        const val QUESTION_FONT_MAX_DEFAULT_SIZE = 100f
+        const val ANIMATION_DURATION: Long = 300
+        const val IS_SPEED_ENABLE = false
+        @JvmField var IS_FEED_REFRESH = false
+        @JvmField var IS_REACTION_GIVEN = false
+        const val VIDEO_FORMAT = ".mp4"
+        const val AUDIO_FORMAT = ".wav"
+        const val IMAGE_FORMAT = ".jpeg"
+        const val VIDEO_DIRECTORY = "profile_video"
+        const val DUMMY_MODEL_ID = "-101"
+        @JvmField var START_MILLIS_POST: Long = 0
+        const val QUESTION_FONT_MIN_DEFAULT_SIZE = 5f
+        const val TEXT_EDITOR_FONT_DEFAULT_SIZE = 25f
+        val textBackgroundColorArray = intArrayOf(Color.TRANSPARENT, Color.WHITE, Color.BLACK)
+        const val MAX_SEEKBAR_VALUE = 40f
+        const val MIN_SEEKBAR_VALUE = 20f
+        const val TEXT_BACKGROUND_PADDING = 14
+        const val TEXT_BACKGROUND_RADIUS = 8
+        @JvmField var GO_TO_INBOX = false
+        const val CHECK_VIDEO: String = "$USERS_CONVERSATION/check/"
+        const val CODE_5095 = "5095"
+        const val CODE_5096 = "5096"
+        @JvmField var START_MILLIS_REPLY: Long = 0
+        const val VALID_URL: String = VIDEO_FILTER + "validate_url"
+        const val QUESTION_VIEW_MAX_HEIGHT_PERCENTAGE = 0.33f
+        const val FROM_CHAT = "chat"
+        const val FROM_COMMENT = "comment"
+        const val AUTO_SUGGESTIONS = "auto-suggestion"
+        const val POSTS_IMAGES_DIRECTORY = "posts_images"
+        const val GALLERY_DIRECTORY = "gallery_video"
+        const val STICKER_IMAGES_DIRECTORY = "sticker_images"
+        const val SYNC_LOOP_QUESTIONS = "questions"
     }
 
 }

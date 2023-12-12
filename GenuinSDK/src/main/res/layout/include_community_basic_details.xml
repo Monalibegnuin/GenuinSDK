@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <merge>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/dimen_16dp"
+                android:paddingTop="@dimen/dimen_16dp">
+
+                <RelativeLayout
+                    android:id="@+id/rlCommunityDp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:transitionName="dpView">
+
+                    <com.begenuin.library.common.customViews.DisplayPictureView
+                        android:id="@+id/llCommunityDp"
+                        android:layout_width="@dimen/dimen_88dp"
+                        android:layout_height="@dimen/dimen_88dp"
+                        android:layout_gravity="center_horizontal" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/dimen_1dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/llRole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen_32dp"
+                    android:background="@drawable/inbox_option_border"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/dimen_16dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvRoleAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:text="@string/edit"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/text_size_15sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llShareCommunity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dimen_32dp"
+                    android:layout_marginStart="@dimen/dimen_8dp"
+                    android:background="@drawable/inbox_option_border"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/dimen_5dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_22dp"
+                        android:layout_height="@dimen/dimen_22dp"
+                        android:contentDescription="@string/share"
+                        android:src="@drawable/ic_share"
+                        app:tint="@color/splash_background" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCommunityHandle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/avenir_next_bold"
+                android:maxLines="1"
+                android:paddingHorizontal="@dimen/dimen_16dp"
+                android:textColor="@color/black_111111"
+                android:textSize="@dimen/text_size_17sp"
+                tools:text="1800flowers" />
+
+            <TextView
+                android:id="@+id/tvCommunityDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/avenir_next_demi_bold"
+                android:lineSpacingExtra="@dimen/dimen_2dp"
+                android:maxLines="2"
+                android:paddingHorizontal="@dimen/dimen_16dp"
+                android:textColor="@color/black_111111"
+                android:textSize="@dimen/text_size_15sp"
+                tools:text="No Matter the Occasion, 1-800-Flowers.com is the Best Place for Flowers Gifts! Truly Original Gifts." />
+
+            <!--    <com.begenuin.begenuin.ui.customview.CustomFlipView-->
+            <!--        android:id="@+id/flipView"-->
+            <!--        android:layout_width="match_parent"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        app:defaultIndex="0"-->
+            <!--        android:visibility="gone"-->
+            <!--        android:layout_marginHorizontal="@dimen/dimen_16dp"-->
+            <!--        android:layout_marginTop="@dimen/dimen_18dp"-->
+            <!--        android:layout_marginBottom="@dimen/dimen_15dp"-->
+            <!--        app:flipDirection="frontToBack"-->
+            <!--        app:flipAxis="X">-->
+            <!--        <include-->
+            <!--            android:visibility="visible"-->
+            <!--            android:id="@+id/layout_community_setup_progress"-->
+            <!--            layout="@layout/layout_community_setup_progress" />-->
+            <!--        <include-->
+            <!--            android:id="@+id/layout_community_setup_done"-->
+            <!--            android:visibility="visible"-->
+            <!--            layout="@layout/layout_community_setup_done" />-->
+
+
+            <!--    </com.begenuin.begenuin.ui.customview.CustomFlipView>-->
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/dimen_16dp"
+                android:paddingVertical="@dimen/dimen_8dp">
+
+                <TextView
+                    android:id="@+id/tvNoOfCommunityMembers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenir_next_bold"
+                    android:textColor="@color/black_111111"
+                    android:textSize="@dimen/text_size_17sp"
+                    tools:text="120" />
+
+                <TextView
+                    android:id="@+id/tvNoOfLoops"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:fontFamily="@font/avenir_next_bold"
+                    android:textColor="@color/black_111111"
+                    android:textSize="@dimen/text_size_17sp"
+                    tools:text="6" />
+
+                <TextView
+                    android:id="@+id/tvLoops"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_4dp"
+                    android:layout_marginTop="@dimen/dimen_1dp"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:text="@string/loops"
+                    android:textColor="@color/color_949494"
+                    android:textSize="@dimen/text_size_12sp" />
+
+                <TextView
+                    android:id="@+id/tvNoOfVideos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_16dp"
+                    android:fontFamily="@font/avenir_next_bold"
+                    android:textColor="@color/black_111111"
+                    android:textSize="@dimen/text_size_17sp"
+                    tools:text="24" />
+
+                <TextView
+                    android:id="@+id/tvVideos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dimen_4dp"
+                    android:layout_marginTop="@dimen/dimen_1dp"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:text="@string/videos"
+                    android:textColor="@color/color_949494"
+                    android:textSize="@dimen/text_size_12sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvCommunityLoops"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/dimen_16dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/raw_inbox_loop_list" />
+
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/shimmerScroll"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/shimmerLoops"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="@dimen/dimen_16dp"
+                                    android:orientation="vertical">
+
+                                    <include
+                                        android:id="@+id/layoutShimmerCreateLoop"
+                                        layout="@layout/shimmer_layout_create_loop"
+                                        android:visibility="gone" />
+
+                                    <include layout="@layout/shimmer_layout_loop1" />
+
+                                    <include layout="@layout/shimmer_layout_loop" />
+
+                                    <include layout="@layout/shimmer_layout_loop1" />
+
+                                </LinearLayout>
+
+                            </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        </RelativeLayout>
+                    </androidx.core.widget.NestedScrollView>
+
+                    <RelativeLayout
+                        android:id="@+id/rlNoMessages"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorWhite"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/dimen_32dp"
+                            android:layout_marginTop="@dimen/dimen_80dp"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/dimen_120dp"
+                                android:layout_height="@dimen/dimen_120dp"
+                                android:src="@drawable/ic_no_loops" />
+
+                            <TextView
+                                android:id="@+id/tvNoLoopTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dimen_16dp"
+                                android:fontFamily="@font/avenir_next_bold"
+                                android:text="@string/no_loops_yet"
+                                android:textAlignment="center"
+                                android:textColor="@color/black_111111"
+                                android:textSize="@dimen/text_size_20sp" />
+
+                            <TextView
+                                android:id="@+id/tvNoLoopDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dimen_12dp"
+                                android:fontFamily="@font/avenir_next_demi_bold"
+                                android:lineSpacingExtra="@dimen/dimen_2dp"
+                                android:text="@string/no_loops_msg"
+                                android:textAlignment="center"
+                                android:textColor="@color/color_949494"
+                                android:textSize="@dimen/text_size_15sp" />
+
+                            <LinearLayout
+                                android:id="@+id/llNewLoop"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/dimen_32dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/dimen_16dp"
+                                android:background="@drawable/profile_qna_bg"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/dimen_8dp"
+                                android:paddingEnd="@dimen/dimen_16dp">
+
+                                <ImageView
+                                    android:layout_width="@dimen/dimen_22dp"
+                                    android:layout_height="@dimen/dimen_22dp"
+                                    android:layout_marginStart="@dimen/dimen_4dp"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:src="@drawable/icon_plus"
+                                    app:tint="@color/colorWhite" />
+
+                                <com.begenuin.library.common.customViews.CustomTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="@dimen/dimen_6dp"
+                                    android:layout_marginEnd="@dimen/dimen_4dp"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:fontFamily="@font/avenir_next_bold"
+                                    android:text="@string/new_loop"
+                                    android:textColor="@color/colorWhite"
+                                    android:textSize="@dimen/text_size_medium" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </merge>
+</layout>

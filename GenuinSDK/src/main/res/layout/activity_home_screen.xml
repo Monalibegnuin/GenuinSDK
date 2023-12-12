@@ -191,29 +191,24 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/sdkProfile"
+                    android:layout_width="@dimen/dimen_40dp"
+                    android:layout_height="@dimen/dimen_40dp"
+                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
-                    android:paddingVertical="@dimen/dimen_8dp"
-                    android:paddingHorizontal="@dimen/dimen_16dp">
+                    app:cardBackgroundColor="@color/black_opacity20"
+                    app:cardCornerRadius="@dimen/dimen_32dp"
+                    app:cardElevation="0dp">
 
-                    <com.begenuin.library.common.customViews.CustomTextView
-                        android:id="@+id/txtLoginEmailIdSDK"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:fontFamily="@font/avenir_next_demi"
-                        android:gravity="center_vertical"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/text_size_big_20sp" />
+                    <ImageView
+                        android:id="@+id/imgProfile"
+                        android:layout_width="@dimen/dimen_40dp"
+                        android:layout_height="@dimen/dimen_40dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/placeholder_contact" />
+                </androidx.cardview.widget.CardView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvSearch"
                     android:layout_width="@dimen/feed_icon_dimen"
@@ -288,7 +283,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginVertical="@dimen/dimen_16dp"
                 android:clipToPadding="false"
-                android:visibility="gone">
+                android:layout_marginTop="@dimen/dimen_200dp"
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -386,7 +382,9 @@
                                 android:layout_height="@dimen/dimen_32dp"
                                 android:layout_gravity="center"
                                 app:innerTextSize="@dimen/text_size_12sp"
-                                app:roundSize="@dimen/dimen_32dp" />
+                                app:roundSize="@dimen/dimen_32dp"
+                                android:layout_marginStart="@dimen/dimen_10dp"
+                                android:visibility="gone"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -403,6 +401,7 @@
                                     android:ellipsize="end"
                                     android:fontFamily="@font/avenir_next_medium"
                                     android:maxLines="1"
+                                    android:visibility="gone"
                                     android:textColor="@color/colorWhite"
                                     android:textSize="@dimen/text_size_15sp" />
 
@@ -413,8 +412,8 @@
                                     android:fontFamily="@font/avenir_next_medium"
                                     android:maxLines="1"
                                     android:text="@string/browse_community"
-                                    android:textColor="@color/white_opacity40"
-                                    android:textSize="@dimen/text_size_11sp" />
+                                    android:textColor="@color/white_opacity50"
+                                    android:textSize="@dimen/text_size_12sp" />
 
                             </LinearLayout>
 
@@ -501,6 +500,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
+                                android:visibility="gone"
                                 android:fontFamily="@font/avenir_next_medium"
                                 android:maxLines="1"
                                 android:textColor="@color/colorWhite"
@@ -513,7 +513,7 @@
                                 android:fontFamily="@font/avenir_next_medium"
                                 android:maxLines="1"
                                 android:text="@string/view_loop"
-                                android:textColor="@color/white_opacity40"
+                                android:textColor="@color/white_opacity50"
                                 android:textSize="@dimen/text_size_12sp" />
 
                         </LinearLayout>

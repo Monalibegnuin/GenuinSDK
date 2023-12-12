@@ -1,0 +1,47 @@
+{
+  "code": 200,
+  "data": {
+    "Fonts": [
+      {
+        "FontId": "1",
+        "FontName": "inter_extra_bold",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "2",
+        "FontName": "inter_extra_bold_italic",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "3",
+        "FontName": "bebas_neue_regular",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "4",
+        "FontName": "courier_prime_bold",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "5",
+        "FontName": "scope_one_regular",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "6",
+        "FontName": "lora_bold",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "7",
+        "FontName": "varela_round_regular",
+        "FontURL": "https://"
+      },
+      {
+        "FontId": "8",
+        "FontName": "nunito_extra_bold",
+        "FontURL": "https://"
+      }
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "code": 200,
+  "data": {
+    "Colors": [
+      {
+        "ColorId": "1",
+        "ColorName": "white",
+        "ColorHexa": "#FFFFFF",
+        "ColorRGB": ""
+      },
+      {
+        "ColorId": "2",
+        "ColorName": "gray",
+        "ColorHexa": "#949494",
+        "ColorRGB": ""
+      },
+      {
+        "ColorId": "3",
+        "ColorName": "black",
+        "ColorHexa": "#000000",
+        "ColorRGB": ""
+      },
+      {
+        "ColorId": "4",
+        "ColorName": "blue",
+        "ColorHexa": "#0645FF",
+        "ColorRGB": ""
+      },{
+        "ColorId": "5",
+        "ColorName": "3594F0",
+        "ColorHexa": "#3594F0",
+        "ColorRGB":""
+      },{
+        "ColorId": "6",
+        "ColorName": "EA413E",
+        "ColorHexa": "#EA413E",
+        "ColorRGB":""
+      },{
+        "ColorId": "7",
+        "ColorName": "FD923D",
+        "ColorHexa": "#FD923D",
+        "ColorRGB":""
+      },{
+        "ColorId": "8",
+        "ColorName": "F4CE47",
+        "ColorHexa": "#F4CE47",
+        "ColorRGB":""
+      },{
+        "ColorId": "9",
+        "ColorName": "76C35D",
+        "ColorHexa": "#76C35D",
+        "ColorRGB":""
+      },{
+        "ColorId": "10",
+        "ColorName": "78CAA4",
+        "ColorHexa": "#78CAA4",
+        "ColorRGB":""
+      },{
+        "ColorId": "11",
+        "ColorName": "7AC7A5",
+        "ColorHexa": "#7AC7A5",
+        "ColorRGB":""
+      },{
+        "ColorId": "12",
+        "ColorName": "5756D5",
+        "ColorHexa": "#5756D5",
+        "ColorRGB":""
+      },{
+        "ColorId": "13",
+        "ColorName": "F8D7E8",
+        "ColorHexa": "#F8D7E8",
+        "ColorRGB":""
+      },{
+        "ColorId": "14",
+        "ColorName": "A88857",
+        "ColorHexa": "#A88857",
+        "ColorRGB":""
+      },{
+        "ColorId": "15",
+        "ColorName": "34513B",
+        "ColorHexa": "#34513B",
+        "ColorRGB":""
+      }
+    ]
+  }
+}

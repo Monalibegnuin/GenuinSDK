@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+
+    <FrameLayout
+        android:id="@+id/video_frames_layout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFrames"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/dimen_4dp"
+            android:paddingHorizontal="@dimen/dimen_3dp"
+            android:alpha="0.6" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/videoSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/transparent"
+            android:max="150"
+            android:paddingTop="@dimen/dimen_8dp"
+            android:progress="0"
+            android:progressBackgroundTint="@android:color/transparent"
+            android:progressTint="@android:color/transparent"
+            android:splitTrack="false" />
+        <!-- android:thumb="@drawable/trim_progress"-->
+        <LinearLayout
+            android:id="@+id/seekBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="vertical" />
+    </FrameLayout>
+
+</RelativeLayout>
+</layout>

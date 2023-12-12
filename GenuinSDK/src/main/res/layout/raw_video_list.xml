@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="@dimen/dimen_33dp"
+        android:layout_height="@dimen/dimen_60dp">
+
+        <ImageView
+            android:id="@+id/ivVideoThumbnail"
+            android:layout_width="@dimen/dimen_33dp"
+            android:layout_height="@dimen/dimen_60dp"
+            android:scaleType="centerCrop" />
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/tvVideoDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/avenir_next_bold"
+            android:text=""
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_very_small" />
+    </FrameLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/viewVideoSelected"
+        android:layout_width="@dimen/dimen_15dp"
+        android:layout_height="@dimen/dimen_3dp"
+        android:layout_marginTop="@dimen/dimen_3dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorWhite"
+        android:visibility="gone"
+        app:cardCornerRadius="@dimen/dimen_1dp"
+        app:cardElevation="0dp" />
+
+
+</LinearLayout>

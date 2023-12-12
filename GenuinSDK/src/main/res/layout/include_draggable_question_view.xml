@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout
+    android:id="@+id/rlParentQuestionView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/llQuestionBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:background="@drawable/question_rounded_corner_white"
+        android:orientation="vertical">
+
+        <com.begenuin.library.common.customViews.TextViewNoClipping
+            android:id="@+id/tvQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenir_next_heavy_italic"
+            android:textColor="@color/system_black"
+            android:textSize="@dimen/text_size_10sp"
+            android:paddingHorizontal="@dimen/dimen_6dp"
+            android:paddingTop="@dimen/dimen_6dp"
+            tools:text="@string/para" />
+
+        <LinearLayout
+            android:id="@+id/llQuestionOwner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dimen_6dp"
+            android:layout_marginBottom="@dimen/dimen_6dp"
+            android:layout_marginTop="@dimen/dimen_8dp">
+
+            <RelativeLayout
+                android:layout_width="@dimen/camera_profile_hw"
+                android:layout_height="@dimen/camera_profile_hw"
+                android:layout_gravity="center_vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ivOwner"
+                    android:layout_width="@dimen/camera_profile_hw"
+                    android:layout_height="@dimen/camera_profile_hw"
+                    android:src="@drawable/dunkinn_donuts_logo" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="6dp"
+                    android:visibility="gone"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvQuestionAskedBy"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/dimen_30dp"
+                android:layout_marginStart="@dimen/dimen_8dp"
+                android:autoSizeMaxTextSize="@dimen/text_size_15sp"
+                android:autoSizeMinTextSize="@dimen/text_size_very_small_11sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeTextType="uniform"
+                android:fontFamily="@font/avenir_next_bold"
+                android:gravity="center_vertical"
+                android:text="@string/frequently_asked_question"
+                android:textColor="@color/system_black"
+                android:textSize="@dimen/text_size_15sp"
+                tools:targetApi="o" />
+            <ImageView
+                android:id="@+id/ivEditQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tint="@color/black_111111"
+                android:src="@drawable/icon_edit"
+                android:visibility="gone"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivBottomAngle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llQuestionBox"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="-4dp"
+        android:src="@drawable/ic_qa_box_triangle" />
+</RelativeLayout>
+</layout>

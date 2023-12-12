@@ -26,4 +26,42 @@
         <attr name="filled_bulb_resource" format="reference" />
         <attr name="empty_bulb_resource" format="reference" />
     </declare-styleable>
+    <declare-styleable name="QuestionView">
+        <attr name="addCustomQuestion" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="StepProgressView">
+        <attr name="progressBarHeight" format="dimension" />
+        <attr name="progressBarWidth" format="dimension" />
+        <attr name="textMargin" format="dimension" />
+        <attr name="markerWidth" format="dimension" />
+        <attr name="textSize" format="dimension" />
+        <attr name="totalProgress" format="integer" />
+        <attr name="currentProgress" format="integer" />
+
+        <attr name="markerColor" format="color" />
+        <attr name="progressBackgroundColor" format="color" />
+        <attr name="progressColor" format="color" />
+        <attr name="textColor" format="color" />
+        <attr name="textFont" format="reference" />
+
+        <attr name="markers" format="string" />
+    </declare-styleable>
+    <declare-styleable name="CustomEditTextWithError">
+        <attr name="ed_hint" format="string" />
+        <attr name="ed_hintColor" format="color" />
+        <attr name="ed_hintTextSize" format="dimension|reference" />
+        <attr name="ed_textColor" format="color" />
+        <attr name="android:maxLines" />
+        <attr name="android:minLines" />
+        <attr name="android:layout_height"/>
+        <attr name="ed_error" format="string" />
+        <attr name="ed_errorColor" format="string" />
+        <attr name="ed_label" format="string" />
+        <attr name="ed_labelColor" format="color" />
+        <attr name="ed_labelTextSize" format="reference|dimension" />
+        <attr name="ed_textCounter" format="string"/>
+        <attr name="background"/>
+        <attr name="android:inputType"/>
+        <attr name="android:maxLength"/>
+    </declare-styleable>
 </resources>

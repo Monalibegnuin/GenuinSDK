@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/dimen_60dp"
+    android:background="@drawable/dialog_ll_shape"
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_20dp">
+
+    <com.begenuin.library.common.customViews.CustomTextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/avenir_next_bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dimen_10dp"
+        android:textColor="@color/color_0A0A0A"
+        android:textSize="@dimen/text_size_17sp"
+        tools:text="@string/invitation_sent_header" />
+
+    <com.begenuin.library.common.customViews.CustomTextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_5dp"
+        android:fontFamily="@font/avenir_next_demi_bold"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/dimen_10dp"
+        android:text="@string/invite_all_validation1"
+        android:textColor="@color/color_999999"
+        android:textSize="@dimen/text_size_small_13sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnOkay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dimen_15dp"
+        android:fontFamily="@font/avenir_next_bold"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/dimen_50dp"
+        android:paddingTop="@dimen/dimen_8dp"
+        android:paddingEnd="@dimen/dimen_50dp"
+        android:paddingBottom="@dimen/dimen_8dp"
+        android:stateListAnimator="@null"
+        android:text="@string/okay"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_size_medium"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="@dimen/dimen_5dp" />
+
+
+</LinearLayout>

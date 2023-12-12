@@ -1,4 +1,4 @@
-package com.begenuin.library.views
+package com.begenuin.library.views.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import com.begenuin.library.R
 import com.begenuin.library.SDKInitiate
+import com.begenuin.library.views.DunkidonutsScreen
 import com.google.android.material.button.MaterialButton
 
 class LoginActivity : AppCompatActivity() {
@@ -28,7 +29,9 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
 
         btnLogin.setOnClickListener{
-            validate()
+            //validate()
+            val redirectDunkyDonut = Intent(this, DunkidonutsScreen::class.java)
+            startActivity(redirectDunkyDonut)
         }
 
     }

@@ -301,7 +301,7 @@
                 android:layout_height="@dimen/feed_icon_dimen"
                 android:layout_marginBottom="@dimen/dimen_16dp"
                 android:src="@drawable/ic_linkout_new"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <!--<com.begenuin.begenuin.common.CustomIcon
                 android:id="@+id/llLink"
@@ -317,7 +317,8 @@
                 android:layout_width="@dimen/feed_icon_dimen"
                 android:layout_height="@dimen/feed_icon_dimen"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:src="@drawable/ic_repost_new" />
+                android:src="@drawable/ic_repost_new"
+                android:visibility="gone"/>
 
             <!--<com.begenuin.begenuin.common.CustomIcon
                 android:id="@+id/llRepost"
@@ -332,7 +333,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <com.begenuin.library.common.customViews.SparkView
                     android:id="@+id/sparkView"
@@ -357,7 +359,8 @@
                 android:layout_width="@dimen/feed_icon_dimen"
                 android:layout_height="@dimen/feed_icon_dimen"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:src="@drawable/ic_save_idle" />
+                android:src="@drawable/ic_save_idle"
+                android:visibility="gone"/>
 
             <!--<com.begenuin.begenuin.common.CustomIcon
                 android:id="@+id/llSaveVideo"
@@ -372,7 +375,8 @@
                 android:layout_width="@dimen/feed_icon_dimen"
                 android:layout_height="@dimen/feed_icon_dimen"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:src="@drawable/ic_share_new" />
+                android:src="@drawable/ic_share_new"
+                android:visibility="gone"/>
 
             <!--<com.begenuin.begenuin.common.CustomIcon
                 android:id="@+id/llShare"
@@ -387,7 +391,8 @@
                 android:layout_width="@dimen/feed_icon_dimen"
                 android:layout_height="@dimen/feed_icon_dimen"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:src="@drawable/ic_reply" />
+                android:src="@drawable/ic_reply"
+                android:visibility="visible"/>
 
             <!--<com.begenuin.begenuin.common.CustomIcon
                 android:id="@+id/llReply"
@@ -402,7 +407,8 @@
                 android:layout_width="@dimen/feed_icon_dimen"
                 android:layout_height="@dimen/feed_icon_dimen"
                 android:layout_marginBottom="@dimen/dimen_16dp"
-                android:src="@drawable/ic_more_options_white" />
+                android:src="@drawable/ic_more_options_white"
+                android:visibility="gone"/>
 
             <!--<com.begenuin.begenuin.common.CustomIcon
                 android:id="@+id/llMoreOptions"
@@ -413,6 +419,121 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llRTOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="false"
+            android:baselineAligned="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+            android:id="@+id/llRTLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            android:visibility="visible"
+            app:custom_icon="@drawable/ic_link2" />-->
+
+            <ImageView
+                android:id="@+id/ivRTLink"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_linkout_new" />
+
+            <ImageView
+                android:id="@+id/ivRTRepost"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_repost_new" />
+
+            <!--<com.begenuin.begenuin.common.CustomIcon
+            android:id="@+id/llRTRepost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_16dp"
+            app:custom_icon="@drawable/ic_repost" />-->
+
+            <LinearLayout
+                android:id="@+id/llRTSpark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:orientation="vertical">
+
+                <com.begenuin.library.common.customViews.SparkView
+                    android:id="@+id/sparkViewRT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvRTSparks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_4dp"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/text_size_15sp"
+                    android:lineSpacingExtra="0dp"
+                    tools:text="0" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llComments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/feed_icon_dimen"
+                    android:layout_height="@dimen/feed_icon_dimen"
+                    android:src="@drawable/ic_comment_new" />
+
+                <TextView
+                    android:id="@+id/tvComments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_4dp"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:text="0"
+                    android:lineSpacingExtra="0dp"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/text_size_15sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivRTShare"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_share_new" />
+
+            <ImageView
+                android:id="@+id/ivParticipate"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_video"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/ivRTMoreOptions"
+                android:layout_width="@dimen/feed_icon_dimen"
+                android:layout_height="@dimen/feed_icon_dimen"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:src="@drawable/ic_more_options_white" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -615,121 +736,6 @@
                         android:visibility="gone"
                         tools:text="An open discussion about the various innovative projects in upcoming markets" />
                 </RelativeLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llRTOptions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:animateLayoutChanges="false"
-                android:baselineAligned="true"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <!--<com.begenuin.begenuin.common.CustomIcon
-                android:id="@+id/llRTLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_16dp"
-                android:visibility="visible"
-                app:custom_icon="@drawable/ic_link2" />-->
-
-                <ImageView
-                    android:id="@+id/ivRTLink"
-                    android:layout_width="@dimen/feed_icon_dimen"
-                    android:layout_height="@dimen/feed_icon_dimen"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:src="@drawable/ic_linkout_new" />
-
-                <ImageView
-                    android:id="@+id/ivRTRepost"
-                    android:layout_width="@dimen/feed_icon_dimen"
-                    android:layout_height="@dimen/feed_icon_dimen"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:src="@drawable/ic_repost_new" />
-
-                <!--<com.begenuin.begenuin.common.CustomIcon
-                android:id="@+id/llRTRepost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimen_16dp"
-                app:custom_icon="@drawable/ic_repost" />-->
-
-                <LinearLayout
-                    android:id="@+id/llRTSpark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:orientation="vertical">
-
-                    <com.begenuin.library.common.customViews.SparkView
-                        android:id="@+id/sparkViewRT"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/tvRTSparks"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_4dp"
-                        android:fontFamily="@font/avenir_next_demi_bold"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/text_size_15sp"
-                        android:lineSpacingExtra="0dp"
-                        tools:text="0" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llComments"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="@dimen/feed_icon_dimen"
-                        android:layout_height="@dimen/feed_icon_dimen"
-                        android:src="@drawable/ic_comment_new" />
-
-                    <TextView
-                        android:id="@+id/tvComments"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="@dimen/dimen_4dp"
-                        android:fontFamily="@font/avenir_next_demi_bold"
-                        android:text="0"
-                        android:lineSpacingExtra="0dp"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="@dimen/text_size_15sp" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/ivRTShare"
-                    android:layout_width="@dimen/feed_icon_dimen"
-                    android:layout_height="@dimen/feed_icon_dimen"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:src="@drawable/ic_share_new" />
-
-                <ImageView
-                    android:id="@+id/ivParticipate"
-                    android:layout_width="@dimen/feed_icon_dimen"
-                    android:layout_height="@dimen/feed_icon_dimen"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:src="@drawable/ic_video"
-                    android:visibility="gone"/>
-
-                <ImageView
-                    android:id="@+id/ivRTMoreOptions"
-                    android:layout_width="@dimen/feed_icon_dimen"
-                    android:layout_height="@dimen/feed_icon_dimen"
-                    android:layout_marginBottom="@dimen/dimen_16dp"
-                    android:src="@drawable/ic_more_options_white" />
-
             </LinearLayout>
         </LinearLayout>
 

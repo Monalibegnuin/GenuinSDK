@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/dialog_ll_shape"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_20dp"
+    android:layout_margin="@dimen/dimen_20dp"
+    android:orientation="vertical">
+
+    <com.begenuin.library.common.customViews.CustomTextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/avenir_next_bold"
+        android:text="Remove Video"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="@dimen/dimen_10dp"
+        android:textSize="@dimen/text_size_big"/>
+
+    <com.begenuin.library.common.customViews.CustomTextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:fontFamily="@font/avenir_next_medium"
+        android:lineSpacingExtra="@dimen/dimen_3dp"
+        android:text="@string/txt_delete_video"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_normal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/dialog_btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:fontFamily="@font/avenir_next_demi"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@color/splash_background"
+            android:textSize="@dimen/text_size_big"/>
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/dialog_btn_yes"
+            android:backgroundTint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:fontFamily="@font/avenir_next_demi"
+            android:text="@string/btn_yes"
+            android:textAllCaps="false"
+            android:textColor="@color/red"
+            android:textSize="@dimen/text_size_big"/>
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/dialog_btn_next"
+            android:backgroundTint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:fontFamily="@font/avenir_next_demi"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/splash_background"
+            android:textSize="@dimen/text_size_big"/>
+    </LinearLayout>
+</LinearLayout>

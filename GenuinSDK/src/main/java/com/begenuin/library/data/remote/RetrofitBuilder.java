@@ -1,6 +1,6 @@
 package com.begenuin.library.data.remote;
 
-import com.begenuine.feedscreensdk.common.Constants;
+import com.begenuin.library.common.Constants;
 import com.begenuin.library.core.interfaces.RetrofitInterface;
 
 import java.util.concurrent.TimeUnit;

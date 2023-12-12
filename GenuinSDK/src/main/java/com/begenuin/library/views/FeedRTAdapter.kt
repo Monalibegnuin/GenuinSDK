@@ -24,7 +24,7 @@ import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.begenuin.library.R
-import com.begenuine.feedscreensdk.common.Constants
+import com.begenuin.library.common.Constants
 import com.begenuin.library.common.Utility
 import com.begenuin.library.common.customViews.SparkView
 import com.begenuin.library.core.enums.FeedViewType
@@ -153,13 +153,13 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                     holder.tvFeedEndDesc.text =
                         context.getString(R.string.empty_suggestions_my_loops)
                 }
-                holder.vpLoopSuggestions.setVisibility(View.GONE)
+                holder.vpLoopSuggestions.visibility = View.GONE
                 holder.btnGoToForYou.visibility = View.VISIBLE
             }
-            holder.llLoader.setTag(Constants.LL_LOADER + position)
-            holder.llLoader.setVisibility(View.GONE)
+            holder.llLoader.tag = Constants.LL_LOADER + position
+            holder.llLoader.visibility = View.GONE
             holder.btnGoToForYou.setOnClickListener { loopSuggestionPagerEventListener?.onGoToFeedClicked() }
-            holder.vpLoopSuggestions.setAdapter(SliderLoopSuggestionRecyclerAdapter(
+            holder.vpLoopSuggestions.adapter = SliderLoopSuggestionRecyclerAdapter(
                 activity,
                 suggestedLoops!!,
                 feedViewType!!,
@@ -192,7 +192,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                         }
                     }
                 }
-            ))
+            )
             holder.vpLoopSuggestions.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 /*int index;
                 int previousState = ViewPager2.SCROLL_STATE_IDLE;*/
@@ -284,29 +284,29 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                 holder.tvDescSingle.tag = Constants.TV_DESC_SINGLE + position
                 holder.sparkView.setTag(Constants.LL_SPARK + position)
                 holder.tvSparks.tag = Constants.TV_SPARK + position
-                holder.ivRTShare.tag = Constants.FAKE_TAG + position
-                holder.ivRTLink.tag = Constants.FAKE_TAG + position
-                holder.ivRTRepost.tag = Constants.FAKE_TAG + position
-                holder.ivRTMoreOptions.tag = Constants.FAKE_TAG + position
-                holder.llRTBottomLayout.tag = Constants.FAKE_TAG + position
                 holder.llWhoCanSeeRT.tag = Constants.FAKE_TAG + position
                 holder.rlRTDesc.tag = Constants.FAKE_TAG + position
                 holder.tvRTDesc.tag = Constants.FAKE_TAG + position
                 holder.tvRTDescSingle.tag = Constants.FAKE_TAG + position
-                holder.sparkViewRT.setTag(Constants.FAKE_TAG + position)
-                holder.tvRTSparks.tag = Constants.FAKE_TAG + position
+//                holder.ivRTShare.tag = Constants.FAKE_TAG + position
+//                holder.ivRTLink.tag = Constants.FAKE_TAG + position
+//                holder.ivRTRepost.tag = Constants.FAKE_TAG + position
+//                holder.ivRTMoreOptions.tag = Constants.FAKE_TAG + position
+                holder.llRTBottomLayout.tag = Constants.FAKE_TAG + position
+//                holder.sparkViewRT.setTag(Constants.FAKE_TAG + position)
+//                holder.tvRTSparks.tag = Constants.FAKE_TAG + position
             } else if (exploreViewModel.type == ExploreVideoType.RT) {
-                holder.ivRTShare.tag = Constants.SHARE_VIDEO + position
-                holder.ivRTLink.tag = Constants.LINK + position
-                holder.ivRTRepost.tag = Constants.LL_REPOST + position
-                holder.ivRTMoreOptions.tag = Constants.MORE_OPTIONS_LAYOUT + position
+//                holder.ivRTShare.tag = Constants.SHARE_VIDEO + position
+//                holder.ivRTLink.tag = Constants.LINK + position
+//                holder.ivRTRepost.tag = Constants.LL_REPOST + position
+//                holder.ivRTMoreOptions.tag = Constants.MORE_OPTIONS_LAYOUT + position
                 holder.llRTBottomLayout.setTag(Constants.LL_BOTTOM + position)
                 holder.llWhoCanSeeRT.setTag(Constants.WHO_CAN_SEE_LL + position)
                 holder.tvRTDesc.tag = Constants.TV_DESC + position
                 holder.tvRTDescSingle.tag = Constants.TV_DESC_SINGLE + position
                 holder.rlRTDesc.tag = Constants.RL_DESC + position
-                holder.sparkViewRT.setTag(Constants.LL_SPARK + position)
-                holder.tvRTSparks.tag = Constants.TV_SPARK + position
+//                holder.sparkViewRT.setTag(Constants.LL_SPARK + position)
+//                holder.tvRTSparks.tag = Constants.TV_SPARK + position
                 holder.ivShare.tag = Constants.FAKE_TAG + position
                 holder.ivLink.tag = Constants.FAKE_TAG + position
                 holder.ivRepost.tag = Constants.FAKE_TAG + position
@@ -330,7 +330,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                 holder.ivMuteIcon.visibility = View.GONE
             }
             if (exploreViewModel.type == ExploreVideoType.PUBLIC_VIDEO) {
-                holder.ivMoreOptions.visibility = View.VISIBLE
+                holder.ivMoreOptions.visibility = View.GONE
                 holder.llBottomLayout.visibility = View.VISIBLE
                 holder.llRTBottomLayout.visibility = View.GONE
                 val discoverVO: DiscoverModel = exploreViewModel.obj as DiscoverModel
@@ -405,7 +405,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                     holder.ivSaveVideo.visibility = View.GONE
                     //if discover QR code has value then hide download video as this is upload by other's user not logged in user and for login user shows visible
                     if (TextUtils.isEmpty(discoverVO.qrCode)) holder.ivDownloadVideo.visibility =
-                        View.VISIBLE else holder.ivDownloadVideo.visibility = View.GONE
+                        View.GONE else holder.ivDownloadVideo.visibility = View.GONE
                     if (discoverVO.videoId!!.contentEquals("-101")) {
                         holder.ivMoreOptions.imageTintList = ColorStateList.valueOf(
                             context.resources.getColor(
@@ -426,9 +426,9 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                     val loggedinUserId: String= ""
                     if (!TextUtils.isEmpty(discoverVO.userId) && discoverVO.userId!!.contentEquals(loggedinUserId)) {
                         holder.ivSaveVideo.visibility = View.GONE
-                        holder.ivDownloadVideo.visibility = View.VISIBLE
+                        holder.ivDownloadVideo.visibility = View.GONE
                     } else {
-                        holder.ivSaveVideo.visibility = View.VISIBLE
+                        holder.ivSaveVideo.visibility = View.GONE
                         holder.ivDownloadVideo.visibility = View.GONE
                     }
                     holder.ivReply.visibility = View.VISIBLE
@@ -461,14 +461,14 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                     Utility.showLogException(e)
                 }
             } else if (exploreViewModel.type == ExploreVideoType.RT) {
-                holder.llComments.visibility = View.VISIBLE
+               // holder.llComments.visibility = View.GONE
                 holder.llRTBottomLayout.visibility = View.VISIBLE
                 holder.llBottomLayout.visibility = View.GONE
-                if (exploreViewModel.isRepostSourceAvailable) {
-                    holder.ivRTRepost.visibility = View.VISIBLE
-                } else {
-                    holder.ivRTRepost.visibility = View.GONE
-                }
+//                if (exploreViewModel.isRepostSourceAvailable) {
+//                    holder.ivRTRepost.visibility = View.GONE
+//                } else {
+//                    holder.ivRTRepost.visibility = View.GONE
+//                }
                 val conversationModel: ConversationModel =
                     exploreViewModel.obj as ConversationModel
                 holder.tvRTUserName.text = String.format("@%s", exploreViewModel.getNickName())
@@ -496,17 +496,17 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                                 )
                             }
                         }
-                        if (!TextUtils.isEmpty(chatModel.sparkCount)) {
-                            holder.tvRTSparks.text =
-                                Utility.formatNumber(chatModel.sparkCount.toLong())
-                        } else {
-                            holder.tvRTSparks.text = "0"
-                        }
-                        if (chatModel.isSparked) {
-                            holder.sparkViewRT.setSpark()
-                        } else {
-                            holder.sparkViewRT.setUnSpark()
-                        }
+//                        if (!TextUtils.isEmpty(chatModel.sparkCount)) {
+//                            holder.tvRTSparks.text =
+//                                Utility.formatNumber(chatModel.sparkCount.toLong())
+//                        } else {
+//                            holder.tvRTSparks.text = "0"
+//                        }
+//                        if (chatModel.isSparked) {
+//                            holder.sparkViewRT.setSpark()
+//                        } else {
+//                            holder.sparkViewRT.setUnSpark()
+//                        }
                     }
                 } catch (e: Exception) {
                     Utility.showLogException(e)
@@ -524,18 +524,18 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                 } else {
                     holder.tvRTRecordedByText.visibility = View.GONE
                 }
-                if (!TextUtils.isEmpty(exploreViewModel.link)) {
-                    holder.ivRTLink.visibility = View.VISIBLE
-                } else {
-                    holder.ivRTLink.visibility = View.GONE
-                }
-                if (TextUtils.isEmpty(conversationModel.commentsCount) || conversationModel.commentsCount
-                        .equals("0", ignoreCase = true)
-                ) {
-                    holder.tvComments.text = "0"
-                } else {
-                    holder.tvComments.text = conversationModel.commentsCount
-                }
+//                if (!TextUtils.isEmpty(exploreViewModel.link)) {
+//                    holder.ivRTLink.visibility = View.GONE
+//                } else {
+//                    holder.ivRTLink.visibility = View.GONE
+//                }
+//                if (TextUtils.isEmpty(conversationModel.commentsCount) || conversationModel.commentsCount
+//                        .equals("0", ignoreCase = true)
+//                ) {
+//                    holder.tvComments.text = "0"
+//                } else {
+//                    holder.tvComments.text = conversationModel.commentsCount
+//                }
                 showGroupInfo(holder, conversationModel)
                 showSubscriberInfo(holder, conversationModel)
             }
@@ -556,11 +556,11 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                 holder.llRTDp.setDpWithImage(activity, false, groupModel.getDp(), groupModel.getSmallDp(), false);
             }*/
         }
-        if (isVideoOwner(conversationModel)) {
-            holder.ivRTMoreOptions.visibility = View.GONE
-        } else {
-            holder.ivRTMoreOptions.visibility = View.VISIBLE
-        }
+//        if (isVideoOwner(conversationModel)) {
+//            holder.ivRTMoreOptions.visibility = View.GONE
+//        } else {
+//            holder.ivRTMoreOptions.visibility = View.GONE
+//        }
         if (conversationModel.settings != null && !conversationModel.settings
                 .discoverable
         ) {
@@ -617,9 +617,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
             if (holder.player == null) {
                 if (exploreViewModel.type == ExploreVideoType.PUBLIC_VIDEO) {
                     val discoverVO: DiscoverModel = exploreViewModel.obj as DiscoverModel
-                    if (discoverVO != null) {
-                        discoverVO.isViewCountUpdated = false
-                    }
+                    discoverVO.isViewCountUpdated = false
                 } else if (exploreViewModel.type == ExploreVideoType.RT) {
                     val conversationModel: ConversationModel =
                         exploreViewModel.obj as ConversationModel
@@ -757,15 +755,15 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
         val ivMoreOptions: ImageView
 
         //private final CustomIcon llRTLink, llRTShare, llRTRepost, llRTMoreOptions, llParticipate;
-        val ivRTLink: ImageView
-        val ivRTRepost: ImageView
-        val ivRTShare: ImageView
-        val ivRTMoreOptions: ImageView
-        private val ivParticipate: ImageView
-        val llComments: LinearLayout
-        private val llRTSpark: LinearLayout
+//        val ivRTLink: ImageView
+//        val ivRTRepost: ImageView
+//        val ivRTShare: ImageView
+//        val ivRTMoreOptions: ImageView
+//        private val ivParticipate: ImageView
+//        val llComments: LinearLayout
+//        private val llRTSpark: LinearLayout
         private val llSpark: LinearLayout
-        val sparkViewRT: SparkView
+        //val sparkViewRT: SparkView
         val sparkView: SparkView
         val llBottomLayout: LinearLayout
         private val llBottomInnerLayout: LinearLayout
@@ -780,10 +778,10 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
         val rlDesc: RelativeLayout
         val rlRTDesc: RelativeLayout
         val tvRTName: TextView
-        val tvComments: TextView
+        //val tvComments: TextView
         val tvAddQuestion: TextView
         val tvSparks: TextView
-        val tvRTSparks: TextView
+       // val tvRTSparks: TextView
         val tvRecordedByText: TextView
         val tvRTRecordedByText: TextView
         val tvOgOwnerName: TextView
@@ -830,10 +828,10 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
             tvFromCameraRoll = itemView.findViewById<TextView>(R.id.tvFromCameraRoll)
             ivWaterMarkProfile = itemView.findViewById<CircleImageView>(R.id.ivWaterMarkProfile)
             tvRTName = itemView.findViewById<TextView>(R.id.tvRTName)
-            tvComments = itemView.findViewById<TextView>(R.id.tvComments)
-            llComments = itemView.findViewById<LinearLayout>(R.id.llComments)
-            ivRTLink = itemView.findViewById<ImageView>(R.id.ivRTLink)
-            ivRTShare = itemView.findViewById<ImageView>(R.id.ivRTShare)
+//            tvComments = itemView.findViewById<TextView>(R.id.tvComments)
+//            llComments = itemView.findViewById<LinearLayout>(R.id.llComments)
+//            ivRTLink = itemView.findViewById<ImageView>(R.id.ivRTLink)
+//            ivRTShare = itemView.findViewById<ImageView>(R.id.ivRTShare)
             llDp = itemView.findViewById(R.id.llDp)
             llUserDp = itemView.findViewById(R.id.llUserDp)
             tvPublicUserName = itemView.findViewById<TextView>(R.id.tvPublicUserName)
@@ -851,15 +849,15 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
             llWhoCanSeeRT = itemView.findViewById<LinearLayout>(R.id.llWhoCanSeeRT)
             ivFlagged = itemView.findViewById<ImageView>(R.id.ivFlagged)
             ivMuteIcon = itemView.findViewById<ImageView>(R.id.ivMuteIcon)
-            ivRTRepost = itemView.findViewById<ImageView>(R.id.ivRTRepost)
+            //ivRTRepost = itemView.findViewById<ImageView>(R.id.ivRTRepost)
             ivRepost = itemView.findViewById<ImageView>(R.id.ivRepost)
             tvOgOwnerName = itemView.findViewById<TextView>(R.id.tvOgOwnerName)
             cardReposted = itemView.findViewById<CardView>(R.id.cardReposted)
             llBottomInnerLayout = itemView.findViewById<LinearLayout>(R.id.llBottomInnerLayout)
             llRTBottomInnerLayout = itemView.findViewById<LinearLayout>(R.id.llRTBottomInnerLayout)
             ivMoreOptions = itemView.findViewById<ImageView>(R.id.ivMoreOptions)
-            ivRTMoreOptions = itemView.findViewById<ImageView>(R.id.ivRTMoreOptions)
-            ivParticipate = itemView.findViewById<ImageView>(R.id.ivParticipate)
+            //ivRTMoreOptions = itemView.findViewById<ImageView>(R.id.ivRTMoreOptions)
+            //ivParticipate = itemView.findViewById<ImageView>(R.id.ivParticipate)
             tvOwnerConversationAt = itemView.findViewById<TextView>(R.id.tvOwnerConversationAt)
             tvRTOwnerConversationAt = itemView.findViewById<TextView>(R.id.tvRTOwnerConversationAt)
             cardSubscribe = itemView.findViewById<CardView>(R.id.cardSubscribe)
@@ -868,34 +866,34 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
             sparkView = itemView.findViewById(R.id.sparkView)
             llSpark = itemView.findViewById<LinearLayout>(R.id.llSpark)
             tvSparks = itemView.findViewById<TextView>(R.id.tvSparks)
-            sparkViewRT = itemView.findViewById(R.id.sparkViewRT)
-            llRTSpark = itemView.findViewById<LinearLayout>(R.id.llRTSpark)
-            tvRTSparks = itemView.findViewById<TextView>(R.id.tvRTSparks)
+//            sparkViewRT = itemView.findViewById(R.id.sparkViewRT)
+//            llRTSpark = itemView.findViewById<LinearLayout>(R.id.llRTSpark)
+//            tvRTSparks = itemView.findViewById<TextView>(R.id.tvRTSparks)
             val llRTBottom: LinearLayout = itemView.findViewById<LinearLayout>(R.id.llRTBottom)
             llBottomInnerLayout.post(Runnable {
                 val layoutParams: LinearLayout.LayoutParams =
-                    llBottomInnerLayout.getLayoutParams() as LinearLayout.LayoutParams
+                    llBottomInnerLayout.layoutParams as LinearLayout.LayoutParams
                 layoutParams.topMargin = halfHeightPX
-                llBottomInnerLayout.setLayoutParams(layoutParams)
+                llBottomInnerLayout.layoutParams = layoutParams
             })
             llRTBottomInnerLayout.post(Runnable {
                 val layoutParams: LinearLayout.LayoutParams =
-                    llRTBottomInnerLayout.getLayoutParams() as LinearLayout.LayoutParams
+                    llRTBottomInnerLayout.layoutParams as LinearLayout.LayoutParams
                 layoutParams.topMargin = halfHeightPX
-                llRTBottomInnerLayout.setLayoutParams(layoutParams)
+                llRTBottomInnerLayout.layoutParams = layoutParams
             })
-            llRTSpark.setOnClickListener{
-                feedAdapterListener?.onSparkClicked()
-            }
+//            llRTSpark.setOnClickListener{
+//                feedAdapterListener?.onSparkClicked()
+//            }
             llSpark.setOnClickListener{
                 feedAdapterListener?.onSparkClicked()
             }
             cardAddQuestion.setOnClickListener {
                 feedAdapterListener?.onAskQuestionClicked()
             }
-            ivRTRepost.setOnClickListener {
-                feedAdapterListener?.onRepostClicked()
-            }
+//            ivRTRepost.setOnClickListener {
+//                feedAdapterListener?.onRepostClicked()
+//            }
             ivRepost.setOnClickListener {
                 feedAdapterListener?.onRepostClicked()
             }
@@ -904,7 +902,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                     val exploreViewModel: ExploreViewModel<*> = data[getAbsoluteAdapterPosition()]
                     if (exploreViewModel.type == ExploreVideoType.PUBLIC_VIDEO) {
                         val discoverModel: DiscoverModel =
-                            exploreViewModel.getObj() as DiscoverModel
+                            exploreViewModel.obj as DiscoverModel
                         if (discoverModel.getIsFlag() === 1) {
                             feedAdapterListener!!.onFlagVideoClicked()
                         } else {
@@ -924,30 +922,30 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
             ivShare.setOnClickListener {
                 feedAdapterListener?.onShareClick()
             }
-            ivRTShare.setOnClickListener {
-                feedAdapterListener?.onShareClick()
-            }
+//            ivRTShare.setOnClickListener {
+//                feedAdapterListener?.onShareClick()
+//            }
             ivReply.setOnClickListener {
                 feedAdapterListener?.onReplyClick()
             }
-            ivParticipate.setOnClickListener {
-                feedAdapterListener?.onParticipateClicked()
-            }
+//            ivParticipate.setOnClickListener {
+//                feedAdapterListener?.onParticipateClicked()
+//            }
             ivLink.setOnClickListener {
                 feedAdapterListener?.onLinkClick()
             }
-            ivRTLink.setOnClickListener {
-                feedAdapterListener?.onLinkClick()
-            }
+//            ivRTLink.setOnClickListener {
+//                feedAdapterListener?.onLinkClick()
+//            }
             ivSaveVideo.setOnClickListener {
                 feedAdapterListener?.onSaveClick()
             }
             ivMoreOptions.setOnClickListener {
                 feedAdapterListener?.onMoreOptionsClicked()
             }
-            ivRTMoreOptions.setOnClickListener {
-                feedAdapterListener?.onMoreOptionsClicked()
-            }
+//            ivRTMoreOptions.setOnClickListener {
+//                feedAdapterListener?.onMoreOptionsClicked()
+//            }
             llDp.setOnClickListener { v ->
                 feedAdapterListener?.onProfileClick(getAbsoluteAdapterPosition())
             }
@@ -996,9 +994,9 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
             cardSubscribe.setOnClickListener {
                 feedAdapterListener?.onSubscribeClicked()
             }
-            llComments.setOnClickListener{
-                feedAdapterListener?.onCommentsClicked()
-            }
+//            llComments.setOnClickListener{
+//                feedAdapterListener?.onCommentsClicked()
+//            }
             tvDesc.setOnTouchListener { view: View, motionEvent: MotionEvent? ->
                 view.parent.requestDisallowInterceptTouchEvent(true)
                 false

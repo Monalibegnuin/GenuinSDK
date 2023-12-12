@@ -12,7 +12,7 @@ import com.begenuin.library.core.interfaces.ResponseListener;
 import com.begenuin.library.data.remote.BaseAPIService;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.begenuine.feedscreensdk.common.Constants;
+import com.begenuin.library.common.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.Serializable;

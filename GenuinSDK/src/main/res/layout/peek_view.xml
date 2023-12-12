@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:gravity="center">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:cardBackgroundColor="@color/black_111111"
+        app:cardCornerRadius="@dimen/dimen_10dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.begenuin.library.common.customViews.TextureImageView
+                android:id="@+id/ivThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@android:color/black" />
+
+            <com.google.android.exoplayer2.ui.StyledPlayerView
+                android:id="@+id/videoView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:alpha="0"
+                app:auto_show="true"
+                app:backgroundTint="@color/transparent"
+                app:resize_mode="zoom"
+                app:surface_type="texture_view"
+                app:use_controller="false"
+                tools:visibility="invisible" />
+
+            <LinearLayout
+                android:id="@+id/llPublicVideoBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/dimen_16dp"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dimen_16dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/rlImage"
+                        android:layout_width="@dimen/dimen_36dp"
+                        android:layout_height="@dimen/dimen_36dp"
+                        android:layout_gravity="center">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/ivVideoProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:src="@color/md_grey_400" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                            android:id="@+id/animationView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="@dimen/dimen_2dp"
+                            android:visibility="gone"
+                            app:lottie_autoPlay="true"
+                            app:lottie_loop="true" />
+                    </RelativeLayout>
+
+                    <com.begenuin.library.common.customViews.CustomTextView
+                        android:id="@+id/tvPublicUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_17sp"
+                        tools:text="\@user.name" />
+
+                </LinearLayout>
+
+<!--                <com.begenuin.begenuin.common.ExpandableTextView-->
+<!--                    android:id="@+id/tvPublicDesc"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_8dp"-->
+<!--                    android:ellipsize="end"-->
+<!--                    android:fontFamily="@font/avenir_next_demi_bold"-->
+<!--                    android:lineSpacingExtra="@dimen/dimen_2dp"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:textColor="@android:color/white"-->
+<!--                    android:textSize="@dimen/text_size_15sp"-->
+<!--                    tools:text="An open discussion about the various innovative projects in upcoming markets" />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llRTBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginHorizontal="@dimen/dimen_16dp"
+                android:animateLayoutChanges="true"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dimen_16dp"
+                android:visibility="gone">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/black_opacity40"
+                    app:cardCornerRadius="@dimen/dimen_20dp">
+
+                    <LinearLayout
+                        android:id="@+id/llRTOwner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/dimen_8dp"
+                        android:paddingVertical="@dimen/dimen_6dp"
+                        android:visibility="visible">
+
+                        <com.begenuin.library.common.customViews.CustomTextView
+                            android:id="@+id/tvRTUserName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_bold"
+                            android:maxLines="1"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/text_size_15sp"
+                            tools:text="\@vishal" />
+
+                        <com.begenuin.library.common.customViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_4dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/avenir_next_demi_bold"
+                            android:maxLines="1"
+                            android:text="Added"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text_size_15sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llReposted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/dimen_8dp"
+                        android:paddingVertical="@dimen/dimen_4dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="@dimen/dimen_16dp"
+                            android:layout_height="@dimen/dimen_16dp"
+                            android:src="@drawable/ic_repost" />
+
+                        <com.begenuin.library.common.customViews.CustomTextView
+                            android:id="@+id/tvReposterOwnerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_4dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/avenir_next_bold"
+                            android:maxLines="1"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text_size_12sp" />
+
+                        <com.begenuin.library.common.customViews.CustomTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_2dp"
+                            android:fontFamily="@font/avenir_next_demi_bold"
+                            android:text="@string/reposted_small"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text_size_12sp" />
+
+                        <com.begenuin.library.common.customViews.CustomTextView
+                            android:id="@+id/tvOgOwnerName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_2dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/avenir_next_bold"
+                            android:maxLines="1"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/text_size_12sp" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+
+                    <com.begenuin.library.common.customViews.DisplayPictureView
+                        android:id="@+id/llRTDp"
+                        android:layout_width="@dimen/dimen_36dp"
+                        android:layout_height="@dimen/dimen_36dp"
+                        app:innerTextSize="@dimen/text_size_15sp"
+                        app:roundSize="@dimen/dimen_36dp" />
+
+
+                    <com.begenuin.library.common.customViews.CustomTextView
+                        android:id="@+id/tvRTName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:drawablePadding="@dimen/dimen_12dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_17sp"
+                        tools:text="Innovation Discussion" />
+                </LinearLayout>
+
+
+<!--                <com.begenuin.begenuin.common.ExpandableTextView-->
+<!--                    android:id="@+id/tvRTDesc"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/dimen_8dp"-->
+<!--                    android:ellipsize="end"-->
+<!--                    android:fontFamily="@font/avenir_next_demi_bold"-->
+<!--                    android:lineSpacingExtra="@dimen/dimen_2dp"-->
+<!--                    android:maxLines="1"-->
+<!--                    android:textColor="@android:color/white"-->
+<!--                    android:textSize="@dimen/text_size_15sp"-->
+<!--                    tools:text="An open discussion about the various innovative projects in upcoming markets" />-->
+
+            </LinearLayout>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/ivProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:indeterminate="true"
+                android:layout_margin="@dimen/dimen_8dp"
+                app:indicatorColor="@color/colorWhite"
+                app:trackThickness="@dimen/dimen_2dp"
+                app:indicatorSize="@dimen/dimen_20dp"
+                android:visibility="gone"
+                app:trackColor="@color/white_opacity20" />
+        </FrameLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cvVideo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="57dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        app:cardBackgroundColor="@color/colorWhite"
+        app:cardCornerRadius="@dimen/dimen_10dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/peek_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false" />
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

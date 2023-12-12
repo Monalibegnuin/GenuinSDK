@@ -2,7 +2,9 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("kotlin-android")
 }
+
 apply(from = "publishLocal.gradle")
 
 android {
@@ -38,6 +40,10 @@ android {
             }
         }
     }
+
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -61,6 +67,9 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer:2.18.7")
     implementation("com.airbnb.android:lottie:3.4.4")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.giphy.sdk:ui:2.1.18")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    //implementation("com.github.iknow4:android-utils-sdk:1.1.2")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

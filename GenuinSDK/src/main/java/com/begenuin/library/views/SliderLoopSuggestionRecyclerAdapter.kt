@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.begenuin.library.R
-import com.begenuine.feedscreensdk.common.Constants
+import com.begenuin.library.common.Constants
 import com.begenuin.library.common.Utility
 import com.begenuin.library.core.enums.FeedViewType
 import com.begenuin.library.common.customViews.CustomTextView

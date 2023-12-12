@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.begenuin.library.R;
-import com.begenuine.feedscreensdk.common.Constants;
 import com.begenuin.library.core.interfaces.OnVideoDownload;
 import com.begenuin.library.data.model.DiscoverModel;
 import com.begenuin.library.data.model.LottieAnimModel;

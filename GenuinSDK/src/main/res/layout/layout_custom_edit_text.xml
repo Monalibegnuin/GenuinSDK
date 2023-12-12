@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/dimen_16dp"
+    android:layout_marginTop="@dimen/dimen_16dp"
+    android:layout_marginEnd="@dimen/dimen_16dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/label_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/label_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenir_next_medium"
+            android:text="@string/name"
+            android:textColor="@color/color_111111"
+            android:textSize="@dimen/text_size_15sp" />
+
+        <TextView
+            android:id="@+id/requiredText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_5dp"
+            android:layout_toEndOf="@id/label_txt"
+            android:fontFamily="@font/avenir_next_medium"
+            android:text="*"
+            android:textColor="@color/red_F2545B"
+            android:visibility="gone" />
+
+        <com.begenuin.library.common.customViews.CustomTextView
+            android:id="@+id/tvHandleCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/avenir_next_medium"
+            android:text="@string/zero_24"
+            android:textColor="@color/color_949494"
+            android:textSize="@dimen/text_size_very_small" />
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/edittext_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dimen_8dp"
+        android:background="@drawable/edit_text_e7e7_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/dimen_16dp"
+        android:paddingVertical="@dimen/dimen_16dp"
+        app:layout_constraintEnd_toEndOf="@id/label_parent"
+        app:layout_constraintStart_toStartOf="@id/label_parent"
+        app:layout_constraintTop_toBottomOf="@id/label_parent">
+
+        <EditText
+            android:id="@+id/edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:fontFamily="@font/avenir_next_medium"
+            android:gravity="start"
+            android:hint="@string/enter_bio_here"
+            android:lineSpacingExtra="@dimen/dimen_3dp"
+            android:minLines="1"
+            android:textColor="@color/black_111111"
+            android:textColorHint="@color/color_949494"
+            android:textCursorDrawable="@drawable/cursor_drawable"
+            android:textSize="@dimen/text_size_normal_17sp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/text_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:fontFamily="@font/avenir_next_demi_bold"
+        android:text="Names can only have letters, numbers, or spaces."
+        android:textColor="@color/red_F2545B"
+        android:textSize="@dimen/text_size_12sp"
+        app:layout_constraintStart_toStartOf="@+id/edittext_parent"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

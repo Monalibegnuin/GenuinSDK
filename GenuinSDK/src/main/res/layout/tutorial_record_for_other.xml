@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/translucent_black">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/dimen_16dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_48dp"
+                android:layout_height="@dimen/dimen_48dp"
+                android:layout_marginBottom="@dimen/dimen_16dp"
+                android:contentDescription="@string/public_video"
+                android:src="@drawable/ic_public_video"
+                app:tint="@color/colorWhite" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenir_next_demi_bold"
+                    android:gravity="center"
+                    android:text="@string/create_a_public_video"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/text_size_24sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_4dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/avenir_next_demi_bold"
+                        android:gravity="center"
+                        android:text="for "
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_24sp" />
+
+                    <TextView
+                        android:id="@+id/tvOtherUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/avenir_next_bold"
+                        android:gravity="center"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_size_24sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvRecordForOtherDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_8dp"
+                android:fontFamily="@font/avenir_next_demi_bold"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/dimen_3dp"
+                android:text="@string/record_for_other_desc"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/text_size_15sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

@@ -6,15 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/lblLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimen_180dp"
+        android:layout_height="@dimen/dimen_150dp"
         android:layout_marginTop="50dp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Login"
-        android:textColor="#000"
-        android:textSize="20sp"
+        app:srcCompat="@drawable/dunkinn_donuts_logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -24,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:ems="10"
         android:hint="Email Id"

@@ -1,7 +1,7 @@
 package com.begenuin.library.data.viewmodel
 
 import android.content.Context
-import com.begenuine.feedscreensdk.common.Constants
+import com.begenuin.library.common.Constants
 import com.begenuin.library.common.Utility
 import com.begenuin.library.core.interfaces.ResponseListener
 import com.begenuin.library.data.model.ConversationModel

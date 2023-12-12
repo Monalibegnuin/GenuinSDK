@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -18,13 +20,19 @@
         android:theme="@style/Theme.FeedScreenSDK"
         tools:targetApi="31">
         <activity
-            android:name="com.begenuin.library.views.DunkidonutsScreen"
+            android:name=".views.activities.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name="com.begenuin.library.views.LoginActivity"
+            android:name=".views.DunkidonutsScreen"
+            android:exported="false" />
+        <activity
+            android:name=".views.activities.LoginActivity"
             android:exported="true" />
         <activity
-            android:name="com.begenuin.library.views.HomeScreen"
+            android:name=".views.activities.HomeScreen"
+            android:exported="true" />
+        <activity
+            android:name=".views.activities.CameraNewActivity"
             android:exported="true" />
     </application>
 

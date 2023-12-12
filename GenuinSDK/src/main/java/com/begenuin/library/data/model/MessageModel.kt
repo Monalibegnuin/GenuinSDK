@@ -3,7 +3,7 @@ package com.begenuin.library.data.model
 import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
-import com.begenuine.feedscreensdk.common.Constants
+import com.begenuin.library.common.Constants
 import com.begenuin.library.common.Utility
 import com.begenuin.library.core.enums.VideoConvType
 import com.begenuin.library.core.interfaces.ResponseListener

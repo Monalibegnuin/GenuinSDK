@@ -1,7 +1,6 @@
 package com.begenuin.library.common
 
 import android.app.Activity
-import com.begenuine.feedscreensdk.common.Constants
 import com.begenuin.library.core.interfaces.ResponseListener
 import com.begenuin.library.data.model.ChatModel
 import com.begenuin.library.data.model.CommentModel
