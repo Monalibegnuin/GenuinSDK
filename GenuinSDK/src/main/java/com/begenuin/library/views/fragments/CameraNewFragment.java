@@ -4325,7 +4325,7 @@ public class CameraNewFragment extends Camera2Fragment implements Camera2Listene
         } else if (id == R.id.llShareQuestion) {
             shareQuestion();
         } else if (id == R.id.ivBackNew) {
-            Utility.hideKeyboard(context, null);
+            Utility.hideKeyboard(context);
             String stateBack;
             if (TextUtils.isEmpty(cameraFragmentBinding.questionView.questionViewBindingCustom.edtAddQuestion.getText().toString().trim())) {
                 stateBack = "empty";
@@ -4334,7 +4334,7 @@ public class CameraNewFragment extends Camera2Fragment implements Camera2Listene
             }
             handleQuestionBack();
         } else if (id == R.id.tvDone) {
-            Utility.hideKeyboard(context, null);
+            Utility.hideKeyboard(context);
             cameraFragmentBinding.questionView.questionViewBindingCustom.edtAddQuestion.clearComposingText();
             if (isCustomQuestionChanged()) {
 //                try {

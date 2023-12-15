@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -60,26 +60,25 @@
             android:layout_below="@+id/llHeader"
             android:background="@color/colorWhite">
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/fabPost"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dimen_52dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/dimen_16dp"
-                android:text="@string/post"
-                android:textColor="@color/colorWhite"
-                android:textSize="@dimen/text_size_20sp"
-                android:textAllCaps="false"
-                android:letterSpacing="0"
-                app:iconSize="@dimen/dimen_36dp"
-                app:icon="@drawable/ic_participate_with_bg"
-                app:iconTint="@color/transparent"
-                app:iconTintMode="add"
-                app:iconPadding="@dimen/dimen_8dp"
-                android:backgroundTint="@color/colorPrimary"
-                android:fontFamily="@font/avenir_next_bold"
-                android:visibility="visible"/>
+<!--            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--                android:id="@+id/fabPost"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/dimen_52dp"-->
+<!--                android:layout_alignParentTop="true"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_marginBottom="@dimen/dimen_16dp"-->
+<!--                android:textColor="@color/colorWhite"-->
+<!--                android:textSize="@dimen/text_size_20sp"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:letterSpacing="0"-->
+<!--                app:iconSize="@dimen/dimen_36dp"-->
+<!--                android:layout_marginTop="@dimen/dimen_16dp"-->
+<!--                app:icon="@drawable/ic_participate_with_bg"-->
+<!--                app:iconTint="@color/transparent"-->
+<!--                app:iconTintMode="add"-->
+<!--                app:iconPadding="@dimen/dimen_8dp"-->
+<!--                android:fontFamily="@font/avenir_next_bold"-->
+<!--                android:visibility="gone"/>-->
 
             <include
                 android:id="@+id/communityBasicDetails"

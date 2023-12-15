@@ -38,6 +38,14 @@
                     android:layout_height="@dimen/dimen_1dp"
                     android:layout_weight="1" />
 
+                <ImageView
+                    android:id="@+id/fabPost"
+                    android:layout_width="@dimen/dimen_60dp"
+                    android:layout_height="@dimen/dimen_60dp"
+                    android:layout_marginEnd="-6dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:src="@drawable/ic_participate_with_bg" />
+
                 <LinearLayout
                     android:id="@+id/llRole"
                     android:layout_width="wrap_content"

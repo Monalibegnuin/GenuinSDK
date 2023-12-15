@@ -1,13 +1,20 @@
 package com.begenuin.library.common
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Typeface
 import android.media.MediaMetadataRetriever
+import android.media.RingtoneManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -31,12 +38,28 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.core.app.ShareCompat.IntentBuilder
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.begenuin.begenuin.data.model.EditorColorsModel
+import com.begenuin.library.GenuinSDKApplication
 import com.begenuin.library.R
+import com.begenuin.library.SDKInitiate
 import com.begenuin.library.common.customViews.CustomEditTextWithError
+import com.begenuin.library.core.enums.NotificationType
+import com.begenuin.library.core.enums.VideoConvType
+import com.begenuin.library.data.db.QueryDataHelper
+import com.begenuin.library.data.model.ChatModel
+import com.begenuin.library.data.model.CommentModel
+import com.begenuin.library.data.model.ConversationModel
 import com.begenuin.library.data.model.EditorFontModel
+import com.begenuin.library.data.model.LoopsModel
+import com.begenuin.library.data.model.MemberInfoModel
+import com.begenuin.library.data.model.MembersModel
+import com.begenuin.library.data.model.MessageModel
+import com.begenuin.library.data.model.MetaDataModel
+import com.begenuin.library.views.activities.HomeScreen
 import com.begenuine.feedscreensdk.common.ShowLogger
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -660,5 +683,257 @@ object Utility {
         val inputMethodManager =
             mContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    @JvmStatic
+    fun getDBHelper(): QueryDataHelper? {
+        return GenuinSDKApplication.dbHelper
+    }
+
+    @JvmStatic
+    fun hideKeyboard(mContext: Activity) {
+        try {
+            if (mContext.currentFocus != null) {
+                val imm =
+                    mContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(mContext.currentFocus!!.windowToken, 0)
+            }
+        } catch (e: java.lang.Exception) {
+           showLogException(e)
+        }
+    }
+
+
+    fun convertChatIntoMessage(chat: ChatModel, chatId: String?): MessageModel {
+        val message = MessageModel()
+        message.chatId = chatId
+        message.mediaUrl  = chat.videoUrl
+        message.mediaUrl = chat.videoUrlM3U8
+        message.thumbnailUrl = chat.thumbnailUrl
+        message.videoThumbnailLarge = chat.videoThumbnailLarge
+        message.videoThumbnailSmall = chat.videoThumbnailSmall
+        message.localVideoPath = ""
+        message.messageId = chat.conversationId
+        message.messageAt  = chat.conversationAt
+        message.link = chat.link
+        message.isRead = chat.read
+        message.isRetry = false
+        message.videoUploadStatus = 3
+        message.localImagePath = ""
+        message.imageUploadStatus = 2
+        message.dpUploadStatus =2
+        message.convType = VideoConvType.ROUND_TABLE.value
+        message.messageSummary = chat.description
+        message.shareURL = chat.shareURL
+        message.noOfViews = chat.noOfViews
+        message.noOfComments =chat.noOfComments
+        message.ffMpegCommand = chat.ffMpegCommand
+        message.compressionStatus = 1
+        if (chat.owner != null) {
+            chat.owner.userName = chat.owner.nickname
+        }
+        message.owner = chat.owner
+        message.questions = chat.questions
+        var metaDataModel: MetaDataModel? = chat.metaData
+        if (metaDataModel == null) {
+            metaDataModel = MetaDataModel()
+        }
+        metaDataModel.duration = chat.duration
+        metaDataModel.resolution = chat.resolution
+        metaDataModel.size = chat.size
+        metaDataModel.aspectRatio = chat.aspectRatio
+        message.metaData =metaDataModel
+        message.repostModel = chat.repostModel
+        return message
+    }
+
+    fun convertLoopModelIntoConversation(
+        context: Context?,
+        loopsModel: LoopsModel
+    ): ConversationModel {
+        val conversationModel = ConversationModel()
+        conversationModel.chatId = loopsModel.chatId
+        conversationModel.convType = loopsModel.convType
+        conversationModel.settings = loopsModel.settings
+        conversationModel.noOfViews = loopsModel.noOfViews
+        conversationModel.group = loopsModel.group
+        if (loopsModel.latestMessages != null && loopsModel.latestMessages!!.size > 0) {
+            val chats: MutableList<ChatModel> = java.util.ArrayList()
+            for (k in 0 until loopsModel.latestMessages!!.size) {
+                val messageModel: MessageModel = loopsModel.latestMessages!![k]
+                chats.add(
+                    convertMessageIntoChat(
+                        messageModel,
+                        loopsModel.chatId
+                    )
+                )
+            }
+            conversationModel.setChats(chats)
+        }
+        if (loopsModel.group != null) {
+            //val userId: String = SharedPrefUtils.getStringPreference(context, Constants.PREF_USER)
+            val userId: String = SDKInitiate.userId
+            val memberList: List<MembersModel> = loopsModel.group!!.members
+            if (memberList.isNotEmpty()) {
+                for (i in memberList.indices) {
+                    val membersModel: MembersModel = memberList[i]
+                    if (membersModel.userId!!.contentEquals(userId)) {
+                        val memberInfoModel = MemberInfoModel()
+                        memberInfoModel.role = membersModel.memberRole
+                        memberInfoModel.status = memberInfoModel.status
+                        conversationModel.memberInfo = memberInfoModel
+                        break
+                    }
+                }
+            }
+            val subscribersList: List<MembersModel> = loopsModel.group!!.getSubscribers()
+            if (subscribersList.isNotEmpty()) {
+                for (j in subscribersList.indices) {
+                    val subscriber: MembersModel = subscribersList[j]
+                    if (subscriber.userId!!.contentEquals(userId)) {
+                        conversationModel.isSubscriber = true
+                        break
+                    }
+                }
+            }
+        }
+        return conversationModel
+    }
+
+    private fun convertMessageIntoChat(messageModel: MessageModel, chatId: String?): ChatModel {
+        val chat = ChatModel()
+        chat.chatId = chatId
+        chat.videoUrl = messageModel.mediaUrl
+        chat.videoUrlM3U8 = messageModel.mediaUrlM3U8
+        chat.thumbnailUrl = messageModel.thumbnailUrl
+        chat.videoThumbnailLarge = messageModel.videoThumbnailLarge
+        chat.videoThumbnailSmall = messageModel.videoThumbnailSmall
+        chat.localVideoPath = messageModel.localVideoPath
+        chat.conversationId = messageModel.messageId
+        chat.conversationAt = messageModel.messageAt
+        chat.link = messageModel.link
+        chat.read = messageModel.isRead
+        chat.isRetry = messageModel.isRetry
+        chat.videoUploadStatus = messageModel.videoUploadStatus
+        chat.imagePath = messageModel.localImagePath
+        chat.imageUploadStatus = messageModel.imageUploadStatus
+        chat.dpUploadStatus = messageModel.dpUploadStatus
+        chat.convType = messageModel.convType
+        chat.description = messageModel.messageSummary
+        chat.shareURL = messageModel.shareURL
+        chat.noOfViews = messageModel.noOfViews
+        chat.noOfComments = messageModel.noOfComments
+        chat.ffMpegCommand = messageModel.ffMpegCommand
+        chat.compressionStatus = messageModel.compressionStatus
+        if (messageModel.owner != null) {
+            messageModel.owner!!.nickname = messageModel.owner!!.getUserName()
+        }
+        chat.owner = messageModel.owner
+        chat.questions = messageModel.questions
+        val metaDataModel = chat.metaData
+        chat.metaData = metaDataModel
+        if (metaDataModel != null) {
+            chat.duration = metaDataModel.duration
+            chat.aspectRatio = metaDataModel.aspectRatio
+            chat.resolution = metaDataModel.resolution
+            chat.size = metaDataModel.size
+        }
+        chat.repostModel = messageModel.repostModel
+        return chat
+    }
+
+    fun displayNotification(context: Context, from: String, path: String?, convType: Int) {
+        var type: String? = null
+        if (from.equals(
+                Constants.FROM_PUBLIC_VIDEO,
+                ignoreCase = true
+            ) || from.equals(Constants.FROM_RECORD_FOR_OTHER, ignoreCase = true)
+        ) {
+            type = NotificationType.LOCAL_PROFILE_VIDEO.value
+        } else if (from.equals(
+                Constants.FROM_REACTION,
+                ignoreCase = true
+            ) || from.equals(
+                Constants.FROM_DIRECT,
+                ignoreCase = true
+            ) || from.equals(Constants.FROM_GROUP, ignoreCase = true)
+        ) {
+            type = NotificationType.LOCAL_REPLY_SENT_VIDEO.value
+        } else if (from.equals(Constants.FROM_CHAT, ignoreCase = true)) {
+            type = if (convType == 4) {
+                NotificationType.LOCAL_LOOP_VIDEO.value
+            } else {
+                NotificationType.LOCAL_INBOX_VIDEO.value
+            }
+        } else if (from.equals(Constants.FROM_ROUND_TABLE, ignoreCase = true)) {
+            type = NotificationType.LOCAL_LOOP_VIDEO.value
+        } else if (from.equals(Constants.FROM_COMMENT, ignoreCase = true)) {
+            type = if (convType == 4) {
+                NotificationType.LOCAL_LOOP_COMMENT_VIDEO.value
+            } else {
+                NotificationType.LOCAL_COMMENT_VIDEO.value
+            }
+        }
+        val defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val intent = Intent(context, HomeScreen::class.java)
+        if (type != null) {
+            if (type.equals(
+                    NotificationType.LOCAL_COMMENT_VIDEO.getValue(),
+                    ignoreCase = true
+                ) || type.equals(
+                    NotificationType.LOCAL_LOOP_COMMENT_VIDEO.getValue(),
+                    ignoreCase = true
+                )
+            ) {
+                if (Utility.getDBHelper() != null) {
+                    val commentModel: CommentModel =
+                        getDBHelper()!!.getCompressedCommentVideo(path)
+                    val chatId: String = commentModel.getChatId()
+                    val videoId: String = commentModel.getVideoId()
+                    intent.putExtra("sourceId", if (TextUtils.isEmpty(chatId)) "" else chatId)
+                    intent.putExtra("parentId", if (TextUtils.isEmpty(videoId)) "" else videoId)
+                }
+            }
+            intent.putExtra("type", if (TextUtils.isEmpty(type)) "" else type)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val NOTIFICATION_CHANNEL_ID = "102"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                @SuppressLint("WrongConstant") val notificationChannel = NotificationChannel(
+                    NOTIFICATION_CHANNEL_ID,
+                    "Notification",
+                    NotificationManager.IMPORTANCE_MAX
+                )
+                //Configure Notification Channel
+                notificationChannel.description =
+                    context.resources.getString(R.string.upload_failed)
+                notificationChannel.enableLights(true)
+                notificationChannel.enableVibration(true)
+                notificationManager.createNotificationChannel(notificationChannel)
+            }
+            val notificationBuilder: NotificationCompat.Builder =
+                NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                    .setContentTitle("BeGenuin")
+                    .setAutoCancel(true)
+                    .setSound(defaultSound)
+                    .setContentText(context.resources.getString(R.string.upload_failed))
+                    .setContentIntent(pendingIntent)
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText(context.resources.getString(R.string.upload_failed))
+                    )
+                    .setWhen(System.currentTimeMillis())
+                    .setPriority(Notification.PRIORITY_MAX)
+            notificationManager.notify(1001, notificationBuilder.build())
+        }
     }
 }

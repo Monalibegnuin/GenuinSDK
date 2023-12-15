@@ -2,31 +2,57 @@ package com.begenuin.library.views.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import com.arthenica.ffmpegkit.FFmpegKit
+import com.begenuin.library.GenuinSDKApplication
 import com.begenuin.library.R
 import com.begenuin.library.common.Constants
 import com.begenuin.library.common.Utility
+import com.begenuin.library.common.Utility.getDBHelper
 import com.begenuin.library.core.enums.VideoConvType
 import com.begenuin.library.core.interfaces.LoopsAdapterListener
 import com.begenuin.library.core.interfaces.ResponseListener
+import com.begenuin.library.data.eventbus.CompressionCompletedEvent
+import com.begenuin.library.data.eventbus.ConversationDeleteEvent
+import com.begenuin.library.data.eventbus.ConversationUpdateEvent
+import com.begenuin.library.data.eventbus.ConversationVideoProgressUpdateEvent
+import com.begenuin.library.data.eventbus.LoopVideoAPICompleteEvent
+import com.begenuin.library.data.eventbus.PublicVideoStatusChangedEvent
+import com.begenuin.library.data.eventbus.VideoUploadedEvent
+import com.begenuin.library.data.model.ChatModel
 import com.begenuin.library.data.model.CommunityModel
+import com.begenuin.library.data.model.DiscoverModel
 import com.begenuin.library.data.model.LoopsModel
+import com.begenuin.library.data.model.MemberInfoModel
+import com.begenuin.library.data.model.MessageModel
+import com.begenuin.library.data.model.VideoParamsModel
 import com.begenuin.library.data.remote.BaseAPIService
+import com.begenuin.library.data.remote.service.CompressionWorker
+import com.begenuin.library.data.viewmodel.GenuinFFMpegManager
+import com.begenuin.library.data.viewmodel.UploadQueueManager
+import com.begenuin.library.data.viewmodel.VideoAPIManager
 import com.begenuin.library.databinding.FragmentCommunityDetailsBinding
 import com.begenuin.library.views.LoopsAdapter
 import com.begenuin.library.views.activities.CameraNewActivity
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.begenuin.library.views.adpters.UploadVideosAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.concurrent.ExecutionException
 
 
 /**
@@ -37,23 +63,16 @@ import org.json.JSONObject
 class CommunityDetailsFragment : Fragment(){
 
     private var communityId: String = ""
-    private var bottomSheetGuideLineDialog: BottomSheetDialog? = null
     var role: Int = 0
-    private lateinit var launcher: ActivityResultLauncher<Intent>
-    private var tabList: ArrayList<String> = ArrayList()
     var communityModel: CommunityModel? = null
     private var communityDetailsService: BaseAPIService? = null
-    private var editCommunityActivityLauncher: ActivityResultLauncher<Intent>? = null
-    private var isBottomSheetDrawerAutoOpenedOnce: Boolean = false
-
-    private var invitingUserDp: String = ""
-    private var invitingUserIsAvatar: Boolean = false
     private var isCommunityDataLoaded: Boolean = false
-    private var isUserMetaDataLoaded: Boolean = false
     lateinit var _binding: FragmentCommunityDetailsBinding
     private var communityLoopsService: BaseAPIService? = null
     private var loopList: ArrayList<LoopsModel> = ArrayList()
     lateinit var adapter: LoopsAdapter
+    private var isDataLoaded = false
+    private var workManager: WorkManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +80,8 @@ class CommunityDetailsFragment : Fragment(){
             communityId = it.getString("community_id").toString()
             role = it.getInt("role")
         }
+        workManager = WorkManager.getInstance(requireActivity())
+        EventBus.getDefault().register(this)
     }
 
     override fun onDestroy() {
@@ -77,13 +98,6 @@ class CommunityDetailsFragment : Fragment(){
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param communityId Community Id.
-         * @return A new instance of fragment CommunityDetailsFragment.
-         */
         @JvmStatic
         fun newInstance(communityId: String?, role: Int) = CommunityDetailsFragment().apply {
             arguments = Bundle().apply {
@@ -116,7 +130,8 @@ class CommunityDetailsFragment : Fragment(){
         setRoleActionClickListener()
         callCommunityBasicDetails()
         callGetCommunityLoops()
-        _binding.fabPost.setOnClickListener{
+        failedLoopManagement()
+        _binding.communityBasicDetails.fabPost.setOnClickListener{
             val intent = Intent(context, CameraNewActivity::class.java)
             intent.putExtra("from", Constants.FROM_ROUND_TABLE)
             intent.putExtra("community_id", communityId)
@@ -128,6 +143,24 @@ class CommunityDetailsFragment : Fragment(){
 //            callMetaDataApiForCommunityInvite()
 //        }
     }
+
+    private fun showNoLoopsView() {
+//        if (role == CommunityMemberRole.MODERATOR.value) {
+//            addTemplateStarter()
+//            addCreateLoopCell()
+//        } else if (role == CommunityMemberRole.MEMBER.value) {
+//            rlNoMessages.visibility = View.VISIBLE
+//            tvNoLoopTitle.text = context?.resources?.getString(R.string.ready_to_start_loop)
+//            tvNoLoopDesc.text = context?.resources?.getString(R.string.no_loops_community_msg)
+//            llNewLoop.visibility = View.VISIBLE
+//        } else {
+        _binding.communityBasicDetails.rlNoMessages.visibility = View.VISIBLE
+        _binding.communityBasicDetails.tvNoLoopTitle.text =  context?.resources?.getString(R.string.no_loops_yet)
+        _binding.communityBasicDetails.tvNoLoopDesc.text = context?.resources?.getString(R.string.no_loops_community_non_member_msg)
+        _binding.communityBasicDetails.llNewLoop.visibility = View.GONE
+       // }
+    }
+
 
 //    @SuppressLint("SetTextI18n")
 //    fun openBottomSheetDialog() {
@@ -384,7 +417,7 @@ class CommunityDetailsFragment : Fragment(){
         }
     }
 
-    fun callGetCommunityLoops() {
+    private fun callGetCommunityLoops() {
         try {
             if (communityLoopsService != null) {
                 communityLoopsService?.cancelCall()
@@ -438,12 +471,12 @@ class CommunityDetailsFragment : Fragment(){
                                 }
                             }
 
-//                            if (myLoops.isNotEmpty()) {
-//                                if (Utility.getDBHelper() != null) {
-//                                    Utility.getDBHelper().insertORUpdateLoops(myLoops)
-//                                }
-//                            }
-                            //pendingLoopsOrMessageManagement()
+                            if (myLoops.isNotEmpty()) {
+                                if (getDBHelper() != null) {
+                                    getDBHelper()!!.insertORUpdateLoops(myLoops)
+                                }
+                            }
+                            pendingLoopsOrMessageManagement()
 //                            if (loopList.isNotEmpty()) {
 //                                addCreateLoopCell()
 //                                addTemplateStarter()
@@ -451,7 +484,7 @@ class CommunityDetailsFragment : Fragment(){
                             setAdapter(false)
                         }
                         communityLoopsService = null
-                        //isDataLoaded = true
+                        isDataLoaded = true
                     }
 
                     override fun onFailure(error: String) {
@@ -582,7 +615,7 @@ class CommunityDetailsFragment : Fragment(){
 
     fun manageBackPress() {
         activity?.supportFragmentManager?.popBackStack()
-
+        activity?.finish()
 //        if (fragment is NewProfileFragment) {
 //            val childFm = fragment.getChildFragmentManager()
 //            val childIndex = childFm.backStackEntryCount
@@ -656,4 +689,491 @@ class CommunityDetailsFragment : Fragment(){
 //            }
 //        }
     }
+
+    @Subscribe
+    fun onLoopVideoAPISuccess(loopVideoAPICompleteEvent: LoopVideoAPICompleteEvent) {
+        Utility.showToast(activity, "Video Uploaded Successfully")
+        activity?.runOnUiThread { handleUploadAPIComplete(loopVideoAPICompleteEvent) }
+    }
+
+    @Subscribe
+    fun onVideoUploadProgress(model: ConversationVideoProgressUpdateEvent) {
+        activity?.runOnUiThread {
+            updateVideoProgress(model)
+        }
+    }
+    private fun handleUploadAPIComplete(model: LoopVideoAPICompleteEvent) {
+        var isDataUpdated = false
+
+        for (i in loopList.indices) {
+            val loopModel: LoopsModel =
+                loopList[i]
+            if (loopModel.chatId.equals("-102") || loopModel.chatId.equals("-103")) {
+                continue
+            }
+
+            if (loopModel.latestMessages?.isNotEmpty() == true) {
+                for (j in loopModel.latestMessages!!.indices) {
+                    val messageModel = loopModel.latestMessages!![j]
+                    if (!TextUtils.isEmpty(messageModel.localVideoPath) && messageModel.localVideoPath.equals(
+                            model.localVideoPath,
+                            ignoreCase = true
+                        )
+                    ) {
+                        if (!TextUtils.isEmpty(model.createdLoopId)) {
+                            loopModel.chatId = model.createdLoopId
+                            messageModel.chatId = model.createdLoopId
+                        }
+                        val mainViewHolder = _binding.communityBasicDetails.rvCommunityLoops.findViewHolderForAdapterPosition(i)
+                        if (mainViewHolder is LoopsAdapter.LoopsViewHolder) {
+                            val viewHolder =
+                                mainViewHolder.rvUploadList?.findViewHolderForAdapterPosition(
+                                    j
+                                ) as UploadVideosAdapter.VideosViewHolder?
+                            if (viewHolder != null && mainViewHolder.rvUploadList?.adapter != null) {
+                                isDataUpdated = true
+                                (mainViewHolder.rvUploadList?.adapter as UploadVideosAdapter?)!!.playUploadCompleteAnim(
+                                    viewHolder
+                                )
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    if (activity?.isDestroyed == false) {
+                                        syncUpdateWithDB()
+                                    }
+                                }, 2500)
+                            }
+                        }
+                        adapter.notifyDataSetChanged()
+                        break
+                    }
+                }
+            }
+        }
+        if (!isDataUpdated) {
+            syncUpdateWithDB()
+        }
+    }
+
+    private fun syncUpdateWithDB() {
+        val dbLoopList = getDBHelper()!!.loops
+        for (i in dbLoopList.indices) {
+            val dbModel = dbLoopList[i]
+            val memberData = MemberInfoModel()
+            memberData.status = "active"
+            memberData.role = "Moderator"
+            dbModel.memberInfo = memberData
+            for (j in loopList.indices) {
+                val model = loopList[j]
+                if (dbModel.chatId.equals(model.chatId)) {
+                    if (model.chatId.equals("-101")) {
+                        if (model.latestMessages != null && dbModel.latestMessages != null) {
+                            if (model.latestMessages!![0].localVideoPath.equals(dbModel.latestMessages!![0].localVideoPath)) {
+                                val isExpanded = loopList[j].isExpanded
+                                loopList[j] = dbModel
+                                loopList[j].isExpanded = isExpanded
+                            }
+                        }
+                    } else {
+                        val isExpanded = loopList[j].isExpanded
+                        loopList[j] = dbModel
+                        loopList[j].isExpanded = isExpanded
+                    }
+                }
+            }
+        }
+        val sortedList = loopList.sortedWith(compareBy { it.latestMessageAt })
+        loopList = ArrayList(sortedList.reversed())
+        setAdapter(false)
+    }
+
+    private fun updateVideoProgress(model: ConversationVideoProgressUpdateEvent) {
+        Utility.showLog("CommunityDetailsFragment", "Video upload is in progress")
+        for (i in loopList.indices) {
+            val loopsModel: LoopsModel =
+                loopList[i]
+            if (loopsModel.chatId.equals("-102") || loopsModel.chatId.equals("-103")) {
+                continue
+            }
+            if (loopsModel.latestMessages?.isNotEmpty() == true) {
+                for (j in loopsModel.latestMessages!!.indices) {
+                    val messageModel = loopsModel.latestMessages!![j]
+                    if (!TextUtils.isEmpty(messageModel.localVideoPath) && messageModel.localVideoPath.equals(
+                            model.localVideoPath,
+                            ignoreCase = true
+                        )
+                    ) {
+                        messageModel.uploadProgress = model.progress
+                        val mainViewHolder = _binding.communityBasicDetails.rvCommunityLoops?.findViewHolderForAdapterPosition(i)
+                        if (mainViewHolder is LoopsAdapter.LoopsViewHolder) {
+                            val viewHolder =
+                                mainViewHolder.rvUploadList?.findViewHolderForAdapterPosition(
+                                    j
+                                ) as UploadVideosAdapter.VideosViewHolder?
+                            if (viewHolder != null && mainViewHolder.rvUploadList?.adapter != null) {
+                                (mainViewHolder.rvUploadList?.adapter as UploadVideosAdapter?)!!.updateVideoProgress(
+                                    viewHolder,
+                                    model.progress
+                                )
+                            }
+                        }
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    private fun pendingLoopsOrMessageManagement() {
+        val pendingLoops = getDBHelper()!!.getPendingCommunityLoops(communityId)
+        val pendingMessages = getDBHelper()!!.pendingMessages
+
+        if (pendingMessages.isNotEmpty()) {
+            for (i in loopList.indices) {
+                val model = loopList[i]
+                if (model.chatId.equals("-102") || model.chatId.equals("-101") || model.chatId.equals("-103")) {
+                    continue
+                }
+                model.latestMessages?.filter { it.videoUploadStatus != 3 }
+                    ?.let { model.latestMessages?.removeAll(it.toSet()) }
+                for (j in pendingMessages.indices) {
+                    val messageModel = pendingMessages[j]
+                    if (messageModel.chatId == model.chatId) {
+                        model.latestMessages?.add(0, messageModel)
+                    }
+                }
+                model.pendingUploadList = model.latestMessages?.filter {
+                    it.videoUploadStatus != 3
+                }
+            }
+        }
+
+        if (pendingLoops.isNotEmpty()) {
+//            if (loopList.isEmpty()) {
+//                addCreateLoopCell()
+//                addTemplateStarter()
+//            }
+            val loopsToDelete = loopList.filter { it.chatId.equals("-101") }
+
+            if (loopsToDelete.isNotEmpty()) {
+                for (i in loopsToDelete.indices) {
+                    for (j in pendingLoops.indices) {
+                        if (pendingLoops[j].latestMessages!![0].localVideoPath?.equals(loopsToDelete[i].latestMessages!![0].localVideoPath)!!) {
+                            pendingLoops[j].isExpanded = loopsToDelete[i].isExpanded
+                        }
+                    }
+                }
+            }
+
+            loopList.removeAll(loopList.filter { it.chatId.equals("-101") }.toSet())
+
+            loopList.addAll(1, pendingLoops)
+        }
+
+        if (pendingLoops.isNotEmpty() || pendingMessages.isNotEmpty()) {
+            failedLoopManagement()
+            syncUpdateWithDB()
+        }
+    }
+
+    @Subscribe
+    fun onVideoUploaded(videoUploaded: VideoUploadedEvent)
+    {
+        val extraParams: VideoParamsModel = videoUploaded.videoParamsModel!!
+        extraParams.videoURL = extraParams.videoFile
+        if (getDBHelper() != null) {
+            extraParams.shareURL = getDBHelper()!!.getShareURLForRT(extraParams.videoFile)
+        }
+        VideoAPIManager.sendVideoAPI(requireActivity(), "round_table", extraParams)
+    }
+
+    @Subscribe
+    fun onCompressionCompleted(compressionCompleted: CompressionCompletedEvent)
+    {
+        val from = compressionCompleted.from;
+        val path = compressionCompleted.path;
+
+        if (GenuinSDKApplication.isInForGround) {
+            if (from.equals(
+                    Constants.FROM_PUBLIC_VIDEO,
+                    ignoreCase = true
+                ) || from.equals(Constants.FROM_RECORD_FOR_OTHER, ignoreCase = true)
+            ) {
+                val discoverModel: DiscoverModel? =
+                    getDBHelper()!!.getCompressedPublicVideo(path)
+                if (discoverModel != null) {
+                    UploadQueueManager.getInstance()
+                        .uploadPublicVideo(activity, discoverModel)
+                }
+            } else if (from.equals(Constants.FROM_REACTION, ignoreCase = true) || from.equals(
+                    Constants.FROM_DIRECT,
+                    ignoreCase = true
+                ) || from.equals(Constants.FROM_GROUP, ignoreCase = true)
+            ) {
+                val chatModel: ChatModel? = getDBHelper()!!.getCompressedChatVideo(path)
+                if (chatModel != null) {
+                    //uploadReaction(chatModel)
+                }
+            } else if (from.equals(Constants.FROM_ROUND_TABLE, ignoreCase = true)) {
+                val loopsModel = getDBHelper()!!.getLoopByLocalVideoPath(path)
+                loopsModel?.let { uploadLoop(it) }
+            } else if (from.equals(Constants.FROM_CHAT, ignoreCase = true)) {
+                if (compressionCompleted.convType == VideoConvType.ROUND_TABLE.value) {
+                    val messageModel: MessageModel? =
+                        getDBHelper()!!.getLoopVideoByLocalPath(path)
+                    if (messageModel != null) {
+                        uploadLoopVideo(messageModel)
+                    }
+                } else {
+//                    val chatModel: ChatModel? = Utility.getDBHelper()!!.getCompressedChatVideo(path)
+//                    if (chatModel != null) {
+//                        uploadChat(chatModel)
+//                    }
+                }
+            } else if (from.equals(Constants.FROM_COMMENT, ignoreCase = true)) {
+//                val commentModel: CommentModel? =
+//                    Utility.getDBHelper()!!.getCompressedCommentVideo(path)
+//                if (commentModel != null) {
+//                    uploadComment(commentModel)
+//                }
+            }
+        } else {
+            updateRetry(from, path, compressionCompleted.convType)
+            Utility.displayNotification(requireActivity(), from, path, compressionCompleted.convType)
+        }
+    }
+
+    private fun uploadLoopVideo(messageModel: MessageModel?) {
+        UploadQueueManager.getInstance().uploadLoopVideo(activity, messageModel)
+    }
+
+    private fun updateRetry(from: String, path: String, convType: Int) {
+        if (from.equals(Constants.FROM_CHAT, ignoreCase = true)) {
+            if (convType == VideoConvType.ROUND_TABLE.value) {
+                if (getDBHelper() != null) {
+                    val messageModel: MessageModel? =
+                        getDBHelper()!!.getLoopVideoByLocalPath(path)
+                    if (messageModel != null) {
+                        // Update retry status for particular loop video in DB by local path
+                        getDBHelper()!!.updateRetryStatusForLoopVideo(messageModel.localVideoPath, false)
+                        EventBus.getDefault().post(ConversationUpdateEvent(true))
+                    }
+                }
+            } else {
+                if (getDBHelper() != null) {
+                    val chatModel = getDBHelper()!!.getCompressedChatVideo(path)
+                    if (chatModel != null) {
+                        // Changed the way to storing retry status to DB, now it will store Retry status on the basic of localVideoPath
+                        getDBHelper()!!.updateRetryStatus(chatModel.localVideoPath, true)
+                        EventBus.getDefault().post(ConversationUpdateEvent(false))
+                    }
+                }
+            }
+        } else if (from.equals(Constants.FROM_REACTION, ignoreCase = true)) {
+            if (getDBHelper() != null) {
+                val chatModel = getDBHelper()!!.getCompressedChatVideo(path)
+                if (chatModel != null) {
+                    // Changed the way to storing retry status to DB, now it will store Retry status on the basic of localVideoPath
+                    getDBHelper()!!.updateRetryStatus(chatModel.localVideoPath, true)
+                    EventBus.getDefault()
+                        .post(ConversationUpdateEvent(chatModel.convType === VideoConvType.ROUND_TABLE.value))
+                }
+            }
+        } else if (from.equals(Constants.FROM_DIRECT, ignoreCase = true) || from.equals(Constants.FROM_GROUP, ignoreCase = true)
+        ) {
+            if (getDBHelper() != null) {
+                // Changed the way to storing retry status to DB, now it will store Retry status on the basic of localVideoPath
+                getDBHelper()!!.updateRetryStatus(path, true)
+            }
+            EventBus.getDefault().post(ConversationUpdateEvent(false))
+        } else if (from.equals(Constants.FROM_ROUND_TABLE, ignoreCase = true)) {
+            val messageModel: MessageModel? = getDBHelper()!!.getLoopVideoByLocalPath(path)
+            if (messageModel != null) {
+                // Update retry status for particular loop video in DB by local path
+                getDBHelper()!!.updateRetryStatusForLoopVideo(messageModel.localVideoPath, true)
+                EventBus.getDefault().post(ConversationUpdateEvent(true))
+            }
+        } else if (from.equals(Constants.FROM_COMMENT, ignoreCase = true)) {
+//            if (Utility.getDBHelper() != null) {
+//                Utility.getDBHelper()!!.updateCommentRetryStatus(path, true)
+//            }
+//            val comment = PostCommentEvent()
+//            comment.isRetry = true
+//            comment.localFilePath = path
+//            EventBus.getDefault().post(comment)
+        } else if (from.equals(Constants.FROM_PUBLIC_VIDEO, ignoreCase = true) || from.equals(
+                Constants.FROM_RECORD_FOR_OTHER,
+                ignoreCase = true
+            )
+        ) {
+            if (getDBHelper() != null) {
+                getDBHelper()!!.updateProfileRetryStatus(path, true)
+                getDBHelper()!!.updatePublicVideoStatus(path, 1)
+                getDBHelper()!!.updatePublicImageStatus(path, 1)
+                val publicVideo = PublicVideoStatusChangedEvent()
+                publicVideo.videoLocalPath = path
+                publicVideo.isRetry = true
+                publicVideo.videoUploadStatus = 1
+                publicVideo.imageUploadStatus = 1
+                publicVideo.apiUploadStatus = 0
+                publicVideo.compressionStatus = 1
+                EventBus.getDefault().post(publicVideo)
+            }
+        }
+    }
+    private fun uploadLoop(loop: LoopsModel?) {
+        UploadQueueManager.getInstance().uploadLoop(requireActivity(), loop)
+    }
+    override fun onResume() {
+        super.onResume()
+        if (isDataLoaded) {
+            pendingLoopsOrMessageManagement()
+        }
+    }
+
+    private fun failedLoopManagement() {
+        val pendingLoops = getDBHelper()!!
+            .pendingLoops
+        val pendingMessages = getDBHelper()!!
+            .pendingMessages
+        if (pendingLoops.size > 0) {
+            for (i in pendingLoops.indices) {
+                val loopsModel = pendingLoops[i]
+                if (loopsModel.latestMessages != null && loopsModel.latestMessages!!.size > 0
+                ) {
+                    val messageModel: MessageModel = loopsModel.latestMessages!![0]
+                    if (messageModel.compressionStatus == 0) {
+                        startFFMpegCommand(
+                            messageModel.ffMpegCommand!!,
+                            messageModel.localVideoPath!!,
+                            Constants.FROM_ROUND_TABLE,
+                            VideoConvType.ROUND_TABLE.value,
+                            loopsModel.chatId!!
+                        )
+                    } else if (!messageModel.isVideoAndImageUploaded()) {
+                        uploadLoop(loopsModel)
+                    } else {
+                        VideoAPIManager.retryAPILoop(requireActivity(), loopsModel)
+                    }
+                }
+            }
+        }
+        if (pendingMessages.size > 0) {
+            for (i in pendingMessages.indices) {
+                val messageModel = pendingMessages[i]
+                if (messageModel.compressionStatus == 0) {
+                    startFFMpegCommand(
+                        messageModel.ffMpegCommand!!,
+                        messageModel.localVideoPath!!,
+                        Constants.FROM_CHAT,
+                        VideoConvType.ROUND_TABLE.value,
+                        messageModel.chatId!!
+                    )
+                } else if (!messageModel.isVideoAndImageUploaded()) {
+                    uploadLoopVideo(messageModel)
+                } else {
+                    VideoAPIManager.retryAPILoopVideo(requireActivity(), messageModel)
+                }
+            }
+        }
+    }
+
+
+    private fun startFFMpegCommand(
+        command: String,
+        tag: String,
+        from: String,
+        convType: Int,
+        chatId: String
+    ) {
+        cancelLastSession(tag)
+        GenuinFFMpegManager.getInstance().addValueToHashmap(tag, true)
+        val mergeRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(CompressionWorker::class.java)
+            .setInputData(createInputDataForUri(command, tag, from, convType, chatId))
+            .addTag(tag)
+            .build()
+        workManager!!.enqueue(mergeRequest)
+    }
+
+    private fun createInputDataForUri(
+        command: String,
+        path: String,
+        from: String,
+        convType: Int,
+        chatId: String
+    ): Data {
+        val builder = Data.Builder()
+        builder.putString("path", path)
+        builder.putString("command", command)
+        builder.putString("from", from)
+        builder.putString("whichSession", Constants.SESSION_MERGE)
+        builder.putInt("convType", convType)
+        builder.putString("chatId", chatId)
+        return builder.build()
+    }
+
+    private fun cancelLastSession(tag: String) {
+        val list = workManager!!.getWorkInfosByTag(tag)
+        try {
+            val workInfoList = list.get()
+            for (workInfo in workInfoList) {
+                val state = workInfo.state
+                val sessionId = workInfo.outputData.getLong("sessionId", -1)
+                if (sessionId != -1L) {
+                    FFmpegKit.cancel(sessionId)
+                }
+                Utility.showLog("TAG", state.toString())
+            }
+        } catch (e: ExecutionException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        workManager!!.cancelAllWorkByTag(tag)
+    }
+
+    @Subscribe
+    fun onConversationUpdate(conversationUpdate: ConversationUpdateEvent?) {
+        activity?.runOnUiThread {
+            if (conversationUpdate != null) {
+                if (conversationUpdate.isRT) {
+                    syncUpdateWithDB()
+                }
+            }
+        }
+    }
+
+    @Subscribe
+    fun onConversationDelete(conversationDeleteEvent: ConversationDeleteEvent?) {
+        activity?.runOnUiThread {
+            if (conversationDeleteEvent != null) {
+                val chatId = conversationDeleteEvent.chatId
+                for (i in loopList.indices) {
+                    val loopModel: LoopsModel =
+                        loopList[i]
+                    if (loopModel.chatId.equals(chatId)) {
+//                        for(item in templateListFromServer){
+//                            if(item.id == loopModel.templateId){
+//                                templateDataList.add(item)
+//                                val templateFilteredList = templateDataList.filter { it.isLoopCreated == true }
+//                                if(templateFilteredList.isNotEmpty() && templateFilteredList.size == 1){
+//                                    addTemplateStarter()
+//                                }
+//                                break
+//                            }
+//                        }
+                        loopList.remove(loopModel)
+                        if (loopList.size == 0) {
+                            loopList.clear()
+                        }
+                        if(loopList.isEmpty()){
+                            //showNoLoopsView()
+                        }
+                        setAdapter(false)
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+
 }

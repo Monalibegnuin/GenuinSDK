@@ -45,6 +45,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -55,9 +56,16 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.arthenica.ffmpegkit.FFmpegKit;
 import com.begenuin.begenuin.data.model.EditorColorsModel;
+import com.begenuin.library.data.eventbus.CompressionCompletedPreviewEvent;
+import com.begenuin.library.data.remote.service.CompressionWorker;
 import com.begenuin.begenuin.ui.customview.draggableview.DraggableBaseCustomView;
 import com.begenuin.begenuin.ui.customview.draggableview.DraggableImageViewFull;
 import com.begenuin.library.common.GiphyGenuinManager;
@@ -92,9 +100,12 @@ import com.begenuin.library.data.model.VideoFileModel;
 import com.begenuin.library.data.model.VideoModel;
 import com.begenuin.library.data.model.VideoParamsModel;
 import com.begenuin.library.data.remote.BaseAPIService;
+import com.begenuin.library.data.viewmodel.GenuinFFMpegManager;
+import com.begenuin.library.data.viewmodel.UploadQueueManager;
 import com.begenuin.library.views.activities.CameraNewActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.gifdecoder.StandardGifDecoder;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -107,6 +118,10 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.material.button.MaterialButton;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -122,13 +137,16 @@ import java.lang.reflect.Field;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.internal.Util;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -215,7 +233,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
     private boolean isCoverCommandExecuted = false;
     private boolean isPublishClicked = false;
     private boolean isPublished = false;
-    //private WorkManager workManager;
+    private WorkManager workManager;
     private final float THRESHOLD_PER = 0.7f;
     private RelativeLayout rlMain;
     private LinearLayout llProgressBar;
@@ -240,7 +258,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
         draggableViewsList = new ArrayList();
         playerHelper = new ArrayList();
         questionModel = context.selectedQuestion;
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -282,57 +300,65 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
         }, 300);
     }
 
-//    @Subscribe
-//    public void onCompressionCompletedPreview(CompressionCompletedPreviewEvent compressionCompletedPreview) {
-//        boolean isCompleted = compressionCompletedPreview.isCompleted;
-//        context.runOnUiThread(() -> {
-//            if (isCompleted) {
-//                String path = compressionCompletedPreview.path;
-//                String whichSession = compressionCompletedPreview.whichSession;
-//                if (path.equalsIgnoreCase(context.coverPhotoPath)) {
-//                    isCoverCommandExecuted = true;
-//                    if (ivCoverPhoto != null) {
-//                        Glide.with(context).asDrawable().load(context.coverPhotoPath).diskCacheStrategy(DiskCacheStrategy.NONE)
-//                                .skipMemoryCache(true).into(ivCoverPhoto);
-//                    }
+    @Subscribe
+    public void onCompressionCompletedPreview(CompressionCompletedPreviewEvent compressionCompletedPreview) {
+        boolean isCompleted = compressionCompletedPreview.isCompleted;
+        context.runOnUiThread(() -> {
+            if (isCompleted) {
+                String path = compressionCompletedPreview.path;
+                String whichSession = compressionCompletedPreview.whichSession;
+                Utility.showLog("TAG", "Compression path" + path);
+                Utility.showLog("Cover photo path", context.coverPhotoPath);
+                if (path.equalsIgnoreCase(context.coverPhotoPath)) {
+                    isCoverCommandExecuted = true;
+                    if (ivCoverPhoto != null) {
+                        Glide.with(context).asDrawable().load(context.coverPhotoPath).diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true).into(ivCoverPhoto);
+                    }
+                    if (isPublishClicked) {
+                        isPublishClicked = false;
+                        if (!context.from.equalsIgnoreCase(Constants.FROM_REACTION)) {
+                            BaseAPIService.dismissProgressDialog();
+                        }
+                        // Internet condition removed so user can proceed with next step without internet also
+                        publishClickManage();
+                    } else if (isDownloadClick) {
+                        isDownloadClick = false;
+                        startDownload();
+                    }
+                } else if (!TextUtils.isEmpty(destinationPath) && path.equalsIgnoreCase(destinationPath)) {
+                    context.isCompressionDone = true;
+                    if (isDownloadClick) {
+                        isDownloadClick = false;
+                        startDownload();
+                    }
+                    Utility.showLog("TAG", "Compression Done received");
+//                    //TODO:Added in SDK only
 //                    if (isPublishClicked) {
 //                        isPublishClicked = false;
-//                        if (!context.from.equalsIgnoreCase(Constants.FROM_REACTION)) {
-//                            BaseAPIService.dismissProgressDialog();
-//                        }
-//                        // Internet condition removed so user can proceed with next step without internet also
+//                        BaseAPIService.dismissProgressDialog();
 //                        publishClickManage();
-//                    } else if (isDownloadClick) {
-//                        isDownloadClick = false;
-//                        startDownload();
 //                    }
-//                } else if (!TextUtils.isEmpty(destinationPath) && path.equalsIgnoreCase(destinationPath)) {
-//                    context.isCompressionDone = true;
-//                    if (isDownloadClick) {
-//                        isDownloadClick = false;
-//                        startDownload();
-//                    }
-//                    Utility.showLog("TAG", "Compression Done received");
-//                } else if (whichSession.equalsIgnoreCase(Constants.SESSION_DOWNLOAD)) {
-//                    BaseAPIService.dismissProgressDialog();
-//                    if (player != null) {
-//                        player.setPlayWhenReady(true);
-//                    }
-//                    downloadVideo(context.downloadedVideoPath);
-//                }
-//            } else {
-//                if (BaseAPIService.isShowingProgressDialog()) {
-//                    BaseAPIService.dismissProgressDialog();
-//                }
-//                if (player != null) {
-//                    player.setPlayWhenReady(true);
-//                }
-//            }
-//        });
-//    }
+                } else if (whichSession.equalsIgnoreCase(Constants.SESSION_DOWNLOAD)) {
+                    BaseAPIService.dismissProgressDialog();
+                    if (player != null) {
+                        player.setPlayWhenReady(true);
+                    }
+                    downloadVideo(context.downloadedVideoPath);
+                }
+            } else {
+                if (BaseAPIService.isShowingProgressDialog()) {
+                    BaseAPIService.dismissProgressDialog();
+                }
+                if (player != null) {
+                    player.setPlayWhenReady(true);
+                }
+            }
+        });
+    }
 
     private void initControls(View view) {
-        //workManager = WorkManager.getInstance(context);
+        workManager = WorkManager.getInstance(context);
         rlHeaderMain = view.findViewById(R.id.rlHeaderMain);
         videoView = view.findViewById(R.id.videoView);
         progressTimer = view.findViewById(R.id.progressTimer);
@@ -761,7 +787,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
         args.putInt("videoDuration", (int) totalDuration);
         args.putInt("cameraFacing", cameraFacing);
         args.putString("link", link);
-        if(context.isFromTemplate) args.putString("template_title", context.rtName); args.putString("template_description", context.rtDesc); args.putInt("template_id", context.templateId);
+        //if(context.isFromTemplate) args.putString("template_title", context.rtName); args.putString("template_description", context.rtDesc); args.putInt("template_id", context.templateId);
         context.roundTableVideoFragment.setArguments(args);
         context.getSupportFragmentManager().beginTransaction().add(R.id.content, context.roundTableVideoFragment).addToBackStack("RT").commit();
     }
@@ -1237,8 +1263,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
                 complexCommand += " -map \"[v]\" -map \"[a]\"";
                 complexCommand += " -c:v libx264 -preset ultrafast -c:a aac -b:a 192k ";
                 complexCommand += context.downloadedVideoPath + " -async 1 -vsync 2";
-                //TODO: FFMPEG not integrated
-                //startFFMpegCommand(complexCommand, context.downloadedVideoPath, Constants.SESSION_DOWNLOAD);
+                startFFMpegCommand(complexCommand, context.downloadedVideoPath, Constants.SESSION_DOWNLOAD);
             } else {
                 if (Utility.isNetworkAvailable(context)) {
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -1306,6 +1331,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
             }
             File dest = new File(destinationLocation, fileName);
             destinationPath = dest.getAbsolutePath();
+            Utility.showLog("destination path absolute", destinationPath);
             String complexCommand = "-y ";
 
             String concatCommand = "";
@@ -1551,69 +1577,71 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
                         complexCommand += "\" ";
                     }
                 }
-//                boolean is265Supported = !SharedPrefUtils.getBoolPreference(context, Constants.PREF_IS_H265_FAILED);
-//                if (is265Supported && ConnectivityCheckManager.getInstance(context).isMobileDataConnected) {
-//                    Utility.showLog("TAG", "h265 is running");
-//                    complexCommand += "-c:v libx265 -tag:v hvc1 -preset ultrafast -c:a aac -b:a 192k ";
-//                } else {
-//                    Utility.showLog("TAG", "h264 is running");
-//                    complexCommand += "-c:v libx264 -preset ultrafast -c:a aac -b:a 192k ";
-//                }
-//                if (context.isAudioReply()) {
-//                    complexCommand += "-shortest ";
-//                }
-//                complexCommand += destinationPath + " -async 1 -vsync 2";
-//
-//                context.ffMpegCommand = complexCommand;
-//                context.isCompressionDone = false;
-               // startFFMpegCommand(complexCommand, destinationPath, Constants.SESSION_MERGE);
+               //  boolean is265Supported = !SharedPrefUtils.getBoolPreference(context, Constants.PREF_IS_H265_FAILED);
+                 boolean is265Supported = true;
+
+                if (is265Supported &&  Utility.isNetworkAvailable(context)) {
+                    Utility.showLog("TAG", "h265 is running");
+                    complexCommand += "-c:v libx265 -tag:v hvc1 -preset ultrafast -c:a aac -b:a 192k ";
+                } else {
+                    Utility.showLog("TAG", "h264 is running");
+                    complexCommand += "-c:v libx264 -preset ultrafast -c:a aac -b:a 192k ";
+                }
+                if (context.isAudioReply()) {
+                    complexCommand += "-shortest ";
+                }
+                complexCommand += destinationPath + " -async 1 -vsync 2";
+                Utility.showLog("Sending destination for compression", destinationPath);
+                context.ffMpegCommand = complexCommand;
+                context.isCompressionDone = false;
+                startFFMpegCommand(complexCommand, destinationPath, Constants.SESSION_MERGE);
             }
         }
     }
 
-//    private void startFFMpegCommand(String command, String tag, String whichSession) {
-//        cancelLastSession(tag);
-//        GenuinFFMpegManager.getInstance().addValueToHashmap(tag, false);
-//        OneTimeWorkRequest mergeRequest =
-//                new OneTimeWorkRequest.Builder(CompressionWorker.class)
-//                        .setInputData(createInputDataForUri(command, tag, whichSession))
-//                        .addTag(tag)
-//                        .build();
-//        workManager.enqueue(mergeRequest);
-//    }
+    private void startFFMpegCommand(String command, String tag, String whichSession) {
+        cancelLastSession(tag);
+        GenuinFFMpegManager.getInstance().addValueToHashmap(tag, false);
+        OneTimeWorkRequest mergeRequest =
+                new OneTimeWorkRequest.Builder(CompressionWorker.class)
+                        .setInputData(createInputDataForUri(command, tag, whichSession))
+                        .addTag(tag)
+                        .build();
+        workManager.enqueue(mergeRequest);
+    }
 
-//    private void cancelLastSession(String tag) {
-//        ListenableFuture<List<WorkInfo>> list = workManager.getWorkInfosByTag(tag);
-//        try {
-//            List<WorkInfo> workInfoList = list.get();
-//            for (WorkInfo workInfo : workInfoList) {
-//                Utility.showLog("TAG", tag + " worker");
-//                WorkInfo.State state = workInfo.getState();
-//                long sessionId = workInfo.getOutputData().getLong("sessionId", -1);
-//                if (sessionId != -1) {
-//                    FFmpegKit.cancel(sessionId);
-//                }
-//                Utility.showLog("TAG", state.toString());
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        workManager.cancelAllWorkByTag(tag);
-//    }
+    private void cancelLastSession(String tag) {
+        ListenableFuture<List<WorkInfo>> list = workManager.getWorkInfosByTag(tag);
+        try {
+            List<WorkInfo> workInfoList = list.get();
+            for (WorkInfo workInfo : workInfoList) {
+                Utility.showLog("TAG", tag + " worker");
+                WorkInfo.State state = workInfo.getState();
+                long sessionId = workInfo.getOutputData().getLong("sessionId", -1);
+                if (sessionId != -1) {
+                    FFmpegKit.cancel(sessionId);
+                }
+                Utility.showLog("TAG", state.toString());
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        workManager.cancelAllWorkByTag(tag);
+    }
 
-//    private Data createInputDataForUri(String command, String path, String whichSession) {
-//        Data.Builder builder = new Data.Builder();
-//        builder.putString("path", path);
-//        builder.putString("command", command);
-//        builder.putString("from", context.from);
-//        builder.putString("whichSession", whichSession);
-//        builder.putInt("convType", context.convType);
-//        builder.putString("chatId", context.chatId);
-//        if (whichSession.equalsIgnoreCase(Constants.SESSION_MERGE)) {
-//            builder.putLong("totalDuration", totalDuration);
-//        }
-//        return builder.build();
-//    }
+    private Data createInputDataForUri(String command, String path, String whichSession) {
+        Data.Builder builder = new Data.Builder();
+        builder.putString("path", path);
+        builder.putString("command", command);
+        builder.putString("from", context.from);
+        builder.putString("whichSession", whichSession);
+        builder.putInt("convType", context.convType);
+        builder.putString("chatId", context.chatId);
+        if (whichSession.equalsIgnoreCase(Constants.SESSION_MERGE)) {
+            builder.putLong("totalDuration", totalDuration);
+        }
+        return builder.build();
+    }
 
     private boolean isVideoHaveAudioTrack(String path) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -1645,104 +1673,6 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
         trimStr = start + ":" + end;
         return trimStr;
     }
-
-    /*private void execFFmpegBinary(final String[] command) {
-
-        if (session != null) {
-            session.cancel();
-            FFmpegKit.cancel(session.getSessionId());
-            if (session.getFuture() != null)
-                session.getFuture().cancel(true);
-            if (future != null)
-                future.cancel(true);
-            session = null;
-        }
-
-        try {
-            final long startTime = System.currentTimeMillis();
-            Utility.showLog(Constants.TAG, "Trimming Start: " + startTime);
-
-            session = new FFmpegSession(command, session -> {
-                if (VideoMergeAndPlayFragment.this.session.getSessionId() != session.getSessionId()) {
-                    Utility.showLog(Constants.TAG, "Old session. Ignore");
-                    return;
-                } else {
-                    context.runOnUiThread(() -> {
-                        VideoMergeAndPlayFragment.this.session = null;
-                        if (VideoMergeAndPlayFragment.this.shouldDoReMerge) {
-                            VideoMergeAndPlayFragment.this.shouldDoReMerge = false;
-                        }
-                    });
-                }
-
-                ReturnCode returnCode = session.getReturnCode();
-
-                if (ReturnCode.isSuccess(session.getReturnCode())) {
-                    Utility.showLog(Constants.TAG, "Async command execution completed successfully.");
-                    final long totalTime = (System.currentTimeMillis() - startTime) / 1000;
-                    HashMap<String, Object> map = new HashMap<String, Object>() {{
-                        put("user_id", context.userId);
-                        put("device_id", context.deviceId);
-                        put("no_of_parts", endPos - startPos + 1);
-                        put("duration", totalTime);
-                    }};
-                    GenuInApplication.getInstance().createDataDogLogs(Constants.RECORD_PREVIEW_TIME, map);
-                    Utility.showLog(Constants.TAG, "Time: " + totalTime);
-                    if ((isSendClick || isDownloadClick) && !isPaused) {
-                        context.runOnUiThread(() -> {
-                            if (isSendClick) {
-                                publishClickManage();
-                            } else {
-                                isDownloadClick = false;
-                                ivVideoMergeDownload.performClick();
-                            }
-                        });
-                    } else if (isNeedToGiveCallBackForFFMpeg()) {
-                        Intent intent = new Intent("FFMPEG_COMPLETE");
-                        intent.putExtra("isCompleted", true);
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                    }
-                } else if (ReturnCode.isCancel(session.getReturnCode())) {
-                    BaseAPIService.dismissProgressDialog();
-                    isSendClick = false;
-                    isDownloadClick = false;
-                    if (isNeedToGiveCallBackForFFMpeg()) {
-                        Intent intent = new Intent("FFMPEG_COMPLETE");
-                        intent.putExtra("isCompleted", false);
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                    }
-                    Utility.showLog(Constants.TAG, "Async command execution cancelled by user.");
-                } else {
-                    Utility.showLog(Constants.TAG, "Async command execution failed with rc = " + returnCode);
-//                        showToast(context, getString(R.string.cant_trim_video));
-                    BaseAPIService.dismissProgressDialog();
-                    isSendClick = false;
-                    isDownloadClick = false;
-                    if (isNeedToGiveCallBackForFFMpeg()) {
-                        Intent intent = new Intent("FFMPEG_COMPLETE");
-                        intent.putExtra("isCompleted", false);
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                    }
-
-                    String buffer = session.getOutput();
-                    FFmpegKitConfig.printToLogcat(Log.INFO, buffer);
-                }
-            }, new LogCallback() {
-                @Override
-                public void apply(com.arthenica.ffmpegkit.Log log) {
-                    Utility.showLog(Constants.TAG, "FFmpegLog: " + log.getMessage());
-                }
-            }, statistics -> Utility.showLog(Constants.TAG, "Statistics: " + statistics.toString()));
-
-            GenuinFFmpegExecuteTask asyncFFmpegExecuteTask = new GenuinFFmpegExecuteTask(session);
-            future = executorService.submit(asyncFFmpegExecuteTask);
-
-            long ffmpegSessionId = session.getSessionId();
-            Utility.showLog(Constants.TAG, "FFMpegSession: " + ffmpegSessionId);
-        } catch (Exception e) {
-            BaseAPIService.dismissProgressDialog();
-        }
-    }*/
 
     private boolean isNeedToGiveCallBackForFFMpeg() {
         return context.videoOptions != CameraNewActivity.VideoOptions.REPLY_REACTION && context.videoOptions != CameraNewActivity.VideoOptions.COMMENT;
@@ -2722,7 +2652,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
             complexCommand += " -c:v libx264 -preset ultrafast -c:a aac -b:a 192k ";
             complexCommand += context.downloadedVideoPath + " -async 1 -vsync 2";
             Utility.showLog("DownloadComm", complexCommand);
-            //startFFMpegCommand(complexCommand, context.downloadedVideoPath, Constants.SESSION_DOWNLOAD);
+            startFFMpegCommand(complexCommand, context.downloadedVideoPath, Constants.SESSION_DOWNLOAD);
         } else {
             if (Utility.isNetworkAvailable(context)) {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -3140,6 +3070,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
             //sendNextButtonClicked(Constants.SCREEN_GROUP_PUBLISH);
         } else if (context.videoOptions == CameraNewActivity.VideoOptions.ROUND_TABLE) {
             goToRTFragment();
+            //uploadVideoService();
             //sendNextButtonClicked(Constants.SCREEN_RT_PUBLISH)
 //        } else if (Utility.isLoggedIn(context) && context.from.equalsIgnoreCase(Constants.FROM_REACTION)) {
 //            try {
@@ -3471,10 +3402,9 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
                             e.printStackTrace();
                         }
                     }
-                    //TODO: Not added yet
-                    //UploadQueueManager.getInstance().uploadVideo(context, videoParamsModel);
+                    UploadQueueManager.getInstance().uploadVideo(context, videoParamsModel);
                 } else {
-                   // GenuinFFMpegManager.getInstance().addValueToHashmap(destinationPath, true);
+                    GenuinFFMpegManager.getInstance().addValueToHashmap(destinationPath, true);
                 }
 
 //                if (!context.from.equalsIgnoreCase(Constants.FROM_RECORD_FOR_OTHER)) {
@@ -3870,7 +3800,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
 //        GenuInApplication.getInstance().sendEventLogs(Constants.RECORD_PREVIEW_BACK_CLICK, map);
         context.prevEventTime = System.currentTimeMillis();
         isValidURLNeedToCall = false;
-        Utility.hideKeyboard(context, null);
+        Utility.hideKeyboard(context);
         context.progressArray = new int[2];
         context.videoProgress = 0;
         stopPlaying();
@@ -4639,7 +4569,7 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
         } else {
             complexCommand += "\" -map \"[v]\" -frames:v 1 -q:v 2 " + context.coverPhotoPath;
         }
-        //startFFMpegCommand(complexCommand, context.coverPhotoPath, Constants.SESSION_IMAGE);
+        startFFMpegCommand(complexCommand, context.coverPhotoPath, Constants.SESSION_IMAGE);
     }
 
 //    private void generateFirstBitmap(String path, boolean isFront, long millis) {
@@ -4701,4 +4631,23 @@ public class VideoMergeAndPlayFragment extends Fragment implements View.OnClickL
         videoView.getLocationOnScreen(locationScreen);
         return locationScreen;
     }
+
+//    @Subscribe
+//    public void onCompressionCompleted(CompressionCompletedEvent compressionCompleted) {
+//        String from = compressionCompleted.from;
+//        String path = compressionCompleted.path;
+//        if (from.equalsIgnoreCase(Constants.FROM_ROUND_TABLE)) {
+//            LoopsModel loopsModel = Objects.requireNonNull(Utility.getDBHelper()).getLoopByLocalVideoPath(path);
+//            if (loopsModel != null) {
+//                uploadLoop(loopsModel);
+//            }
+//        }else{
+//            Toast.makeText(getActivity(), "Not from round table", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//
+//    public void uploadLoop(LoopsModel loop) {
+//        UploadQueueManager.getInstance().uploadLoop(getActivity(), loop);
+//    }
+
 }

@@ -300,8 +300,8 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
 //                holder.ivRTLink.tag = Constants.LINK + position
 //                holder.ivRTRepost.tag = Constants.LL_REPOST + position
 //                holder.ivRTMoreOptions.tag = Constants.MORE_OPTIONS_LAYOUT + position
-                holder.llRTBottomLayout.setTag(Constants.LL_BOTTOM + position)
-                holder.llWhoCanSeeRT.setTag(Constants.WHO_CAN_SEE_LL + position)
+                holder.llRTBottomLayout.tag = Constants.LL_BOTTOM + position
+                holder.llWhoCanSeeRT.tag = Constants.WHO_CAN_SEE_LL + position
                 holder.tvRTDesc.tag = Constants.TV_DESC + position
                 holder.tvRTDescSingle.tag = Constants.TV_DESC_SINGLE + position
                 holder.rlRTDesc.tag = Constants.RL_DESC + position
@@ -316,7 +316,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                 holder.rlDesc.tag = Constants.FAKE_TAG + position
                 holder.tvDesc.tag = Constants.FAKE_TAG + position
                 holder.tvDescSingle.tag = Constants.FAKE_TAG + position
-                holder.sparkView.setTag(Constants.FAKE_TAG + position)
+                holder.sparkView.tag = Constants.FAKE_TAG + position
                 holder.tvSparks.tag = Constants.FAKE_TAG + position
             }
             holder.rlOverlay.tag = Constants.OVERLAY + position
@@ -375,7 +375,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
 //                    val userName: String =
 //                        SharedPrefUtils.getStringPreference(activity, Constants.PREF_NK_NAME)
                   //TODO: Need to get user data
-                   val userName: String = " "
+                   val userName = "Test"
                     holder.tvPublicUserName.text = String.format("@%s", userName)
                 } else {
                     holder.tvPublicUserName.text =
@@ -423,7 +423,7 @@ class FeedRTAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder?> {
                     }
                 } else {
                     //Utility.getLoggedInUserId(context.activity))
-                    val loggedinUserId: String= ""
+                    val loggedinUserId: String= SDKInitiate.userId
                     if (!TextUtils.isEmpty(discoverVO.userId) && discoverVO.userId!!.contentEquals(loggedinUserId)) {
                         holder.ivSaveVideo.visibility = View.GONE
                         holder.ivDownloadVideo.visibility = View.GONE

@@ -116,6 +116,19 @@ class Constants {
         const val GALLERY_DIRECTORY = "gallery_video"
         const val STICKER_IMAGES_DIRECTORY = "sticker_images"
         const val SYNC_LOOP_QUESTIONS = "questions"
+        const val GET_UPLOAD_URL = "users/video/upload/create_upload_url"
+        const val CREATE_PUBLIC_VIDEO = "video/create"
+        const val CODE_5156 = "5156"
+        const val VIDEO_CACHE_MINUTES: Long = 1440
+        const val FROM_PROFILE_PHOTO = "profile_photo"
+        const val FROM_CHANGE_COVER = "change_cover"
+        const val SESSION_MERGE = "session_merge"
+        const val SESSION_DOWNLOAD = "session_download"
+        const val CREATE_VIDEO = "conversation/create"
+        const val CODE_5061 = "5061"
+        const val SESSION_IMAGE = "session_image"
+        const val CODE_5057 = "5057"
+        const val SEND_REPLY: String = "$USERS_CONVERSATION/reply"
     }
 
 }

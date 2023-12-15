@@ -139,8 +139,7 @@
                         app:layout_constraintHeight="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth="wrap_content"
-                        android:visibility="gone">
+                        app:layout_constraintWidth="wrap_content">
 
                         <TableLayout
                             android:layout_width="wrap_content"
@@ -161,7 +160,7 @@
                                     android:layout_marginEnd="@dimen/dimen_8dp"
                                     app:roundSize="@dimen/dimen_24dp"
                                     app:innerTextSize="@dimen/text_size_10sp"
-                                    android:visibility="gone"/>
+                                    android:visibility="visible"/>
 
                                 <TextView
                                     android:id="@+id/tvFeedType"
@@ -284,7 +283,7 @@
                 android:layout_marginVertical="@dimen/dimen_16dp"
                 android:clipToPadding="false"
                 android:layout_marginTop="@dimen/dimen_200dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

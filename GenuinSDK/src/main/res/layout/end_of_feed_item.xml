@@ -76,7 +76,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="@dimen/text_size_15sp" />
 
-        <com.begenuin.begenuin.ui.customview.NestedScrollableHost
+        <com.begenuin.library.common.customViews.NestedScrollableHost
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_16dp" >
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </com.begenuin.begenuin.ui.customview.NestedScrollableHost>
+        </com.begenuin.library.common.customViews.NestedScrollableHost>
 
 
         <com.google.android.material.button.MaterialButton

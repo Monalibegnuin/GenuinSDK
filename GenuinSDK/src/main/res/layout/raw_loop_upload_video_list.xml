@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/dimen_4dp"
+    android:layout_marginEnd="@dimen/dimen_8dp"
+    app:cardElevation="0dp">
+
+    <ImageView
+        android:id="@+id/ivUploadVideoThumbnail"
+        android:layout_width="@dimen/dimen_36dp"
+        android:layout_height="@dimen/dimen_64dp"
+        android:src="@color/splash_background"/>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressUploadVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:indicatorColor="@color/colorWhite"
+        app:trackThickness="@dimen/dimen_2dp"
+        app:indicatorSize="@dimen/dimen_18dp"
+        app:trackColor="@color/white_opacity20" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lavUploadSuccess"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
+        app:lottie_rawRes="@raw/success_no_confetti"
+        app:lottie_loop="false"
+        app:lottie_autoPlay="false"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/ivRetryUpload"
+        android:layout_width="@dimen/dimen_24dp"
+        android:layout_height="@dimen/dimen_24dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_retry"/>
+
+</androidx.cardview.widget.CardView>

@@ -45,6 +45,6 @@ public class VideoParamsModel implements Serializable {
     public float fileSize = 0f;
     public DiscoverModel discoverModel;
     public SettingsModel settingsModel;
-//    public ChangeCoverModel changeCoverModel;
+    public ChangeCoverModel changeCoverModel;
 //    public ChangeProfilePhotoModel profilePhotoModel;
 }

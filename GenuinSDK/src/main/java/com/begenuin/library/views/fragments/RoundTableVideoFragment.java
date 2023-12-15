@@ -752,7 +752,7 @@ public class RoundTableVideoFragment extends Fragment implements View.OnClickLis
     }
 
     public void backManage() {
-        Utility.hideKeyboard(context, null);
+        Utility.hideKeyboard(context);
         if (searchService != null) {
             searchService.cancelCall();
         }
@@ -792,9 +792,10 @@ public class RoundTableVideoFragment extends Fragment implements View.OnClickLis
                 }
                 context.insertAndUploadLoopVideo(compressVideoFilePath, videoDuration, link, videoWidth, videoHeight);
                 showSuccessPage();
-                new Handler(Looper.getMainLooper()).postDelayed(() -> Utility.hideKeyboard(context, null), 100);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> Utility.hideKeyboard(context), 100);
             }
-        } else if (id == R.id.btnShare) {//                if (Utility.getDBHelper() != null) {
+        } else if (id == R.id.btnShare) {
+            //                if (Utility.getDBHelper() != null) {
 //                    if (!TextUtils.isEmpty(broadCastedShareURL)) {
 //                        Utility.shareVideoLink(context, broadCastedShareURL, "-101", Constants.FROM_ROUND_TABLE);
 //                    } else {

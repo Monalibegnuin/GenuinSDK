@@ -16,9 +16,9 @@ import java.util.ArrayList
 
 class FeedOptionsCommunitiesAdapter(
     val context: Activity,
-    val communities: ArrayList<CommunityModel>,
+    private val communities: ArrayList<CommunityModel>,
     val itemSelectListener: ItemSelectListener,
-    var highlightedCommunityId: String
+    private var highlightedCommunityId: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
     override fun onCreateViewHolder(
         parent: ViewGroup,

@@ -1,11 +1,18 @@
 package com.begenuin.library.views
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.TextUtils
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.ImageView
@@ -15,13 +22,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.begenuin.library.R
 import com.begenuin.library.common.Utility
+import com.begenuin.library.common.customViews.CustomTextView
 import com.begenuin.library.common.customViews.DisplayPictureView
+import com.begenuin.library.common.customViews.expandablelayout.ExpandableLayout
 import com.begenuin.library.core.interfaces.LoopsAdapterListener
+import com.begenuin.library.core.interfaces.VideoUploadInterface
+import com.begenuin.library.data.eventbus.ConversationUpdateEvent
 import com.begenuin.library.data.model.LoopsModel
 import com.begenuin.library.data.model.MessageModel
+import com.begenuin.library.data.viewmodel.UploadQueueManager
+import com.begenuin.library.data.viewmodel.VideoAPIManager
+import com.begenuin.library.views.adpters.UploadVideosAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
+import org.greenrobot.eventbus.EventBus
 
 class LoopsAdapter(
     private val mContext: Activity,
@@ -38,7 +53,8 @@ class LoopsAdapter(
 
     override fun onBindViewHolder(holder: LoopsViewHolder, position: Int) {
         try {
-            val model = loopList[position]
+            if (holder is LoopsViewHolder) {
+                val model = loopList[position]
 
                 if (isFromInbox) {
                     holder.llPrivacySettings?.visibility = View.VISIBLE
@@ -123,8 +139,8 @@ class LoopsAdapter(
 //                        if (isLoggedInUser(filteredList[0].owner!!.userId)) {
 //                            holder.tvUserName?.text = mContext.resources.getString(R.string.you)
 //                        } else {
-                            holder.tvUserName?.text =
-                                String.format("@%s", filteredList[0].owner!!.userName)
+                        holder.tvUserName?.text =
+                            String.format("@%s", filteredList[0].owner!!.userName)
                         //}
                         holder.tvPosted?.text =
                             String.format(" %s", mContext.resources.getString(R.string.posted))
@@ -197,11 +213,12 @@ class LoopsAdapter(
                     )
                 } else {
                     // If loop is not created yet than hide post button
-//                    if (model.chatId == "-101" || (!isFromInbox && (model.memberInfo == null || communityRole == CommunityMemberRole.NONE.value))) {
-//                        holder.ivPost?.visibility = View.GONE
-//                    } else {
-//                        holder.ivPost?.visibility = View.VISIBLE
-//                    }
+                    if (model.chatId == "-101" || (!isFromInbox)) { //TODO: Removed condition && (model.memberInfo == null)
+                        // || communityRole == CommunityMemberRole.NONE.value
+                        holder.ivPost?.visibility = View.GONE
+                    } else {
+                        holder.ivPost?.visibility = View.VISIBLE
+                    }
                     holder.cardMain?.setCardBackgroundColor(
                         mContext.resources.getColor(
                             R.color.colorWhite,
@@ -286,7 +303,7 @@ class LoopsAdapter(
                             // Show 1st member which will be owner of loop
                             val member1 = members[0]
                             //if (isLoggedInUser(member1.userId)) {
-                                holder.tvOwner?.text = mContext.resources.getString(R.string.you)
+                            holder.tvOwner?.text = mContext.resources.getString(R.string.you)
 //                            } else {
 //                                holder.tvOwner?.text = String.format("@%s", member1.userName)
 //                            }
@@ -309,11 +326,11 @@ class LoopsAdapter(
                             // Show second member of the loop
                             if (members.size == 2) {
                                 //if (isLoggedInUser(member2.userId)) {
-                                    holder.tvOtherCoHosts?.text =
-                                        String.format(
-                                            " + %s",
-                                            mContext.resources.getString(R.string.you)
-                                        )
+                                holder.tvOtherCoHosts?.text =
+                                    String.format(
+                                        " + %s",
+                                        mContext.resources.getString(R.string.you)
+                                    )
 //                                } else {
 //                                    holder.tvOtherCoHosts?.text =
 //                                        String.format(" + @%s", member2.userName)
@@ -367,80 +384,81 @@ class LoopsAdapter(
 
                 // check for any chats are pending to upload and show upload list based on that.
                 if (model.pendingUploadList != null && model.pendingUploadList!!.isNotEmpty()) {
-                    //holder.elUploadContainer?.visibility = View.VISIBLE
+                    holder.elUploadContainer?.visibility = View.VISIBLE
                     holder.llUploadContainer?.visibility = View.VISIBLE
 
                     //Following block of code handles expand + fade in animation in consecutive order.
                     if (!model.isExpanded) {
                         holder.llUploadContainer?.alpha = 0f
                         model.isExpanded = true
-//                        holder.elUploadContainer?.expand(true)
-//                        holder.elUploadContainer?.setOnExpansionUpdateListener { _, state ->
-//                            if (state == ExpandableLayout.State.EXPANDED) {
-//                                holder.llUploadContainer?.animate()?.alpha(1f)?.setDuration(500)
-//                                    ?.start()
-//                                holder.elUploadContainer?.setOnExpansionUpdateListener(null)
-//                            }
-//                        }
+                        holder.elUploadContainer?.expand(true)
+                        holder.elUploadContainer?.setOnExpansionUpdateListener { _, state ->
+                            if (state == ExpandableLayout.State.EXPANDED) {
+                                holder.llUploadContainer?.animate()?.alpha(1f)?.setDuration(500)
+                                    ?.start()
+                                holder.elUploadContainer?.setOnExpansionUpdateListener(null)
+                            }
+                        }
                     } else {
-                       // holder.elUploadContainer?.setExpanded(true, false)
+                        holder.elUploadContainer?.setExpanded(true, false)
                     }
 
                     //Set Adapter to show pending upload list
-//                    val uploadChatAdapter =
-//                        UploadVideosAdapter(mContext, model, model.pendingUploadList!!, object :
-//                            VideoUploadInterface {
-//                            override fun onRetryClicked(messageModel: MessageModel) {
-//                                if (Utility.isNetworkAvailable(mContext)) {
-//                                    messageModel.isRetry = false
-//                                    if (Utility.getDBHelper() != null) {
-//                                        // Update retry status for particular loop video in DB by local path
-//                                        Utility.getDBHelper()
-//                                            .updateRetryStatusForLoopVideo(
-//                                                messageModel.localVideoPath, false
-//                                            )
-//                                    }
-//                                    notifyDataSetChanged()
-//                                    if (messageModel.isVideoAndImageUploaded()) {
-//                                        VideoAPIManager.retryAPILoopVideo(mContext, messageModel)
-//                                    } else {
-//                                        UploadQueueManager.getInstance()
-//                                            .uploadLoopVideo(mContext, messageModel)
-//                                    }
-//                                }
-//                            }
-//
-//                            override fun onRetryLoopClicked(loopsModel: LoopsModel) {
-//                                if (Utility.isNetworkAvailable(mContext)) {
-//                                    if (loopsModel.latestMessages != null && loopsModel.latestMessages!!.isNotEmpty()) {
-//                                        val messageModel = loopsModel.latestMessages!![0]
-//                                        messageModel.isRetry = false
-//                                        if (Utility.getDBHelper() != null) {
-//                                            // Update retry status for particular loop video in DB by local path
-//                                            Utility.getDBHelper()
-//                                                .updateRetryStatusForLoopVideo(
-//                                                    messageModel.localVideoPath, false
-//                                                )
-//                                        }
-//                                        notifyDataSetChanged()
-//                                        if (loopsModel.latestMessages!![0].isVideoAndImageUploaded()) {
-//                                            VideoAPIManager.retryAPILoop(mContext, loopsModel)
-//                                        } else {
-//                                            UploadQueueManager.getInstance()
-//                                                .uploadLoop(mContext, loopsModel)
-//                                        }
-//                                    }
-//                                }
-//                            }
-//
-//                            override fun onDeleteClicked(messageModel: MessageModel) {
-//                                val isNewLoop =
-//                                    messageModel.chatId.equals("-101", ignoreCase = true)
-//                                showVideoDeleteAlert(isNewLoop, messageModel)
-//                            }
-//                        })
-//                    holder.rvUploadList?.adapter = uploadChatAdapter
-//                    holder.tvUploadingVideos?.let { setUploadText(model, it) }
+                    val uploadChatAdapter =
+                        UploadVideosAdapter(mContext, model, model.pendingUploadList!!, object :
+                            VideoUploadInterface {
+                            override fun onRetryClicked(messageModel: MessageModel) {
+                                if (Utility.isNetworkAvailable(mContext)) {
+                                    messageModel.isRetry = false
+                                    if (Utility.getDBHelper() != null) {
+                                        // Update retry status for particular loop video in DB by local path
+                                        Utility.getDBHelper()!!
+                                            .updateRetryStatusForLoopVideo(
+                                                messageModel.localVideoPath, false
+                                            )
+                                    }
+                                    notifyDataSetChanged()
+                                    if (messageModel.isVideoAndImageUploaded()) {
+                                        VideoAPIManager.retryAPILoopVideo(mContext, messageModel)
+                                    } else {
+                                        UploadQueueManager.getInstance()
+                                            .uploadLoopVideo(mContext, messageModel)
+                                    }
+                                }
+                            }
+
+                            override fun onRetryLoopClicked(loopsModel: LoopsModel) {
+                                if (Utility.isNetworkAvailable(mContext)) {
+                                    if (loopsModel.latestMessages != null && loopsModel.latestMessages!!.isNotEmpty()) {
+                                        val messageModel = loopsModel.latestMessages!![0]
+                                        messageModel.isRetry = false
+                                        if (Utility.getDBHelper() != null) {
+                                            // Update retry status for particular loop video in DB by local path
+                                            Utility.getDBHelper()!!
+                                                .updateRetryStatusForLoopVideo(
+                                                    messageModel.localVideoPath, false
+                                                )
+                                        }
+                                        notifyDataSetChanged()
+                                        if (loopsModel.latestMessages!![0].isVideoAndImageUploaded()) {
+                                            //TODO: Need to uncomment and test
+                                            VideoAPIManager.retryAPILoop(mContext, loopsModel)
+                                        } else {
+                                            UploadQueueManager.getInstance()
+                                                .uploadLoop(mContext, loopsModel)
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onDeleteClicked(messageModel: MessageModel) {
+                                val isNewLoop =
+                                    messageModel.chatId.equals("-101", ignoreCase = true)
+                                showVideoDeleteAlert(isNewLoop, messageModel)
+                            }
+                        })
+                    holder.rvUploadList?.adapter = uploadChatAdapter
+                    holder.tvUploadingVideos?.let { setUploadText(model, it) }
                     val failedVideoSize = model.pendingUploadList!!.filter { it.isRetry }
                     if (failedVideoSize.size > 1) {
                         holder.llUploadOptions?.visibility = View.VISIBLE
@@ -458,16 +476,16 @@ class LoopsAdapter(
                             }
 
                             override fun onAnimationEnd(p0: Animation?) {
-//                                holder.llUploadContainer?.visibility = View.INVISIBLE
-//                                holder.elUploadContainer?.setOnExpansionUpdateListener { _, state ->
-//                                    if (state == ExpandableLayout.State.COLLAPSED) {
-//                                        holder.llUploadContainer?.visibility = View.VISIBLE
-//                                        holder.llUploadContainer?.alpha = 0f
-//                                        holder.elUploadContainer?.setOnExpansionUpdateListener(null)
-//                                        holder.elUploadContainer?.visibility = View.GONE
-//                                    }
-//                                }
-//                                holder.elUploadContainer?.collapse(true)
+                                holder.llUploadContainer?.visibility = View.INVISIBLE
+                                holder.elUploadContainer?.setOnExpansionUpdateListener { _, state ->
+                                    if (state == ExpandableLayout.State.COLLAPSED) {
+                                        holder.llUploadContainer?.visibility = View.VISIBLE
+                                        holder.llUploadContainer?.alpha = 0f
+                                        holder.elUploadContainer?.setOnExpansionUpdateListener(null)
+                                        holder.elUploadContainer?.visibility = View.GONE
+                                    }
+                                }
+                                holder.elUploadContainer?.collapse(true)
                             }
 
                             override fun onAnimationRepeat(p0: Animation?) {
@@ -475,10 +493,11 @@ class LoopsAdapter(
                         })
                         holder.llUploadContainer?.startAnimation(anim)
                     } else {
-                       // holder.elUploadContainer?.setExpanded(false, false)
-                        //holder.elUploadContainer?.visibility = View.GONE
+                        holder.elUploadContainer?.setExpanded(false, false)
+                        holder.elUploadContainer?.visibility = View.GONE
                     }
                 }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -489,108 +508,104 @@ class LoopsAdapter(
         }
 
     // Show dialog to confirm failed video should be clear or not.
-//    private fun showVideoDeleteAlert(
-//        isNewLoop: Boolean,
-//        message: MessageModel
-//    ) {
-//        val mVideoDeleteDialog = Dialog(mContext)
-//        mVideoDeleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        mVideoDeleteDialog.setContentView(R.layout.common_simple_dialog_new)
-//        mVideoDeleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        mVideoDeleteDialog.window!!.setLayout(
-//            ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT
-//        )
-//        mVideoDeleteDialog.show()
-//        val tvTitle = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_title)
-//        val tvMsg = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_message)
-//        val btnCancel = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_cancel)
-//        val btnYes = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_yes)
-//        btnYes.text = mContext.resources.getString(R.string.txt_clear)
-//        tvTitle.text = mContext.resources.getString(R.string.txt_clear_video_header)
-//        tvMsg.text = mContext.resources.getString(R.string.txt_clear_video_sub)
-//        btnCancel.setOnClickListener { mVideoDeleteDialog.dismiss() }
-//        btnYes.setOnClickListener {
-//            mVideoDeleteDialog.dismiss()
-//            if (isNewLoop) {
-//                if (Utility.getDBHelper() != null) {
-//                    // This will delete loop from DB as in this case loop creation is failed
-//                    Utility.getDBHelper()
-//                        .deleteLoopByLocalPath(message.localVideoPath)
-//                }
-//            } else {
-//                // This will delete failed loop video from DB
-//                if (Utility.getDBHelper() != null) {
-//                    Utility.getDBHelper()
-//                        .deleteLoopVideoByLocalPath(message.localVideoPath)
-//                    Utility.getDBHelper().updateLatestMessageAt(message.chatId)
-//                }
-//            }
-//            EventBus.getDefault().post(ConversationUpdateEvent(true))
-//        }
-//    }
+    private fun showVideoDeleteAlert(
+        isNewLoop: Boolean,
+        message: MessageModel
+    ) {
+        val mVideoDeleteDialog = Dialog(mContext)
+        mVideoDeleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        mVideoDeleteDialog.setContentView(R.layout.common_simple_dialog_new)
+        mVideoDeleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        mVideoDeleteDialog.window!!.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        mVideoDeleteDialog.show()
+        val tvTitle = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_title)
+        val tvMsg = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_message)
+        val btnCancel = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_cancel)
+        val btnYes = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_yes)
+        btnYes.text = mContext.resources.getString(R.string.txt_clear)
+        tvTitle.text = mContext.resources.getString(R.string.txt_clear_video_header)
+        tvMsg.text = mContext.resources.getString(R.string.txt_clear_video_sub)
+        btnCancel.setOnClickListener { mVideoDeleteDialog.dismiss() }
+        btnYes.setOnClickListener {
+            mVideoDeleteDialog.dismiss()
+            if (isNewLoop) {
+                    // This will delete loop from DB as in this case loop creation is failed
+                    Utility.getDBHelper()?.deleteLoopByLocalPath(message.localVideoPath)
+            } else {
+                // This will delete failed loop video from DB
+                if (Utility.getDBHelper() != null) {
+                    Utility.getDBHelper()!!.deleteLoopVideoByLocalPath(message.localVideoPath)
+                    Utility.getDBHelper()!!.updateLatestMessageAt(message.chatId)
+                }
+            }
+            EventBus.getDefault().post(ConversationUpdateEvent(true))
+        }
+    }
 
     // Show dialog to confirm all failed videos should be clear or not
-//    private fun showAllVideoDeleteAlert(
-//        model: LoopsModel
-//    ) {
-//        // Below condition is used to check if given model is a new loop or not
-//        val inNewLoop = model.chatId.equals("-101", ignoreCase = true)
-//        val mVideoDeleteDialog = Dialog(mContext)
-//        mVideoDeleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        mVideoDeleteDialog.setContentView(R.layout.common_simple_dialog_new)
-//        mVideoDeleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        mVideoDeleteDialog.window!!.setLayout(
-//            ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT
-//        )
-//        mVideoDeleteDialog.show()
-//        val tvTitle = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_title)
-//        val tvMsg = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_message)
-//        val btnCancel = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_cancel)
-//        val btnYes = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_yes)
-//        btnYes.text = mContext.resources.getString(R.string.txt_clear_all)
-//        tvTitle.text = mContext.resources.getString(R.string.txt_clear_all_video_header)
-//        tvMsg.text = mContext.resources.getString(R.string.txt_clear_all_video_sub)
-//        btnCancel.setOnClickListener { v: View? -> mVideoDeleteDialog.dismiss() }
-//        btnYes.setOnClickListener { v: View? ->
-//            mVideoDeleteDialog.dismiss()
-//            if (inNewLoop) {
-//                // This will delete loop from DB as in this case loop creation is failed
-//                if (Utility.getDBHelper() != null) {
-//                    Utility.getDBHelper()
-//                        .deleteLoopByLocalPath(model.latestMessages!![0].localVideoPath)
-//                }
-//            } else {
-//                // This will delete all failed loop videos from DB
-//                if (Utility.getDBHelper() != null) {
-//                    Utility.getDBHelper()
-//                        .deleteAllFailedReplyMessages(model.chatId)
-//                    Utility.getDBHelper().updateLatestMessageAt(model.chatId)
-//                }
-//            }
-//            EventBus.getDefault().post(ConversationUpdateEvent(true))
-//        }
-//    }
+    private fun showAllVideoDeleteAlert(
+        model: LoopsModel
+    ) {
+        // Below condition is used to check if given model is a new loop or not
+        val inNewLoop = model.chatId.equals("-101", ignoreCase = true)
+        val mVideoDeleteDialog = Dialog(mContext)
+        mVideoDeleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        mVideoDeleteDialog.setContentView(R.layout.common_simple_dialog_new)
+        mVideoDeleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        mVideoDeleteDialog.window!!.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        mVideoDeleteDialog.show()
+        val tvTitle = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_title)
+        val tvMsg = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_message)
+        val btnCancel = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_cancel)
+        val btnYes = mVideoDeleteDialog.findViewById<CustomTextView>(R.id.dialog_btn_yes)
+        btnYes.text = mContext.resources.getString(R.string.txt_clear_all)
+        tvTitle.text = mContext.resources.getString(R.string.txt_clear_all_video_header)
+        tvMsg.text = mContext.resources.getString(R.string.txt_clear_all_video_sub)
+        btnCancel.setOnClickListener { v: View? -> mVideoDeleteDialog.dismiss() }
+        btnYes.setOnClickListener { v: View? ->
+            mVideoDeleteDialog.dismiss()
+            if (inNewLoop) {
+                // This will delete loop from DB as in this case loop creation is failed
+                if (Utility.getDBHelper() != null) {
+                    Utility.getDBHelper()!!
+                        .deleteLoopByLocalPath(model.latestMessages!![0].localVideoPath)
+                }
+            } else {
+                // This will delete all failed loop videos from DB
+                if (Utility.getDBHelper() != null) {
+                    Utility.getDBHelper()!!
+                        .deleteAllFailedReplyMessages(model.chatId)
+                    Utility.getDBHelper()!!.updateLatestMessageAt(model.chatId)
+                }
+            }
+            EventBus.getDefault().post(ConversationUpdateEvent(true))
+        }
+    }
 
     // Show popup window for retry all/cancel all
-//    private fun retryAllManagement(
-//        loopModel: LoopsModel,
-//        llUploadOptions: LinearLayout
-//    ) {
-//        val failedVideoSize = loopModel.pendingUploadList!!.filter { it.isRetry } as ArrayList
-//        if (failedVideoSize.isNotEmpty()) {
-//            failedVideoSize.reverse()
+    fun retryAllManagement(loopModel: LoopsModel, llUploadOptions: LinearLayout) {
+        val failedVideoSize = loopModel.pendingUploadList!!.filter { it.isRetry } as ArrayList
+        if (failedVideoSize.isNotEmpty()) {
+            failedVideoSize.reverse()
+        }
+//        @SuppressLint("NonConstantResourceId")
+//        val popupMenu = PopupMenuCustomLayout(
+//            mContext, R.layout.retry_custom_menu) {itemId: Int ->
+//
 //        }
-//        @SuppressLint("NonConstantResourceId") val popupMenu = PopupMenuCustomLayout(
-//            mContext, R.layout.retry_custom_menu
-//        ) { itemId: Int ->
+//        { itemId: Int ->
 //            when (itemId) {
 //                R.id.llRetry -> {
 //                    if (Utility.isNetworkAvailable(mContext)) {
 //                        if (Utility.getDBHelper() != null) {
 //                            // This function will change the retry status to false for all failed videos
-//                            Utility.getDBHelper()
+//                            Utility.getDBHelper()!!
 //                                .updateAllMessagesRetryStatus(
 //                                    loopModel.chatId
 //                                )
@@ -620,7 +635,7 @@ class LoopsAdapter(
 //        }
 //        popupMenu.setRetryCountsForDialog(failedVideoSize.size)
 //        popupMenu.show(llUploadOptions)
-//    }
+    }
 
     private fun SpannableStringBuilder.spansAppend(
         text: CharSequence,
@@ -649,62 +664,62 @@ class LoopsAdapter(
     }
 
     // Set upload text for different scenarios
-//    private fun setUploadText(loopModel: LoopsModel, textView: TextView) {
-//        val builder = SpannableStringBuilder()
-//        val failedVideoSize = loopModel.pendingUploadList!!.filter { it.isRetry }
-//        val uploadingSize = loopModel.pendingUploadList!!.size - failedVideoSize.size
-//        if (failedVideoSize.isNotEmpty() && uploadingSize == 0) {
-//            if (failedVideoSize.size == 1) {
-//                builder.spansAppend(
-//                    text = mContext.resources.getString(R.string.loop_upload_failed),
-//                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-//                    ForegroundColorSpan(mContext.resources.getColor(R.color.red_F2545B, null)),
-//                )
-//            } else {
-//                builder.spansAppend(
-//                    text = mContext.resources.getString(
-//                        R.string.no_of_uploads_failed,
-//                        failedVideoSize.size
-//                    ),
-//                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-//                    ForegroundColorSpan(mContext.resources.getColor(R.color.red_F2545B, null)),
-//                )
-//            }
-//        } else if (failedVideoSize.isNotEmpty()) {
-//            builder.spansAppend(
-//                text = mContext.resources.getString(
-//                    R.string.no_of_videos_failed,
-//                    failedVideoSize.size
-//                ),
-//                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-//                ForegroundColorSpan(mContext.resources.getColor(R.color.red_F2545B, null)),
-//            )
-//            builder.append(" ")
-//        }
-//        if (uploadingSize > 0) {
-//            if (uploadingSize == 1) {
-//                builder.append(
-//                    mContext.resources.getString(
-//                        R.string.uploading_one_videos
-//                    )
-//                )
-//            } else {
-//                builder.append(
-//                    mContext.resources.getString(
-//                        R.string.uploading_videos,
-//                        uploadingSize
-//                    )
-//                )
-//            }
-//        }
-//        textView.setText(builder, TextView.BufferType.SPANNABLE)
-//    }
+    private fun setUploadText(loopModel: LoopsModel, textView: TextView) {
+        val builder = SpannableStringBuilder()
+        val failedVideoSize = loopModel.pendingUploadList!!.filter { it.isRetry }
+        val uploadingSize = loopModel.pendingUploadList!!.size - failedVideoSize.size
+        if (failedVideoSize.isNotEmpty() && uploadingSize == 0) {
+            if (failedVideoSize.size == 1) {
+                builder.spansAppend(
+                    text = mContext.resources.getString(R.string.loop_upload_failed),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    ForegroundColorSpan(mContext.resources.getColor(R.color.red_F2545B, null)),
+                )
+            } else {
+                builder.spansAppend(
+                    text = mContext.resources.getString(
+                        R.string.no_of_uploads_failed,
+                        failedVideoSize.size
+                    ),
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    ForegroundColorSpan(mContext.resources.getColor(R.color.red_F2545B, null)),
+                )
+            }
+        } else if (failedVideoSize.isNotEmpty()) {
+            builder.spansAppend(
+                text = mContext.resources.getString(
+                    R.string.no_of_videos_failed,
+                    failedVideoSize.size
+                ),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                ForegroundColorSpan(mContext.resources.getColor(R.color.red_F2545B, null)),
+            )
+            builder.append(" ")
+        }
+        if (uploadingSize > 0) {
+            if (uploadingSize == 1) {
+                builder.append(
+                    mContext.resources.getString(
+                        R.string.uploading_one_videos
+                    )
+                )
+            } else {
+                builder.append(
+                    mContext.resources.getString(
+                        R.string.uploading_videos,
+                        uploadingSize
+                    )
+                )
+            }
+        }
+        textView.setText(builder, TextView.BufferType.SPANNABLE)
+    }
 
     override fun getItemCount(): Int {
         return loopList.size
     }
 
-    public class LoopsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class LoopsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var rlLowerBg: RelativeLayout? = null
         //var llLoopDp: DisplayPictureView? = null
         var ivMember1: DisplayPictureView? = null
@@ -732,7 +747,7 @@ class LoopsAdapter(
         var tvUploadingVideos: TextView? = null
         var rvUploadList: RecyclerView? = null
         var llUploadOptions: LinearLayout? = null
-        //var elUploadContainer: ExpandableLayout? = null
+        var elUploadContainer: ExpandableLayout? = null
         var llPrivacySettings: LinearLayout? = null
         var llSubscribersViews: LinearLayout? = null
         var tvNoOfSubscribers: TextView? = null
@@ -765,11 +780,11 @@ class LoopsAdapter(
             tvConvTime = itemView.findViewById(R.id.tvConvTime)
             cardMain = itemView.findViewById(R.id.cardMain)
             ivPost = itemView.findViewById(R.id.ivPost)
-//            llUploadContainer = itemView.findViewById(R.id.llUploadContainer)
-//            tvUploadingVideos = itemView.findViewById(R.id.tvUploadingVideos)
-//            rvUploadList = itemView.findViewById(R.id.rvUploadList)
-//            llUploadOptions = itemView.findViewById(R.id.llUploadOptions)
-            //elUploadContainer = itemView.findViewById(R.id.elUploadContainer)
+            llUploadContainer = itemView.findViewById(R.id.llUploadContainer)
+            tvUploadingVideos = itemView.findViewById(R.id.tvUploadingVideos)
+            rvUploadList = itemView.findViewById(R.id.rvUploadList)
+            llUploadOptions = itemView.findViewById(R.id.llUploadOptions)
+            elUploadContainer = itemView.findViewById(R.id.elUploadContainer)
             llPrivacySettings = itemView.findViewById(R.id.llPrivacySettings)
             llSubscribersViews = itemView.findViewById(R.id.llSubscribersViews)
             tvNoOfSubscribers = itemView.findViewById(R.id.tvNoOfSubscribers)
@@ -814,17 +829,17 @@ class LoopsAdapter(
 
             llUploadOptions?.setOnClickListener {
                 val model: LoopsModel = it.tag as LoopsModel
-                //retryAllManagement(model, llUploadOptions!!)
+                retryAllManagement(model, llUploadOptions!!)
             }
 
             cardMain?.setOnClickListener {
                 val model: LoopsModel = it.tag as LoopsModel
-                //loopsAdapterListener.onLoopClicked(model)
+                loopsAdapterListener.onLoopClicked(model)
             }
 
             rlImagesContainer?.setOnClickListener {
                 val model = it.tag as LoopsModel
-                //loopsAdapterListener.onThumbnailStackClicked(model)
+                loopsAdapterListener.onThumbnailStackClicked(model)
             }
         }
     }

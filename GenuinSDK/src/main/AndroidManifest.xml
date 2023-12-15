@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".GenuinSDKApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FeedScreenSDK"
         tools:targetApi="31">
+        <activity
+            android:name=".views.activities.CommunityDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".views.activities.ProfileActivity"
             android:exported="false" />
@@ -34,6 +38,10 @@
         <activity
             android:name=".views.activities.CameraNewActivity"
             android:exported="true" />
+
+        <service
+            android:name=".data.remote.service.UploadVideoService"
+            android:exported="false" />
     </application>
 
 </manifest>

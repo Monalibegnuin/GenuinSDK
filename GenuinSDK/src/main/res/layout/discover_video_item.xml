@@ -560,8 +560,6 @@
                 android:id="@+id/llRTBottomInnerLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="@dimen/dimen_100dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
                 android:layout_weight="1"
                 android:animateLayoutChanges="true"

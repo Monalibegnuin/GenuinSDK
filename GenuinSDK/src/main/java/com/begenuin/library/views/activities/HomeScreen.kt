@@ -1,5 +1,6 @@
 package com.begenuin.library.views.activities
 
+import android.Manifest
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -34,13 +35,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.begenuin.library.R
 import com.begenuin.library.SDKInitiate
+import com.begenuin.library.common.Constants
 import com.begenuin.library.common.DownloadVideo
 import com.begenuin.library.common.FlipAnimator
 import com.begenuin.library.common.SparkManager
@@ -60,6 +62,7 @@ import com.begenuin.library.core.enums.FeedViewType
 import com.begenuin.library.core.enums.SparkContentType
 import com.begenuin.library.core.enums.VideoConvType
 import com.begenuin.library.core.interfaces.AudioMuteUnMuteInterface
+import com.begenuin.library.core.interfaces.FeedAdapterListener
 import com.begenuin.library.core.interfaces.FeedCommunityListInterface
 import com.begenuin.library.core.interfaces.FeedViewModelListener
 import com.begenuin.library.core.interfaces.LoopSuggestionPagerEventListener
@@ -74,8 +77,6 @@ import com.begenuin.library.data.viewmodel.ExploreViewModel
 import com.begenuin.library.data.viewmodel.FeedViewModel
 import com.begenuin.library.data.viewmodel.LoopSuggestionResponseListener
 import com.begenuin.library.data.viewmodel.LoopSuggestionsViewModel
-import com.begenuin.library.common.Constants
-import com.begenuin.library.views.fragments.CommunityDetailsFragment
 import com.begenuin.library.views.EqualSpacingItemDecoration
 import com.begenuin.library.views.FeedOptionsCommunitiesAdapter
 import com.begenuin.library.views.FeedRTAdapter
@@ -88,6 +89,7 @@ import com.google.android.material.card.MaterialCardView
 import org.json.JSONObject
 import java.util.Timer
 import java.util.TimerTask
+import kotlin.math.abs
 
 class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewModelListener,
     AudioMuteUnMuteInterface, View.OnClickListener,
@@ -349,7 +351,7 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
                     llForYou.background = ContextCompat.getDrawable(this@HomeScreen, R.color.colorWhite)
                     llSubscriptions.background = ContextCompat.getDrawable(this@HomeScreen,R.color.colorWhite)
                     llMyLoops.background = ContextCompat.getDrawable(this@HomeScreen, R.color.colorWhite)
-                    community.communityId
+                    selectedCommunityId = community.communityId
                     selectedCommunityHandle = community.handle
                     switchFeed(FeedViewType.COMMUNITY.value, community)
                     popupMenu!!.dismiss()
@@ -439,7 +441,8 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
         }
         val pos = feedViewPager.currentItem
         val styledPlayerView = getTextureVideoView(pos)
-        if (styledPlayerView.player != null) {
+
+        if (styledPlayerView != null && styledPlayerView.player != null) {
             styledPlayerView.player!!.volume =
                 (if (CurrentAudioStatus === FeedAudioStatus.MUTED || CurrentAudioStatus === FeedAudioStatus.MUTED_BY_AUDIO_FOCUS) 0 else 1).toFloat()
         }
@@ -477,7 +480,7 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
         deviceId =
             Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         if (discoverList.size == 0) {
-            llInfinityContainer!!.visibility = View.VISIBLE
+            llInfinityContainer!!.visibility = View.GONE
         }
         if (!Utility.isNetworkAvailable(this)) {
             includedLayout.visibility = View.VISIBLE
@@ -660,7 +663,7 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
 
         if (isNewDiscover) {
             discoverList.clear()
-            llInfinityContainer!!.visibility = View.VISIBLE
+            llInfinityContainer!!.visibility = View.GONE
         }
 
         if (FeedViewModel.getInstance().isEndOfSearch) {
@@ -773,21 +776,31 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
                     return
                 }
                 mLastClickTime = SystemClock.elapsedRealtime()
-                //val exploreViewModel: ExploreViewModel<Any> = discoverList[feedViewPager.currentItem]
-                //if (exploreViewModel.type === ExploreVideoType.RT) {
-                   // val conversationModel = exploreViewModel.obj
-                    //if (conversationModel.community != null) {
+                val exploreViewModel: ExploreViewModel<Any> =
+                    discoverList[feedViewPager.currentItem]
+                if (exploreViewModel.type === ExploreVideoType.RT) {
+                    val conversationModel = exploreViewModel.obj as ConversationModel
+                    if (conversationModel.community != null) {
+                        val iCommunityDetails = Intent(this, CommunityDetailsActivity::class.java)
+                        iCommunityDetails.putExtra("community_id", conversationModel.community.communityId)
+                        iCommunityDetails.putExtra("role", conversationModel.community.role)
+                        startActivity(iCommunityDetails)
+                        overridePendingTransition(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left
+                        )
+                    }
+//                val tag = "CommunityDetails"
+//                val fragment: CommunityDetailsFragment = CommunityDetailsFragment.newInstance(
+//                    communityId = selectedCommunityId, 1
+//                )
+//                val fragmentManager: FragmentManager = supportFragmentManager
+//                    val fragmentTransaction = fragmentManager.beginTransaction()
+//                    fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag)
+//                    fragmentTransaction.addToBackStack(tag)
+//                    fragmentTransaction.commit()
                     //}
-                val tag = "CommunityDetails"
-                val fragment: CommunityDetailsFragment = CommunityDetailsFragment.newInstance(
-                    communityId = "7eb90075-9854-4e52-aab5-dd9f0c12203f", 1
-                )
-                val fragmentManager: FragmentManager = supportFragmentManager
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-                    fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag)
-                    fragmentTransaction.addToBackStack(tag)
-                    fragmentTransaction.commit()
-                //}
+                }
             }
 
             R.id.rlLoopInfinity -> {
@@ -866,23 +879,22 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
         newCurrent: RecyclerView.ViewHolder?
     ) {
         Utility.showLog("Scroll", "$scrollPosition $currentPosition $newPosition")
-//        if (targetIndex != newPosition) {
-//            setDataForInfinityView(currentPosition, newPosition)
-//        }
-//        targetIndex = newPosition
+        if (targetIndex != newPosition) {
+            setDataForInfinityView(currentPosition, newPosition)
+        }
+        targetIndex = newPosition
 
-        setDataForInfinityView(currentPosition, newPosition)
-        val absScrollPosition = Math.abs(scrollPosition)
+        val absScrollPosition = abs(scrollPosition)
         if (absScrollPosition > 0.5) {
             if (isTargetLoop) {
                 llInfinityContainer!!.visibility = View.VISIBLE
             } else {
-                llInfinityContainer!!.visibility = View.VISIBLE
+                llInfinityContainer!!.visibility = View.GONE
             }
         } else if (isSourceLoop) {
             llInfinityContainer!!.visibility = View.VISIBLE
         } else {
-            llInfinityContainer!!.visibility = View.VISIBLE
+            llInfinityContainer!!.visibility = View.GONE
         }
        // if (!isSameCommunity) {
             if (absScrollPosition > 0.5) {
@@ -1016,7 +1028,7 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
             var discoverVO: DiscoverModel? = null
             var conversationModel: ConversationModel? = null
             if (exploreViewModel.type === ExploreVideoType.PUBLIC_VIDEO) {
-                llInfinityContainer!!.visibility = View.VISIBLE
+                llInfinityContainer!!.visibility = View.GONE
                 discoverVO = exploreViewModel.obj as DiscoverModel?
                 currentVideoId = discoverVO!!.videoId
                 val videoUrl = discoverVO.videoUrl
@@ -1202,7 +1214,7 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
             if (previousPos < 0) {
                 previousPos = 0
             }
-            discoverList.removeAll(discoverList.subList(0, endPos))
+            discoverList.removeAll(discoverList.subList(0, endPos).toSet())
             if (feedViewAdapter != null) {
                 feedViewAdapter!!.notifyItemRangeRemoved(0, endPos)
                 feedViewAdapter!!.notifyItemRangeChanged(0, discoverList.size)
@@ -1226,11 +1238,9 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
         val descLayout: TextView = getDescLayout(pos)
         val singleDescLayout: TextView = getSingleDescLayout(pos)
         val overlayLayout: RelativeLayout = getOverlayLayout(pos)
-        if (descLayout != null && singleDescLayout != null && overlayLayout != null) {
-            overlayLayout.visibility = GONE
-            descLayout.visibility = GONE
-            singleDescLayout.visibility = View.VISIBLE
-        }
+        overlayLayout.visibility = GONE
+        descLayout.visibility = GONE
+        singleDescLayout.visibility = View.VISIBLE
     }
 
 //    private fun showRepostToolTip() {
@@ -1455,7 +1465,7 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
         clearAdapter()
         discoverList.addAll(FeedViewModel.getInstance().getMasterDiscoverArr(feedMenuPosition))
         setAdapter(0)
-        //refreshDataIfNeeded()
+        refreshDataIfNeeded()
     }
 
     private fun clearAdapter() {
@@ -1497,304 +1507,303 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
             Utility.showLog("Adapter", "FeedAdapter")
             feedViewAdapter = FeedRTAdapter(this, this, discoverList)
 
-//            feedViewAdapter!!.setInterfaceListener(object : FeedAdapterListener {
-//                override fun onSparkClicked() {
-//                    manageSparkUnSpark(false)
-//                }
-//
-//                override fun onProfileClick(pos: Int) {
-//                    pauseCurrentVideo(false)
-//                    //TODO: Need to confirm and open activity/Fragment
-////                    val fragmentManager: FragmentManager = getChildFragmentManager()
-////                    val fragmentTransaction = fragmentManager.beginTransaction()
-////                        .setCustomAnimations(
-////                            R.anim.slide_in_right,
-////                            R.anim.slide_out_left,
-////                            R.anim.slide_in_left,
-////                            R.anim.slide_out_right
-////                        )
-////                    val fragment: NewProfileFragment = NewProfileFragment.Companion.newInstance(
-////                        false,
-////                        discoverList[pos].userId,
-////                        context.mainPager.getCurrentItem()
-////                    )
-////                    val tag2 = "profile"
-////                    fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag2)
-////                    fragmentTransaction.addToBackStack(tag2)
-////                    fragmentTransaction.commit()
-//                }
-//
-//                override fun onVolumeClick() {
-//                    if (CurrentAudioStatus === FeedAudioStatus.UNMUTED) {
-//                        CurrentAudioStatus = FeedAudioStatus.MUTED
-//                        muteAudio(false)
-//                    } else {
-//                        CurrentAudioStatus = FeedAudioStatus.UNMUTED
-//                        unMuteAudio()
-//                    }
-//                }
-//
-//                override fun onReplyClick() {
-//                    replyClickManage()
-//                }
-//
-//                override fun onSaveClick() {
-//                    saveClickManage()
-//                }
-//
-//                override fun onShareClick() {
-//                    shareClickManage()
-//                }
-//
-//                override fun onLinkClick() {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                        return
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime()
-//                    if (discoverList.size == 0) {
-//                        return
-//                    }
-//                    //TODO: Need to ask and add condition
-//                    //context.isLoggedIn()
-//                    if (discoverList[feedViewPager.currentItem].type === ExploreVideoType.PUBLIC_VIDEO) {
-//                        callClickCountApi()
-//                    }
-//                    if (Utility.isNetworkAvailable(this@HomeScreen)) {
-////                        val intent = Intent(, WebViewActivity::class.java)
-////                        intent.putExtra("url", discoverList[feedViewPager.currentItem].link)
-////                        startActivity(intent)
-////                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
-//                    } else {
-//                        Utility.showToast(
-//                            this@HomeScreen,
-//                            this@HomeScreen.resources.getString(R.string.no_internet)
+            feedViewAdapter!!.setInterfaceListener(object : FeedAdapterListener {
+                override fun onSparkClicked() {
+                    manageSparkUnSpark(false)
+                }
+                override fun onProfileClick(pos: Int) {
+                    pauseCurrentVideo(false)
+                    //TODO: Need to confirm and open activity/Fragment
+//                    val fragmentManager: FragmentManager = getChildFragmentManager()
+//                    val fragmentTransaction = fragmentManager.beginTransaction()
+//                        .setCustomAnimations(
+//                            R.anim.slide_in_right,
+//                            R.anim.slide_out_left,
+//                            R.anim.slide_in_left,
+//                            R.anim.slide_out_right
 //                        )
-//                    }
-//                }
-//
-//                override fun onEditClicked() {}
-//                override fun onMoreOptionsClicked() {
-//                    pauseCurrentVideo(false)
-//                    //TODO: Need to add
-//                    //openBottomSheetDialog()
-//                }
-//
-//                override fun onDownloadVideoClick(
-//                    position: Int,
-//                    model: DiscoverModel?,
-//                    downloadVideoTask: DownloadVideo
-//                ) {
-//                    //downloadVideoTask = downloadVideoTask
-//                    downloadVideoTask.setDownloadListener(this@HomeScreen)
-//                    if (!downloadVideoTask.isPermissionGranted) {
-//                        ActivityCompat.requestPermissions(
-//                            this@HomeScreen,
-//                            arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                            Constants.WRITE_STORAGE_PERMISSION
+//                    val fragment: NewProfileFragment = NewProfileFragment.Companion.newInstance(
+//                        false,
+//                        discoverList[pos].userId,
+//                        context.mainPager.getCurrentItem()
+//                    )
+//                    val tag2 = "profile"
+//                    fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag2)
+//                    fragmentTransaction.addToBackStack(tag2)
+//                    fragmentTransaction.commit()
+                }
+
+                override fun onVolumeClick() {
+                    if (CurrentAudioStatus === FeedAudioStatus.UNMUTED) {
+                        CurrentAudioStatus = FeedAudioStatus.MUTED
+                        muteAudio(false)
+                    } else {
+                        CurrentAudioStatus = FeedAudioStatus.UNMUTED
+                        unMuteAudio()
+                    }
+                }
+
+                override fun onReplyClick() {
+                    replyClickManage()
+                }
+
+                override fun onSaveClick() {
+                    saveClickManage()
+                }
+
+                override fun onShareClick() {
+                    shareClickManage()
+                }
+
+                override fun onLinkClick() {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    if (discoverList.size == 0) {
+                        return
+                    }
+                    //TODO: Need to ask and add condition
+                    //context.isLoggedIn()
+                    if (discoverList[feedViewPager.currentItem].type === ExploreVideoType.PUBLIC_VIDEO) {
+                        callClickCountApi()
+                    }
+                    if (Utility.isNetworkAvailable(this@HomeScreen)) {
+//                        val intent = Intent(, WebViewActivity::class.java)
+//                        intent.putExtra("url", discoverList[feedViewPager.currentItem].link)
+//                        startActivity(intent)
+//                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up)
+                    } else {
+                        Utility.showToast(
+                            this@HomeScreen,
+                            this@HomeScreen.resources.getString(R.string.no_internet)
+                        )
+                    }
+                }
+
+                override fun onEditClicked() {}
+                override fun onMoreOptionsClicked() {
+                    pauseCurrentVideo(false)
+                    //TODO: Need to add
+                    //openBottomSheetDialog()
+                }
+
+                override fun onDownloadVideoClick(
+                    position: Int,
+                    model: DiscoverModel?,
+                    downloadVideoTask: DownloadVideo
+                ) {
+                    //downloadVideoTask = downloadVideoTask
+                    downloadVideoTask.setDownloadListener(this@HomeScreen)
+                    if (!downloadVideoTask.isPermissionGranted) {
+                        ActivityCompat.requestPermissions(
+                            this@HomeScreen,
+                            arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            Constants.WRITE_STORAGE_PERMISSION
+                        )
+                    } else {
+                        downloadVideoTask.saveDownloadedVideoToGallery(this@HomeScreen)
+                    }
+                }
+
+                override fun onCoverPhotoClick(position: Int) {}
+                override fun onDetailsClicked() {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    val pos = feedViewPager.currentItem
+                    //TODO: Need to add FeedLoopFragment
+//                    val exploreViewModel: ExploreViewModel = discoverList[pos]
+//                    if (exploreViewModel.type === ExploreVideoType.RT) {
+//                        val conversationModel: ConversationModel =
+//                            exploreViewModel.getObj() as ConversationModel
+//                        pauseCurrentVideo(false)
+//                        val fragmentManager: FragmentManager = getChildFragmentManager()
+//                        val fragmentTransaction = fragmentManager.beginTransaction()
+//                        fragmentTransaction.setCustomAnimations(
+//                            R.anim.slide_in_right,
+//                            R.anim.slide_out_left,
+//                            R.anim.slide_in_left,
+//                            R.anim.slide_out_right
 //                        )
-//                    } else {
-//                        downloadVideoTask.saveDownloadedVideoToGallery(this@HomeScreen)
+//                        val fragment: FeedLoopFragment = FeedLoopFragment.newInstance(
+//                            discoverList[pos].feedId,
+//                            discoverList[pos].convId,
+//                            mainPager.getCurrentItem(),
+//                            conversationModel.getGroup(),
+//                            conversationModel.getSettings(),
+//                            conversationModel.getShareURL(),
+//                            conversationModel.isSubscriber(),
+//                            conversationModel.getMemberInfo(),
+//                            "",
+//                            true
+//                        )
+//                        val tag = "feedloop"
+//                        fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag)
+//                        fragmentTransaction.addToBackStack(tag)
+//                        fragmentTransaction.commit()
 //                    }
-//                }
-//
-//                override fun onCoverPhotoClick(position: Int) {}
-//                override fun onDetailsClicked() {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                        return
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime()
-//                    val pos = feedViewPager.currentItem
-//                    //TODO: Need to add FeedLoopFragment
-////                    val exploreViewModel: ExploreViewModel = discoverList[pos]
-////                    if (exploreViewModel.type === ExploreVideoType.RT) {
-////                        val conversationModel: ConversationModel =
-////                            exploreViewModel.getObj() as ConversationModel
-////                        pauseCurrentVideo(false)
-////                        val fragmentManager: FragmentManager = getChildFragmentManager()
-////                        val fragmentTransaction = fragmentManager.beginTransaction()
-////                        fragmentTransaction.setCustomAnimations(
-////                            R.anim.slide_in_right,
-////                            R.anim.slide_out_left,
-////                            R.anim.slide_in_left,
-////                            R.anim.slide_out_right
-////                        )
-////                        val fragment: FeedLoopFragment = FeedLoopFragment.newInstance(
-////                            discoverList[pos].feedId,
-////                            discoverList[pos].convId,
-////                            mainPager.getCurrentItem(),
-////                            conversationModel.getGroup(),
-////                            conversationModel.getSettings(),
-////                            conversationModel.getShareURL(),
-////                            conversationModel.isSubscriber(),
-////                            conversationModel.getMemberInfo(),
-////                            "",
-////                            true
-////                        )
-////                        val tag = "feedloop"
-////                        fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag)
-////                        fragmentTransaction.addToBackStack(tag)
-////                        fragmentTransaction.commit()
-////                    }
-//                }
-//
-//                override fun onCommentsClicked() {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                        return
-//                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime()
-//                    //TODO: Need to check issue with ExploreViewModel
-////                    val exploreViewModel: ExploreViewModel =
-////                        discoverList[feedViewPager.currentItem]
-////                    if (exploreViewModel.type === ExploreVideoType.RT) {
-////                        val conversationModel: ConversationModel =
-////                            exploreViewModel.getObj() as ConversationModel
-////                        if (conversationModel.chats.size > 0) {
-////                            val chatModel: ChatModel = conversationModel.getChats()
-////                                .get(conversationModel.chats.size - 1)
-////                            val messageModel: MessageModel = Utility.convertChatIntoMessage(
-////                                chatModel,
-////                                conversationModel.getChatId()
-////                            )
-////                            val i = Intent(this@HomeScreen, CommentsNewActivity::class.java)
-////                            i.putExtra("chat_id", conversationModel.getChatId())
-////                            i.putExtra("video_id", messageModel.getMessageId())
-////                            i.putExtra("message_model", messageModel)
-////                            i.putExtra(
-////                                "loop_name",
-////                                if (conversationModel.group != null) conversationModel.group
-////                                    .name else ""
-////                            )
-////                            i.putExtra(
-////                                "isOwner",
-////                                conversationModel.memberInfo != null && conversationModel.memberInfo
-////                                    .role!!.contentEquals("1")
-////                            )
-////                            startActivity(i)
-////                            overridePendingTransition(
-////                                R.anim.slide_in_right,
-////                                R.anim.slide_out_left
-////                            )
-////                        }
-//                    //}
-//                }
-//
-//                override fun onSubscribeClicked() {
-//                    subscribeClickManage()
-//                }
-//
-//                override fun onDescriptionClicked() {
-//                    if (discoverList == null || discoverList.size == 0) {
-//                        return
-//                    }
-//                    val singleDescLayout: TextView = getSingleDescLayout()
-////                    if (singleDescLayout.visibility == View.VISIBLE) {
-////                        expandCollapseDescLayout(true)
-////                    } else {
-////                        expandCollapseDescLayout(false)
-////                    }
-//                }
-//
-//                override fun onOverlayClicked() {
-//                    if (discoverList == null || discoverList.size == 0) {
-//                        return
-//                    }
-//                    //expandCollapseDescLayout(false)
-//                }
-//
-//                override fun onUnlistedClicked() {
-//                    val exploreViewModel: ExploreViewModel<Any> =
+                }
+
+                override fun onCommentsClicked() {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    //TODO: Need to check issue with ExploreViewModel
+//                    val exploreViewModel: ExploreViewModel =
 //                        discoverList[feedViewPager.currentItem]
-////                    if (exploreViewModel.type === ExploreVideoType.RT) {
-////                        if (isOwner(exploreViewModel)) {
-//                    //TODO: Need to add
-////                            openBottomSheetDialogForPrivacyOptions(feedViewPager.currentItem)
-////                        } else {
-////                            openBottomSheetDialogForSingleOption(exploreViewModel)
-////                        }
-////                    } else {
-////                        openBottomSheetDialogForPrivacyOptions(feedViewPager.currentItem)
-////                    }
-//                }
-//
-//                override fun onFlagVideoClicked() {
-//                    flagVideoManagement()
-//                }
-//
-//                override fun onRepostClicked() {
-//                    repostVideoManagement()
-//                }
-//
-//                override fun onRepostOwnerClicked(pos: Int) {
-//                    pauseCurrentVideo(false)
-//                    //TODO: Need to check and add Profile Fragment
-////                    val fragmentManager: FragmentManager = getChildFragmentManager()
-////                    val fragmentTransaction = fragmentManager.beginTransaction()
-////                        .setCustomAnimations(
-////                            R.anim.slide_in_right,
-////                            R.anim.slide_out_left,
-////                            R.anim.slide_in_left,
-////                            R.anim.slide_out_right
-////                        )
-////                    val fragment: NewProfileFragment = NewProfileFragment.Companion.newInstance(
-////                        false,
-////                        discoverList[pos].repostOwnerId,
-////                        context.mainPager.getCurrentItem()
-////                    )
-////                    val tag2 = "profile"
-////                    fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag2)
-////                    fragmentTransaction.addToBackStack(tag2)
-////                    fragmentTransaction.commit()
-//                }
-//
-//                override fun onParticipateClicked() {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                        return
+//                    if (exploreViewModel.type === ExploreVideoType.RT) {
+//                        val conversationModel: ConversationModel =
+//                            exploreViewModel.getObj() as ConversationModel
+//                        if (conversationModel.chats.size > 0) {
+//                            val chatModel: ChatModel = conversationModel.getChats()
+//                                .get(conversationModel.chats.size - 1)
+//                            val messageModel: MessageModel = Utility.convertChatIntoMessage(
+//                                chatModel,
+//                                conversationModel.getChatId()
+//                            )
+//                            val i = Intent(this@HomeScreen, CommentsNewActivity::class.java)
+//                            i.putExtra("chat_id", conversationModel.getChatId())
+//                            i.putExtra("video_id", messageModel.getMessageId())
+//                            i.putExtra("message_model", messageModel)
+//                            i.putExtra(
+//                                "loop_name",
+//                                if (conversationModel.group != null) conversationModel.group
+//                                    .name else ""
+//                            )
+//                            i.putExtra(
+//                                "isOwner",
+//                                conversationModel.memberInfo != null && conversationModel.memberInfo
+//                                    .role!!.contentEquals("1")
+//                            )
+//                            startActivity(i)
+//                            overridePendingTransition(
+//                                R.anim.slide_in_right,
+//                                R.anim.slide_out_left
+//                            )
+//                        }
+                    //}
+                }
+
+                override fun onSubscribeClicked() {
+                    subscribeClickManage()
+                }
+
+                override fun onDescriptionClicked() {
+                    if (discoverList == null || discoverList.size == 0) {
+                        return
+                    }
+                    val singleDescLayout: TextView = getSingleDescLayout()
+//                    if (singleDescLayout.visibility == View.VISIBLE) {
+//                        expandCollapseDescLayout(true)
+//                    } else {
+//                        expandCollapseDescLayout(false)
 //                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime()
-//                    if (discoverList == null || discoverList.size == 0) {
-//                        return
+                }
+
+                override fun onOverlayClicked() {
+                    if (discoverList == null || discoverList.size == 0) {
+                        return
+                    }
+                    //expandCollapseDescLayout(false)
+                }
+
+                override fun onUnlistedClicked() {
+                    val exploreViewModel: ExploreViewModel<Any> =
+                        discoverList[feedViewPager.currentItem]
+//                    if (exploreViewModel.type === ExploreVideoType.RT) {
+//                        if (isOwner(exploreViewModel)) {
+                    //TODO: Need to add
+//                            openBottomSheetDialogForPrivacyOptions(feedViewPager.currentItem)
+//                        } else {
+//                            openBottomSheetDialogForSingleOption(exploreViewModel)
+//                        }
+//                    } else {
+//                        openBottomSheetDialogForPrivacyOptions(feedViewPager.currentItem)
 //                    }
-//                    //TODO: Need to check and add CameraScreen for reply Fragment
-////                    val exploreViewModel: ExploreViewModel =
-////                        discoverList[feedViewPager.currentItem]
-////                    if (exploreViewModel.type === ExploreVideoType.RT) {
-////                        val conversationModel: ConversationModel =
-////                            exploreViewModel.getObj() as ConversationModel
-////                        Utility.goToCameraForReply(
-////                            context,
-////                            conversationModel.getChatId(),
-////                            VideoConvType.ROUND_TABLE.getValue(),
-////                            conversationModel.getGroup(),
-////                            false,
-////                            conversationModel.getSettings()
-////                        )
-////                    }
-//                }
-//
-//                override fun onAskQuestionClicked() {
-//                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-//                        return
+                }
+
+                override fun onFlagVideoClicked() {
+                    flagVideoManagement()
+                }
+
+                override fun onRepostClicked() {
+                    repostVideoManagement()
+                }
+
+                override fun onRepostOwnerClicked(pos: Int) {
+                    pauseCurrentVideo(false)
+                    //TODO: Need to check and add Profile Fragment
+//                    val fragmentManager: FragmentManager = getChildFragmentManager()
+//                    val fragmentTransaction = fragmentManager.beginTransaction()
+//                        .setCustomAnimations(
+//                            R.anim.slide_in_right,
+//                            R.anim.slide_out_left,
+//                            R.anim.slide_in_left,
+//                            R.anim.slide_out_right
+//                        )
+//                    val fragment: NewProfileFragment = NewProfileFragment.Companion.newInstance(
+//                        false,
+//                        discoverList[pos].repostOwnerId,
+//                        context.mainPager.getCurrentItem()
+//                    )
+//                    val tag2 = "profile"
+//                    fragmentTransaction.add(R.id.profile_fragment_container, fragment, tag2)
+//                    fragmentTransaction.addToBackStack(tag2)
+//                    fragmentTransaction.commit()
+                }
+
+                override fun onParticipateClicked() {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    if (discoverList == null || discoverList.size == 0) {
+                        return
+                    }
+                    //TODO: Need to check and add CameraScreen for reply Fragment
+//                    val exploreViewModel: ExploreViewModel =
+//                        discoverList[feedViewPager.currentItem]
+//                    if (exploreViewModel.type === ExploreVideoType.RT) {
+//                        val conversationModel: ConversationModel =
+//                            exploreViewModel.getObj() as ConversationModel
+//                        Utility.goToCameraForReply(
+//                            context,
+//                            conversationModel.getChatId(),
+//                            VideoConvType.ROUND_TABLE.getValue(),
+//                            conversationModel.getGroup(),
+//                            false,
+//                            conversationModel.getSettings()
+//                        )
 //                    }
-//                    mLastClickTime = SystemClock.elapsedRealtime()
-//                    if (discoverList == null || discoverList.size == 0) {
-//                        return
+                }
+
+                override fun onAskQuestionClicked() {
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                        return
+                    }
+                    mLastClickTime = SystemClock.elapsedRealtime()
+                    if (discoverList == null || discoverList.size == 0) {
+                        return
+                    }
+                    //TODO: Need to check and add LoopQuestionAnswerActivity
+//                    val exploreViewModel: ExploreViewModel =
+//                        discoverList[feedViewPager.currentItem]
+//                    if (exploreViewModel.type === ExploreVideoType.RT) {
+//                        val conversationModel: ConversationModel =
+//                            exploreViewModel.getObj() as ConversationModel
+//                        val qnaIntent = Intent(this, LoopQuestionAnswerActivity::class.java)
+//                        qnaIntent.putExtra("chatId", conversationModel.getChatId())
+//                        startActivity(qnaIntent)
+//                        overridePendingTransition(
+//                            R.anim.slide_in_right,
+//                            R.anim.slide_out_left
+//                        )
 //                    }
-//                    //TODO: Need to check and add LoopQuestionAnswerActivity
-////                    val exploreViewModel: ExploreViewModel =
-////                        discoverList[feedViewPager.currentItem]
-////                    if (exploreViewModel.type === ExploreVideoType.RT) {
-////                        val conversationModel: ConversationModel =
-////                            exploreViewModel.getObj() as ConversationModel
-////                        val qnaIntent = Intent(this, LoopQuestionAnswerActivity::class.java)
-////                        qnaIntent.putExtra("chatId", conversationModel.getChatId())
-////                        startActivity(qnaIntent)
-////                        overridePendingTransition(
-////                            R.anim.slide_in_right,
-////                            R.anim.slide_out_left
-////                        )
-////                    }
-//                }
-//            })
+                }
+            })
             feedViewPager.adapter = feedViewAdapter
             feedViewPager.setHasFixedSize(true)
             feedViewPager.removeScrollStateChangeListener(this)
@@ -2537,5 +2546,25 @@ class HomeScreen : AppCompatActivity(), FeedCommunityListInterface, FeedViewMode
     override fun onPause() {
         pauseCurrentVideo(false)
         super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+    private fun refreshDataIfNeeded() {
+        if (FeedViewModel.getInstance().masterCommunitiesList.isEmpty()) {
+            FeedViewModel.getInstance().feedCommunityList(this)
+        }
+        if (discoverList.size == 0) {
+            discoverVideos(true, true)
+        } else {
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                //if (shouldVideoPlay()) {
+                    playCurrentVideo()
+               // }
+            }
+        }
     }
 }

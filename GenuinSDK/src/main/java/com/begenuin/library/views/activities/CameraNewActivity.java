@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.begenuin.library.data.viewmodel.GenuinFFMpegManager;
+import com.begenuin.library.data.viewmodel.UploadQueueManager;
 import com.begenuin.library.views.fragments.ChangeVideoThumbnailCoverFragment;
 import com.begenuin.library.R;
 import com.begenuin.library.SDKInitiate;
@@ -741,14 +743,11 @@ public class CameraNewActivity extends AppCompatActivity implements PullBackLayo
                     loop.setCommunityId(communityId);
                 }
                 loop.setTemplateId(templateId);
-
                 // Need to change while implementing welcome loop
                 loop.setWelcomeLoop(isWelcomeFlag);
-
-//                if (Utility.getDBHelper() != null) {
-//                    Utility.getDBHelper().insertORUpdateLoop(loop);
-//                }
-
+                if (Utility.getDBHelper() != null) {
+                    Utility.getDBHelper().insertORUpdateLoop(loop);
+                }
                 Type listType = new TypeToken<List<MembersModel>>() {
                 }.getType();
                 selectedContactsStr = new Gson().toJson(membersList, listType);
@@ -758,123 +757,128 @@ public class CameraNewActivity extends AppCompatActivity implements PullBackLayo
             if (isCompressionDone) {
                 uploadDirectORRTVideo(VideoConvType.ROUND_TABLE.getValue(), compressVideoFilePath, imagePath, videoDuration, link, videoWidth, videoHeight, selectedContactsStr);
             } else {
-                //GenuinFFMpegManager.getInstance().addValueToHashmap(compressVideoFilePath, true);
+                GenuinFFMpegManager.getInstance().addValueToHashmap(compressVideoFilePath, true);
             }
         }
     }
 
-//    public void insertAndUploadVideo(int convType, String compressVideoFilePath, long videoDuration, String link, int videoWidth,
-//                                     int videoHeight) {
-//        File videoFile = new File(compressVideoFilePath);
-//        File file;
-//        if (TextUtils.isEmpty(coverPhotoPath)) {
-//            File destinationLocation = getExternalFilesDir(Constants.MERGE_DIRECTORY);
-//            String fileName = videoFile.getName().replace(".mp4", ".png");
-//            file = new File(destinationLocation, fileName);
-//            try {
-//                Bitmap mBitmap = getCoverBitmap(compressVideoFilePath, false);
-//                if (mBitmap != null) {
-//                    try (FileOutputStream out = new FileOutputStream(file)) {
-//                        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            } catch (Throwable throwable) {
-//                throwable.printStackTrace();
-//            }
-//        } else {
-//            file = new File(coverPhotoPath);
-//        }
-//        if (file.exists()) {
-//            String imagePath = file.getAbsolutePath();
-//            String selectedContactsStr = "";
-//            if (isCompressionDone) {
-//                try {
-//                    String finalUrl = compressVideoFilePath.substring(compressVideoFilePath.lastIndexOf('/') + 1);
-//                    File to = new File(getCacheDir(), finalUrl);
-//                    InputStream in = new FileInputStream(videoFile);
-//                    OutputStream out = new FileOutputStream(to);
-//
-//                    // Copy the bits from instream to outstream
-//                    byte[] buf = new byte[1024];
-//                    int len;
-//
-//                    while ((len = in.read(buf)) > 0) {
-//                        out.write(buf, 0, len);
-//                    }
-//                    in.close();
-//                    out.close();
-//                } catch (Exception e) {
-//                    Utility.showLogException(e);
-//                }
-//            }
-//            try {
-//                Constants.START_MILLIS_POST = System.currentTimeMillis();
-//                ChatModel chat = new ChatModel();
-//                chat.setChatId("-101");
-//                chat.setVideoUrl(compressVideoFilePath);
-//                chat.setThumbnailUrl(imagePath);
-//                chat.setLocalVideoPath(compressVideoFilePath);
-//                chat.setImagePath(imagePath);
-//                chat.setDuration(Utility.getDurationInt(videoDuration) + "");
-//                chat.setDescription("");
-//                chat.setLink(link);
-//                chat.setAspectRatio(Utility.getVideoAspectRatio(videoWidth, videoHeight));
-//                chat.setResolution(Utility.getVideoResolution(videoWidth, videoHeight));
-//                chat.setSize("5");
-//                chat.setConversationId("");
-//                chat.setConversationAt(String.valueOf(Constants.START_MILLIS_POST));
-//                chat.setReply(false);
-//                chat.setRead(true);
-//                chat.setRetry(false);
-//                chat.setIsReplyOrReaction(1);
-//                chat.setFromStatus("1");
-//                chat.setConvType(convType);
-//                chat.setVideoUploadStatus(1);
-//                chat.setImageUploadStatus(1);
-//                chat.setDpUploadStatus(TextUtils.isEmpty(imageToSet) ? 2 : 1);
-//                chat.setIsReplyReceived(0);
-//                chat.setFfMpegCommand(ffMpegCommand);
-//                chat.setCompressionStatus(isCompressionDone ? 1 : 0);
-//                if (selectedQuestion != null) {
-//                    List<QuestionModel> questions = new ArrayList<>();
-//                    questions.add(selectedQuestion);
-//                    chat.setQuestions(questions);
-//                }
-//                MetaDataModel metaDataModel = new MetaDataModel();
-//                metaDataModel.setContainsExternalVideos(isAnyNonGenuinVideo());
-//                metaDataModel.setMediaType(MediaType.getMediaType(replyOptions));
-//                if (selectedTopic != null) {
-//                    metaDataModel.setTopic(selectedTopic.getName());
-//                }
-//                chat.setMetaData(metaDataModel);
-//
-//                MembersModel currentUserObject = Utility.getCurrentUserObject(this, compressVideoFilePath);
-//                chat.setOwner(currentUserObject);
-//                GroupModel group = new GroupModel();
-//                group.setGroupId("");
-//                if (convType == VideoConvType.ROUND_TABLE.getValue()) {
-//                    group.setName(rtName);
-//                    group.setDescription(TextUtils.isEmpty(rtDesc) ? "" : rtDesc);
-//                    SettingsModel settings = new SettingsModel();
-//                    settings.setDiscoverable(privacyOptionsTypeRT == PrivacyOptionsType.EVERYONE);
-//                    chat.setSettings(settings);
-//                } else if (convType == VideoConvType.GROUP.getValue()) {
-//                    group.setName(groupName);
-//                    group.setDescription(TextUtils.isEmpty(groupDesc) ? "" : groupDesc);
-//                } else {
-//                    group.setName("");
-//                    group.setDescription("");
-//                }
-//                if (!TextUtils.isEmpty(imageToSet)) {
-//                    group.setDp(imageToSet);
-//                    group.setSmallDp(imageToSet);
-//                }
-//                group.setVideoURL(compressVideoFilePath);
-//                List<MembersModel> membersList = new ArrayList<>();
-//                membersList.add(currentUserObject);
-//
+    public void insertAndUploadVideo(int convType, String compressVideoFilePath, long videoDuration, String link, int videoWidth,
+                                     int videoHeight) {
+        File videoFile = new File(compressVideoFilePath);
+        File file;
+        if (TextUtils.isEmpty(coverPhotoPath)) {
+            File destinationLocation = getExternalFilesDir(Constants.MERGE_DIRECTORY);
+            String fileName = videoFile.getName().replace(".mp4", ".png");
+            file = new File(destinationLocation, fileName);
+            try {
+                Bitmap mBitmap = getCoverBitmap(compressVideoFilePath, false);
+                if (mBitmap != null) {
+                    try (FileOutputStream out = new FileOutputStream(file)) {
+                        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        } else {
+            file = new File(coverPhotoPath);
+        }
+        if (file.exists()) {
+            String imagePath = file.getAbsolutePath();
+            String selectedContactsStr = "";
+            if (isCompressionDone) {
+                try {
+                    String finalUrl = compressVideoFilePath.substring(compressVideoFilePath.lastIndexOf('/') + 1);
+                    File to = new File(getCacheDir(), finalUrl);
+                    InputStream in = new FileInputStream(videoFile);
+                    OutputStream out = new FileOutputStream(to);
+
+                    // Copy the bits from instream to outstream
+                    byte[] buf = new byte[1024];
+                    int len;
+
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    in.close();
+                    out.close();
+                } catch (Exception e) {
+                    Utility.showLogException(e);
+                }
+            }
+            try {
+                Constants.START_MILLIS_POST = System.currentTimeMillis();
+                ChatModel chat = new ChatModel();
+                chat.setChatId("-101");
+                chat.setVideoUrl(compressVideoFilePath);
+                chat.setThumbnailUrl(imagePath);
+                chat.setLocalVideoPath(compressVideoFilePath);
+                chat.setImagePath(imagePath);
+                chat.setDuration(Utility.getDurationInt(videoDuration) + "");
+                chat.setDescription("");
+                chat.setLink(link);
+                chat.setAspectRatio(Utility.getVideoAspectRatio(videoWidth, videoHeight));
+                chat.setResolution(Utility.getVideoResolution(videoWidth, videoHeight));
+                chat.setSize("5");
+                chat.setConversationId("");
+                chat.setConversationAt(String.valueOf(Constants.START_MILLIS_POST));
+                chat.setReply(false);
+                chat.setRead(true);
+                chat.setRetry(false);
+                chat.setIsReplyOrReaction(1);
+                chat.setFromStatus("1");
+                chat.setConvType(convType);
+                chat.setVideoUploadStatus(1);
+                chat.setImageUploadStatus(1);
+                chat.setDpUploadStatus(TextUtils.isEmpty(imageToSet) ? 2 : 1);
+                chat.setIsReplyReceived(0);
+                chat.setFfMpegCommand(ffMpegCommand);
+                chat.setCompressionStatus(isCompressionDone ? 1 : 0);
+                if (selectedQuestion != null) {
+                    List<QuestionModel> questions = new ArrayList<>();
+                    questions.add(selectedQuestion);
+                    chat.setQuestions(questions);
+                }
+                MetaDataModel metaDataModel = new MetaDataModel();
+                metaDataModel.setContainsExternalVideos(isAnyNonGenuinVideo());
+                metaDataModel.setMediaType(MediaType.getMediaType(replyOptions));
+                if (selectedTopic != null) {
+                    metaDataModel.setTopic(selectedTopic.getName());
+                }
+                chat.setMetaData(metaDataModel);
+
+                //MembersModel currentUserObject = Utility.getCurrentUserObject(this, compressVideoFilePath);
+                MembersModel currentUserObject = new MembersModel();
+                currentUserObject.setUserId(SDKInitiate.INSTANCE.getUserId());
+                currentUserObject.setName("TestSDK");
+                currentUserObject.setNickname("Test");
+                currentUserObject.setPhone("8779084869");
+                chat.setOwner(currentUserObject);
+                GroupModel group = new GroupModel();
+                group.setGroupId("");
+                if (convType == VideoConvType.ROUND_TABLE.getValue()) {
+                    group.setName(rtName);
+                    group.setDescription(TextUtils.isEmpty(rtDesc) ? "" : rtDesc);
+                    SettingsModel settings = new SettingsModel();
+                    settings.setDiscoverable(privacyOptionsTypeRT == PrivacyOptionsType.EVERYONE);
+                    chat.setSettings(settings);
+                } else if (convType == VideoConvType.GROUP.getValue()) {
+                    group.setName(groupName);
+                    group.setDescription(TextUtils.isEmpty(groupDesc) ? "" : groupDesc);
+                } else {
+                    group.setName("");
+                    group.setDescription("");
+                }
+                if (!TextUtils.isEmpty(imageToSet)) {
+                    group.setDp(imageToSet);
+                    group.setSmallDp(imageToSet);
+                }
+                group.setVideoURL(compressVideoFilePath);
+                List<MembersModel> membersList = new ArrayList<>();
+                membersList.add(currentUserObject);
+
 //                for (ContactsModel contact : selectedContacts) {
 //                    MembersModel member = new MembersModel();
 //                    if (contact.getGenuin() != null) {
@@ -899,24 +903,24 @@ public class CameraNewActivity extends AppCompatActivity implements PullBackLayo
 //                    member.setVideoURL(compressVideoFilePath);
 //                    membersList.add(member);
 //                }
-//                group.setMembers(membersList);
-//                Type listType = new TypeToken<List<MembersModel>>() {
-//                }.getType();
-//                selectedContactsStr = new Gson().toJson(membersList, listType);
-//                if (Utility.getDBHelper() != null) {
-//                    Utility.getDBHelper().insertDirectVideo(chat);
-//                    Utility.getDBHelper().insertGroupAndMembers("-101", group, Constants.START_MILLIS_POST, convType, 1);
-//                }
-//            } catch (Exception e) {
-//                Utility.showLogException(e);
-//            }
-//           // if (isCompressionDone) {
-//                uploadDirectORRTVideo(convType, compressVideoFilePath, imagePath, videoDuration, link, videoWidth, videoHeight, selectedContactsStr);
-////            } else {
-////                GenuinFFMpegManager.getInstance().addValueToHashmap(compressVideoFilePath, true);
-////            }
-//        }
-//    }
+                group.setMembers(membersList);
+                Type listType = new TypeToken<List<MembersModel>>() {
+                }.getType();
+                selectedContactsStr = new Gson().toJson(membersList, listType);
+                if (Utility.getDBHelper() != null) {
+                    Utility.getDBHelper().insertDirectVideo(chat);
+                    Utility.getDBHelper().insertGroupAndMembers("-101", group, Constants.START_MILLIS_POST, convType, 1);
+                }
+            } catch (Exception e) {
+                Utility.showLogException(e);
+            }
+            if (isCompressionDone) {
+                uploadDirectORRTVideo(convType, compressVideoFilePath, imagePath, videoDuration, link, videoWidth, videoHeight, selectedContactsStr);
+            } else {
+                GenuinFFMpegManager.getInstance().addValueToHashmap(compressVideoFilePath, true);
+            }
+        }
+    }
 
     private void uploadDirectORRTVideo(int convType, String compressVideoFilePath, String imagePath, long videoDuration, String link, int videoWidth, int videoHeight, String selectedContactsStr) {
         VideoParamsModel videoParamsModel = new VideoParamsModel();
@@ -965,7 +969,7 @@ public class CameraNewActivity extends AppCompatActivity implements PullBackLayo
         videoParamsModel.videoFile = compressVideoFilePath;
         videoParamsModel.imageFile = imagePath;
         videoParamsModel.dpFile = imageToSet;
-        //UploadQueueManager.getInstance().uploadVideo(CameraNewActivity.this, videoParamsModel);
+        UploadQueueManager.getInstance().uploadVideo(CameraNewActivity.this, videoParamsModel);
     }
 //    public String getNonGenuinUsers() {
 //        String mobileNos = "";

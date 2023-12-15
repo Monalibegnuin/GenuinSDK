@@ -29,9 +29,10 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
 
         btnLogin.setOnClickListener{
-            //validate()
-            val redirectDunkyDonut = Intent(this, DunkidonutsScreen::class.java)
-            startActivity(redirectDunkyDonut)
+            validate()
+//
+//            val redirectDunkyDonut = Intent(this, DunkidonutsScreen::class.java)
+//            startActivity(redirectDunkyDonut)
         }
 
     }
